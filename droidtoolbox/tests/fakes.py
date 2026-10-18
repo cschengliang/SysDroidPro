@@ -203,6 +203,11 @@ class FakeRunner:
             return 0, path.read_bytes() if path.exists() else b"Unable to find package: no.such.package\n", b""
         if words[:3] == ["cmd", "package", "resolve-activity"]:
             return 0, (words[-1] + "/.MainActivity\n").encode(), b""
+        if words[:3] == ["pm", "list", "packages"] and "-f" in words:
+            lines = fixture("pm_list_packages_user0.emu36").splitlines()
+            if words[-1] not in ("0", "-f"):
+                lines = [line for line in lines if "=" + words[-1] + " " in line]
+            return 0, ("\n".join(lines) + "\n").encode(), b""
         if "echo ==STATUS" in script:
             return 0, b"==STATUS\nName:\tinit\n==CMDLINE\ninit\n==THREADS\n1 init\n==LIBS\n==FD\n", b""
         if words[:1] == ["dumpsys"] or words[:2] == ["ps", "-o"]:

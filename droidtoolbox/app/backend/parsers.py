@@ -219,3 +219,163 @@ def users(output):
             name = "机主" if uid == 0 else f"用户 {uid}"
         result.append(M.AndroidUser(uid, name, label, "running" in line.lower()))
     return sorted(result, key=lambda row: row.id)
+
+
+def package_blocks(output):
+    pattern = r"(?ms)^  Package \[([^\]]+)\][^\n]*\n(.*?)(?=^  Package \[|^\S|\Z)"
+    return {match[1]: match[2] for match in re.finditer(pattern, output)}
+
+
+def user_blocks(output):
+    matches = list(re.finditer(r"(?m)^    User (\d+):[^\n]*", output))
+    return {int(match[1]): output[match.start():matches[i + 1].start() if i + 1 < len(matches) else len(output)]
+            for i, match in enumerate(matches)}
+
+
+def field(output, key):
+    match = re.search(r"(?m)^\s*" + re.escape(key) + r"=(.*)$", output)
+    return match[1].strip() if match and match[1].strip() != "null" else None
+
+
+def token(output, key):
+    match = re.search(r"\b" + re.escape(key) + r"=(\S+)", output)
+    return match[1] if match else None
+
+
+def indented(output, title):
+    lines = output.splitlines()
+    for index, line in enumerate(lines):
+        if line.strip() == title + ":":
+            indent = len(line) - len(line.lstrip())
+            result = []
+            for child in lines[index + 1:]:
+                if child.strip() and len(child) - len(child.lstrip()) <= indent:
+                    break
+                result.append(child.strip())
+            return result
+    return []
+
+
+def package_names(output):
+    return {line[8:].strip() for line in output.splitlines() if line.startswith("package:")}
+
+
+def packages(output, system="", disabled="", metadata=""):
+    system_names, disabled_names = package_names(system), package_names(disabled)
+    blocks = package_blocks(metadata)
+    result = []
+    for line in output.splitlines():
+        if not line.startswith("package:"):
+            continue
+        body, *extra = line[8:].split()
+        if "=" in body:
+            path, name = body.rsplit("=", 1)
+        else:
+            path, name = None, body
+        options = dict(item.split(":", 1) for item in extra if ":" in item)
+        block = blocks.get(name, "")
+        result.append(M.PackageInfo(name, field(block, "versionName"), integer(options.get("versionCode")),
+            name in system_names, name not in disabled_names, path, integer(options.get("uid")), integer(token(block, "targetSdk"))))
+    return sorted(result, key=lambda row: row.name)
+
+
+def package_detail(output, package, user=0, info=None, launchable=False):
+    block = package_blocks(output).get(package)
+    if block is None:
+        return None
+    all_users = user_blocks(block)
+    selected = all_users.get(user, "")
+    installed = sorted(uid for uid, body in all_users.items() if token(body.splitlines()[0], "installed") == "true")
+    if user not in installed:
+        return None
+    enabled = token(selected.splitlines()[0], "enabled") not in ("2", "3", "4")
+    if info is None:
+        app_id = integer(field(block, "appId") or field(block, "userId"))
+        info = M.PackageInfo(package, field(block, "versionName"), integer(token(block, "versionCode")),
+            bool(re.search(r"flags=\[\s*SYSTEM\b", block)), enabled, None,
+            user * 100000 + app_id % 100000 if app_id is not None else None, integer(token(block, "targetSdk")))
+    permissions = {name: M.Permission(name, False, False) for name in indented(block, "requested permissions") if name and ":" not in name}
+    for runtime, lines in ((False, indented(block, "install permissions")), (True, indented(selected, "runtime permissions"))):
+        for line in lines:
+            match = re.match(r"([^:\s]+): granted=(true|false)", line)
+            if match:
+                permissions[match[1]] = M.Permission(match[1], match[2] == "true", runtime)
+    directory = field(selected, "dataDir") or field(block, "dataDir")
+    if directory and user != 0:
+        directory = re.sub(r"^/data/(?:data/|user/0/)", f"/data/user/{user}/", directory)
+        directory = re.sub(r"^/data/user_de/0/", f"/data/user_de/{user}/", directory)
+    return M.PackageDetail(info, integer(token(block, "minSdk")), directory, field(selected, "firstInstallTime") or field(block, "firstInstallTime"),
+        field(block, "lastUpdateTime"), field(block, "installerPackageName"), sorted(permissions.values(), key=lambda row: row.name), launchable, installed)
+
+
+def component_class(package, cls):
+    return package + cls if cls.startswith(".") else package + "." + cls if "." not in cls else cls
+
+
+def components(output, package, user=0):
+    block = package_blocks(output).get(package, "")
+    selected = user_blocks(block).get(user, "")
+    disabled = {component_class(package, name) for name in indented(selected, "disabledComponents")}
+    enabled = {component_class(package, name) for name in indented(selected, "enabledComponents")}
+    package_enabled = token(selected.splitlines()[0], "enabled") not in ("2", "3", "4") if selected else True
+    kinds = {"Activity Resolver Table:": "activity", "Activities:": "activity", "Service Resolver Table:": "service", "Services:": "service",
+             "Receiver Resolver Table:": "receiver", "Receivers:": "receiver", "Provider Resolver Table:": "provider", "Providers:": "provider",
+             "Registered ContentProviders:": "provider", "ContentProvider Authorities:": "provider"}
+    kind, current, authority = None, None, None
+    rows = {}
+    for line in output.splitlines():
+        stripped = line.strip()
+        if line and not line[0].isspace():
+            kind, current, authority = kinds.get(stripped), None, None
+        if kind is None:
+            continue
+        match_auth = re.match(r"\s*\[([^\]]+)\]:$", line)
+        if match_auth:
+            authority = match_auth[1]
+        match = re.search(re.escape(package) + r"/([\w.$]+)", line)
+        if match:
+            name = component_class(package, match[1])
+            current = (kind, name)
+            rows.setdefault(current, {"exported": None, "enabled": True, "permission": None, "authorities": set()})
+            if kind == "provider" and authority:
+                rows[current]["authorities"].add(authority)
+        if current:
+            row = rows[current]
+            for key in ("exported", "enabled"):
+                value = token(line, key)
+                if value in ("true", "false"):
+                    row[key] = value == "true"
+            permission = token(line, "permission")
+            if permission and permission != "null":
+                row["permission"] = permission
+    return [M.Component(kind, name, data["exported"], package_enabled and (name in enabled or (name not in disabled and data["enabled"])),
+                        data["permission"], ";".join(sorted(data["authorities"])) or None)
+            for (kind, name), data in sorted(rows.items())]
+
+
+def progress_percent(output):
+    matches = re.findall(r"\[\s*(\d+)%\]", output)
+    return min(100, max(0, int(matches[-1]))) if matches else None
+
+
+def bugreport_path(output):
+    match = re.search(r"Bug report copied to\s+(.+)", output, re.I)
+    return match[1].strip().strip('"') if match else None
+
+
+def install_error(output):
+    match = re.search(r"(?:INSTALL_FAILED|INSTALL_PARSE_FAILED)_[A-Z_]+", output)
+    code = match[0] if match else "未知错误"
+    translations = {
+        "INSTALL_FAILED_VERSION_DOWNGRADE": "版本低于已安装版本，需勾选“允许降级”",
+        "INSTALL_FAILED_UPDATE_INCOMPATIBLE": "签名与已安装版本不一致，需先卸载旧版本",
+        "INSTALL_FAILED_ALREADY_EXISTS": "应用已存在，需勾选“覆盖安装”",
+        "INSTALL_FAILED_INSUFFICIENT_STORAGE": "设备存储空间不足",
+        "INSTALL_FAILED_OLDER_SDK": "设备系统版本低于应用要求的 minSdk",
+        "INSTALL_FAILED_NO_MATCHING_ABIS": "应用不支持该设备的 CPU 架构",
+        "INSTALL_FAILED_TEST_ONLY": "测试包，需勾选“允许测试包”",
+        "INSTALL_PARSE_FAILED_NO_CERTIFICATES": "APK 未签名",
+        "INSTALL_FAILED_USER_RESTRICTED": "用户拒绝了安装，请检查设备的 USB 安装开关",
+        "INSTALL_FAILED_INVALID_APK": "APK 文件无效或已损坏",
+    }
+    return translations.get(code, "APK 文件无效或已损坏" if code.startswith("INSTALL_PARSE_FAILED_") else f"安装失败：{code}")

@@ -97,3 +97,58 @@ def test_real_and_fallback_users():
     rows = P.users("1: id=10, name=null, type=profile.MANAGED, flags=0\n2: id=999, name=分身, type=profile.CLONE, flags=0 (running)\n3: id=11, name=Guest, type=full.GUEST, flags=0")
     assert [(r.id, r.kind) for r in rows] == [(10, "工作资料"), (11, "访客"), (999, "分身")]
     assert rows[0].name == "用户 10"
+
+
+def test_real_package_paths_metadata_permissions():
+    rows = P.packages(fixture("pm_list_packages_user0.emu36"), fixture("pm_list_packages_system.emu36"),
+                      fixture("pm_list_packages_disabled.emu36"), fixture("dumpsys_package_packages.emu36"))
+    hello = next(row for row in rows if row.name == "com.example.helloworld")
+    assert "==/" in hello.apk_path and hello.version_code == 1 and hello.version_name == "1.0" and hello.target_sdk == 36
+    assert not hello.system and hello.enabled
+    for name in ("android", "com.android.settings", "com.example.helloworld"):
+        output = fixture(f"dumpsys_package_{name}.emu36")
+        detail = P.package_detail(output, name)
+        assert detail.info.name == name and detail.installed_users == [0]
+        assert detail.data_dir.startswith("/data/") and detail.min_sdk is not None
+    assert P.package_detail(fixture("dumpsys_package_missing.emu36"), "missing") is None
+
+
+def test_package_users_and_components():
+    output = fixture("package_multiuser.synthetic")
+    zero, ten = P.package_detail(output, "com.example.test"), P.package_detail(output, "com.example.test", 10)
+    assert zero.installed_users == [0, 10] and ten.data_dir == "/data/user/10/com.example.test"
+    assert ten.info.uid == 1012345
+    assert next(p for p in zero.permissions if p.name.endswith("CAMERA")).granted
+    assert not next(p for p in ten.permissions if p.name.endswith("CAMERA")).granted
+    assert not next(p for p in ten.permissions if p.name.endswith("RECORD_AUDIO")).runtime
+    assert P.package_detail(output, "com.example.test", 11) is None
+    comps = P.components(output, "com.example.test")
+    assert not next(c for c in comps if c.kind == "activity").enabled
+    assert next(c for c in P.components(output, "com.example.test", 10) if c.kind == "activity").enabled
+    service = next(c for c in comps if c.kind == "service")
+    assert service.exported is False and service.permission == "android.permission.BIND_JOB_SERVICE"
+    provider = next(c for c in comps if c.kind == "provider")
+    assert provider.authority == "com.example.test.provider" and provider.exported is None
+    assert P.component_class("com.p", "Foo") == "com.p.Foo"
+
+
+def test_real_components_deduplicated():
+    rows = P.components(fixture("dumpsys_package_com.android.settings.emu36"), "com.android.settings")
+    assert len(rows) > 100 and len(rows) == len({(r.kind, r.name) for r in rows})
+    assert any(row.kind == "provider" and row.authority for row in rows)
+    assert any(not row.enabled for row in rows)
+
+
+@pytest.mark.parametrize("code", ["INSTALL_FAILED_VERSION_DOWNGRADE", "INSTALL_FAILED_UPDATE_INCOMPATIBLE", "INSTALL_FAILED_ALREADY_EXISTS",
+    "INSTALL_FAILED_INSUFFICIENT_STORAGE", "INSTALL_FAILED_OLDER_SDK", "INSTALL_FAILED_NO_MATCHING_ABIS", "INSTALL_FAILED_TEST_ONLY",
+    "INSTALL_PARSE_FAILED_NO_CERTIFICATES", "INSTALL_FAILED_USER_RESTRICTED", "INSTALL_FAILED_INVALID_APK", "INSTALL_PARSE_FAILED_MANIFEST_MALFORMED", "INSTALL_FAILED_OTHER"])
+def test_install_errors(code):
+    assert any("\u4e00" <= char <= "\u9fff" for char in P.install_error(f"Failure [{code}: detail]"))
+
+
+def test_progress_and_fields():
+    progress = fixture("bugreport_progress.synthetic")
+    assert P.progress_percent(progress) == 85 and P.progress_percent("no percent") is None
+    assert P.bugreport_path(progress) == "C:/output/bugreport-test.zip"
+    assert P.field("  a=null", "a") is None
+    assert P.token("a=true b=1", "b") == "1"

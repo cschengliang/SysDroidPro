@@ -1,0 +1,37 @@
+Activity Resolver Table:
+  Non-Data Actions:
+    action:
+      aabb com.example.test/.MainActivity filter aa
+Services:
+  Service{11 com.example.test/.Service}
+    exported=false enabled=true permission=android.permission.BIND_JOB_SERVICE
+Registered ContentProviders:
+  com.example.test/.Provider:
+    Provider{a com.example.test/.Provider}
+ContentProvider Authorities:
+  [com.example.test.provider]:
+    Provider{a com.example.test/.Provider}
+Packages:
+  Package [com.example.test] (a):
+    appId=12345
+    versionCode=12 minSdk=23 targetSdk=36
+    versionName=1.2
+    dataDir=/data/user/0/com.example.test
+    flags=[ HAS_CODE ]
+    requested permissions:
+      android.permission.CAMERA
+      android.permission.INTERNET
+      android.permission.RECORD_AUDIO
+    install permissions:
+      android.permission.INTERNET: granted=true
+    User 0: installed=true enabled=0
+      runtime permissions:
+        android.permission.CAMERA: granted=true
+      disabledComponents:
+        com.example.test.MainActivity
+    User 10: installed=true enabled=0
+      runtime permissions:
+        android.permission.CAMERA: granted=false
+      enabledComponents:
+        com.example.test.MainActivity
+    User 11: installed=false enabled=0
