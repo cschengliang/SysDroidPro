@@ -23,7 +23,7 @@ def number(value):
 def sections(output):
     result, key = {}, None
     for line in output.splitlines():
-        if re.fullmatch(r"==[A-Z_]+", line):
+        if re.fullmatch(r"==[A-Z_0-9]+", line):
             key = line[2:]
             result[key] = []
         elif key:
@@ -133,3 +133,89 @@ def apex(output):
         path, name = body.rsplit("=", 1) if "=" in body else (None, body)
         result.append(M.ApexModule(name, integer(match[2]), path))
     return sorted(result, key=lambda item: item.name)
+
+
+def settings(output):
+    return dict(line.split("=", 1) for line in output.splitlines() if "=" in line)
+
+
+def binder_services(output):
+    rows = []
+    for line in output.splitlines():
+        match = re.match(r"\s*\d+\s+(\S+):\s*\[(.*?)\]", line)
+        if match:
+            rows.append(M.BinderService(match[1], match[2] or None))
+    return sorted(rows, key=lambda row: row.name.lower())
+
+
+def init_services(properties):
+    return sorted((M.InitService(k[9:], v) for k, v in properties.items() if k.startswith("init.svc.")), key=lambda row: row.name.lower())
+
+
+def hidl_hals(output):
+    rows = {}
+    for line in output.splitlines():
+        match = re.search(r"(\S+@\S+::\S+)\s+.*?\b(hwbinder|passthrough)\s+(\d+|N/A)\b", line)
+        if match and "*" not in match[1]:
+            row = M.HalInfo(match[1], "hidl", match[2], integer(match[3]))
+            rows[row.name, row.transport] = row
+    return sorted(rows.values(), key=lambda row: (row.name, row.transport))
+
+
+def processes(output):
+    rows = []
+    for line in output.splitlines():
+        cells = line.split(None, 5)
+        if len(cells) == 6 and integer(cells[0]) is not None:
+            rss = integer(cells[3])
+            rows.append(M.ProcessInfo(int(cells[0]), integer(cells[1]), cells[2], cells[5],
+                                      rss * 1024 if rss is not None else None, cells[4]))
+    return rows
+
+
+def process_names(output):
+    result = {}
+    for line in output.splitlines():
+        cells = line.split(None, 1)
+        if len(cells) == 2 and integer(cells[0]) is not None:
+            result[int(cells[0])] = cells[1]
+    return result
+
+
+def process_detail(pid, output):
+    data = sections(output)
+    status = data.get("STATUS", "")
+    name = re.search(r"(?m)^Name:\s*(.+)$", status)
+    threads = []
+    for line in data.get("THREADS", "").splitlines():
+        cells = line.split(None, 1)
+        if len(cells) == 2 and integer(cells[0]) is not None:
+            threads.append((int(cells[0]), cells[1]))
+    libraries = set()
+    for line in data.get("LIBS", "").splitlines():
+        match = re.search(r"(/\S+\.so(?:\.\d+)*)\b", line)
+        if match:
+            libraries.add(match[1])
+    cmdline = data.get("CMDLINE", "").replace("\0", " ").strip()
+    return M.ProcessDetail(pid, name[1] if name else (cmdline.split(" ")[0] if cmdline else str(pid)),
+                           cmdline, status, sorted(threads), sorted(libraries), integer(data.get("FD", "").strip()))
+
+
+def users(output):
+    result = []
+    for line in output.splitlines():
+        match = re.search(r"\bid=(\d+), name=(.*?), type=([^,\s]+)", line)
+        flags = 0
+        if match:
+            uid, name, kind = int(match[1]), match[2], match[3]
+        else:
+            match = re.search(r"UserInfo\{(\d+):(.*):([\da-fA-F]+)\}", line)
+            if not match:
+                continue
+            uid, name, kind = int(match[1]), match[2], ""
+            flags = int(match[3], 16)
+        label = "主用户" if uid == 0 else "工作资料" if "MANAGED" in kind or flags & 0x20 else "分身" if "CLONE" in kind else "访客" if "GUEST" in kind or flags & 0x4 else "其它"
+        if not name or name == "null":
+            name = "机主" if uid == 0 else f"用户 {uid}"
+        result.append(M.AndroidUser(uid, name, label, "running" in line.lower()))
+    return sorted(result, key=lambda row: row.id)

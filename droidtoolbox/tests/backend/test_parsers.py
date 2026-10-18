@@ -61,3 +61,39 @@ def test_apex():
     assert modules and modules[0].version_code is not None
     assert modules == sorted(modules, key=lambda item: item.name)
     assert P.apex("package:/a==/x.apex=com.example.x versionCode:12\n")[0].path == "/a==/x.apex"
+
+
+def test_settings_services_and_hals():
+    assert P.settings("a=x=y\nnull=null\nempty=\n") == {"a": "x=y", "null": "null", "empty": ""}
+    for ns in ("system", "secure", "global"):
+        assert P.settings(fixture(f"settings_list_{ns}.emu36"))
+    services = P.binder_services(fixture("service_list.emu36"))
+    assert services and any(row.interface is None for row in services)
+    assert [s.name for s in services] == sorted((s.name for s in services), key=str.lower)
+    assert P.init_services({"init.svc.z": "running", "init.svc.a": "stopped", "other": "no"})[0].name == "a"
+    for name in ("lshal.emu36", "lshal_root.emu36", "lshal_fallback.emu36"):
+        rows = P.hidl_hals(fixture(name))
+        if name != "lshal_fallback.emu36":
+            assert rows and any(row.pid is not None for row in rows)
+        assert all("*" not in row.name for row in rows)
+
+
+def test_processes_and_partial_detail():
+    rows = P.processes(fixture("ps_A.emu36"))
+    assert rows[0].pid == 1 and rows[0].rss > 0
+    assert P.processes("PID PPID USER RSS S NAME\n1 0 root 0 S init")[0].rss == 0
+    output = "==STATUS\n" + fixture("proc_status.emu36") + "\n==CMDLINE\ninit\0x\n==THREADS\n1 init\n2 worker thread\n==LIBS\n" + fixture("proc_maps_root.emu36") + "\n==FD\n"
+    detail = P.process_detail(1, output)
+    assert detail.name == "init" and detail.cmdline == "init x" and detail.fd_count is None
+    assert detail.threads == [(1, "init"), (2, "worker thread")]
+    assert detail.libraries and len(detail.libraries) == len(set(detail.libraries))
+    assert P.process_names("PID NAME\n10 android.hardware.foo\n") == {10: "android.hardware.foo"}
+
+
+def test_real_and_fallback_users():
+    for name in ("cmd_user_list_v.emu36", "pm_list_users.emu36"):
+        rows = P.users(fixture(name))
+        assert rows[0].id == 0 and rows[0].kind == "主用户" and rows[0].running
+    rows = P.users("1: id=10, name=null, type=profile.MANAGED, flags=0\n2: id=999, name=分身, type=profile.CLONE, flags=0 (running)\n3: id=11, name=Guest, type=full.GUEST, flags=0")
+    assert [(r.id, r.kind) for r in rows] == [(10, "工作资料"), (11, "访客"), (999, "分身")]
+    assert rows[0].name == "用户 10"
