@@ -1,0 +1,5 @@
+total 28
+drwxrwxrwx 2 shell shell 4096 2026-10-18 15:51 .
+drwxrwx--x 5 shell shell 4096 2026-10-18 15:51 ..
+lrwxrwxrwx 1 shell shell    7 2026-10-18 15:51 system link -> /system
+-rw-rw-rw- 1 shell shell   15 2026-10-18 15:51 中文 a'b.txt

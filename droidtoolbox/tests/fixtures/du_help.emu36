@@ -1,0 +1,22 @@
+Toybox 0.8.12-android multicall binary (see toybox --help)
+
+usage: du [-d N] [-abcHKkLlmsx] [FILE...]
+
+Show disk usage, space consumed by files and directories.
+
+Size in:
+-b	Apparent bytes (directory listing size, not space used)
+-h	Human readable (e.g., 1K 243M 2G)
+-k	1024 byte blocks (default)
+-K	512 byte blocks (posix)
+-m	Megabytes
+
+What to show:
+-a	All files, not just directories
+-c	Cumulative total
+-d N	Only depth < N
+-H	Follow symlinks on cmdline
+-L	Follow all symlinks
+-l	Disable hardlink filter
+-s	Only total size of each argument
+-x	Don't leave this filesystem

@@ -110,17 +110,20 @@ class DeviceMethods:
         return P.root_state(self._shell(serial, ROOT_SCRIPT))
 
     def root(self, serial, enable=True):
-        result = self._adb(serial, "root" if enable else "unroot")
+        result = self._adb(serial, "root" if enable else "unroot", checked=False)
         output = result.stdout + result.stderr
         if "cannot run as root in production builds" in output:
             raise api.CommandFailed("user 版本固件不支持 adb root", output)
+        error = error_for(result.exit_code, result.stdout, result.stderr, serial)
+        if error:
+            raise error
         self._adb(serial, "wait-for-device", timeout=15)
         return output
 
     def remount(self, serial):
         result = self._adb(serial, "remount", checked=False)
         output = result.stdout + result.stderr
-        error = error_for(result.exit_code, result.stdout, result.stderr, serial)
+        error = error_for(result.exit_code or (1 if "not running as root" in output.lower() else 0), result.stdout, result.stderr, serial)
         if isinstance(error, api.PermissionDenied):
             raise error
         if result.exit_code or re.search(r"remount failed|not.*writable|failed to remount", output, re.I):

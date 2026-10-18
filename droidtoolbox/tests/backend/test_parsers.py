@@ -152,3 +152,36 @@ def test_progress_and_fields():
     assert P.bugreport_path(progress) == "C:/output/bugreport-test.zip"
     assert P.field("  a=null", "a") is None
     assert P.token("a=true b=1", "b") == "1"
+
+
+def test_real_file_names_links_and_nodes():
+    rows = P.file_entries(fixture("ls_la_names.emu36"), "/data/local/tmp/samples")
+    assert {row.name for row in rows} == {"中文 a'b.txt", "system link"}
+    assert next(row for row in rows if row.is_link).link_target == "/system"
+    nodes = P.file_entries(fixture("ls_la_dev.emu36"), "/dev")
+    assert next(row for row in nodes if row.name == "ashmem").size is None
+    for name in ("ls_la_root.emu36", "ls_la_sdcard.emu36", "anr.emu36", "tombstones.emu36"):
+        assert isinstance(P.file_entries(fixture(name), "/"), list)
+
+
+def test_dropbox_exact_millis_and_timezone():
+    offset = P.timezone_offset(fixture("date_offset.emu36"))
+    rows = P.dropbox_files(fixture("dropbox_file.emu36"), offset)
+    boot = next(row for row in rows if row.name.startswith("SYSTEM_BOOT@"))
+    assert str(round(boot.mtime * 1000)) in boot.path
+    assert all("strictmode" not in row.name for row in rows)
+    selected = P.dropbox_content(fixture("dropbox_print.emu36"), "SYSTEM_BOOT", round(boot.mtime * 1000), offset, fixture("dropbox_file.emu36"))
+    assert selected and "Build:" in selected
+    assert P.dropbox_files(fixture("dropbox.emu36"), offset)
+    assert P.timestamp("2026-10-18 12:00", P.timezone_offset("+0800")) == P.timestamp("2026-10-18 04:00:00", P.timezone_offset("+0000"))
+    assert P.timestamp("bad", offset) is None and P.timestamp("2026-10-18 12:00", None) is None
+    assert P.timezone_offset("+2460") is None and P.timezone_offset("bad") is None
+
+
+def test_dropbox_same_second_and_summary():
+    offset = P.timezone_offset("+0000")
+    listing = "2026-01-01 00:00:00 data_app_crash (text, 1 bytes)\n /data/system/dropbox/data_app_crash@1767225600123.txt\n2026-01-01 00:00:00 data_app_crash (text, 1 bytes)\n /data/system/dropbox/data_app_crash@1767225600456.txt\n"
+    printed = "2026-01-01 00:00:00 data_app_crash (text, 1 bytes)\nfirst\n2026-01-01 00:00:00 data_app_crash (text, 1 bytes)\nsecond\n"
+    assert P.dropbox_content(printed, "data_app_crash", 1767225600456, offset, listing) == "second"
+    assert P.dropbox_content(printed, "data_app_crash", 1767225600456, offset) is None
+    assert P.crash_summary("Process: com.example\njava.lang.IllegalStateException: bad\n") == ("com.example", "java.lang.IllegalStateException: bad")

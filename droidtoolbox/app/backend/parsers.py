@@ -2,6 +2,8 @@
 from __future__ import annotations
 
 import re
+from datetime import datetime, timedelta, timezone
+import posixpath
 
 from . import models as M
 
@@ -379,3 +381,93 @@ def install_error(output):
         "INSTALL_FAILED_INVALID_APK": "APK 文件无效或已损坏",
     }
     return translations.get(code, "APK 文件无效或已损坏" if code.startswith("INSTALL_PARSE_FAILED_") else f"安装失败：{code}")
+
+
+def file_entries(output, path):
+    pattern = r"^([bcdlps-][rwxstST-]{9}[+.@]?)\s+\d+\s+(\S+)\s+(\S+)\s+(\d+,\s*\d+|\d+)\s+(\d{4}-\d{2}-\d{2})\s+(\d{2}:\d{2}(?::\d{2})?)\s+(.*)$"
+    result = []
+    for line in output.splitlines():
+        match = re.match(pattern, line)
+        if not match:
+            continue
+        mode, owner, group, size, date, clock, name = match.groups()
+        target = None
+        if mode.startswith("l"):
+            name, sep, target = name.partition(" -> ")
+            if not sep:
+                target = None
+        if name in (".", ".."):
+            continue
+        result.append(M.FileEntry(name, posixpath.join(path, name), mode.startswith("d"), mode.startswith("l"), target,
+                                  integer(size), mode, owner, group, date + " " + clock))
+    return sorted(result, key=lambda row: (not row.is_dir, row.name.casefold()))
+
+
+def timezone_offset(output):
+    match = re.fullmatch(r"([+-])(\d{2})(\d{2})", output.strip())
+    if not match:
+        return None
+    if int(match[3]) >= 60:
+        return None
+    minutes = (int(match[2]) * 60 + int(match[3])) * (1 if match[1] == "+" else -1)
+    return timezone(timedelta(minutes=minutes)) if abs(minutes) < 24 * 60 else None
+
+
+def timestamp(value, offset):
+    if offset is None:
+        return None
+    for fmt in ("%Y-%m-%d %H:%M:%S.%f", "%Y-%m-%d %H:%M:%S", "%Y-%m-%d %H:%M"):
+        try:
+            return datetime.strptime(value, fmt).replace(tzinfo=offset).timestamp()
+        except ValueError:
+            continue
+    return None
+
+
+def crash_summary(output):
+    process = re.search(r"(?m)^(?:Cmdline|Cmd line|Process):\s*(.+)", output)
+    summary = re.search(r"(?m)^(signal .+|Subject:\s*.+|[\w.$]+(?:Exception|Error):.*)", output)
+    return (process[1] if process else None, summary[1].removeprefix("Subject:").strip() if summary else None)
+
+
+def dropbox_records(output, offset):
+    pattern = r"(?m)^(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}(?:\.\d+)?) (\S+) \(([^\n]*)\)\s*$"
+    matches = list(re.finditer(pattern, output))
+    result = []
+    for i, match in enumerate(matches):
+        body = output[match.end():matches[i + 1].start() if i + 1 < len(matches) else len(output)]
+        raw_path = re.search(r"(?m)^\s*/data/system/dropbox/[^\n]*@(\d+)\.(?:txt|dat|lost)(?:\.gz)?\s*$", body)
+        epoch = timestamp(match[1], offset)
+        millis = int(raw_path[1]) if raw_path else round(epoch * 1000) if epoch is not None else None
+        size_match = re.search(r"(\d+) bytes", match[3])
+        result.append({"tag": match[2], "stamp": match[1], "millis": millis,
+                       "size": int(size_match[1]) if size_match else None, "body": body.strip()})
+    return result
+
+
+def dropbox_files(output, offset):
+    rows = []
+    for entry in dropbox_records(output, offset):
+        tag, millis = entry["tag"], entry["millis"]
+        if millis is None or not (tag.lower().endswith(("_crash", "_anr", "_wtf")) or tag in ("SYSTEM_TOMBSTONE", "SYSTEM_LAST_KMSG", "SYSTEM_BOOT")):
+            continue
+        name = f"{tag}@{millis}"
+        process, summary = crash_summary(entry["body"])
+        rows.append(M.CrashFile("dropbox", "dropbox:" + name, name, millis / 1000, entry["size"], process, summary))
+    return sorted(rows, key=lambda row: row.mtime, reverse=True)
+
+
+def dropbox_content(output, tag, millis, offset, index_output=""):
+    printed = [entry for entry in dropbox_records(output, offset) if entry["tag"] == tag]
+    indexed = [entry for entry in dropbox_records(index_output, offset) if entry["tag"] == tag]
+    target = next((entry for entry in indexed if entry["millis"] == millis), None)
+    if target:
+        group = [entry for entry in indexed if entry["stamp"] == target["stamp"]]
+        candidates = [entry for entry in printed if entry["stamp"] == target["stamp"]]
+        if len(group) != len(candidates):
+            return None
+        return candidates[group.index(target)]["body"].split("\nUsage: dumpsys dropbox")[0].strip().rstrip("=").strip()
+    candidates = [entry for entry in printed if entry["millis"] is not None and entry["millis"] // 1000 == millis // 1000]
+    if len(candidates) == 1:
+        return candidates[0]["body"].split("\nUsage: dumpsys dropbox")[0].strip().rstrip("=").strip()
+    return None

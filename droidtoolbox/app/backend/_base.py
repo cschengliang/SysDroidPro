@@ -23,14 +23,14 @@ def detail(output):
 
 def error_for(code, out, err, serial="", *, checked=True):
     raw = detail(out + "\n" + err).strip()
-    low = raw.lower()
+    low = detail((out + "\n" + err) if code else err).lower()
     if "unauthorized" in low:
         return api.DeviceUnauthorized("设备未授权：请在手机上允许 USB 调试", raw)
     if any(s in low for s in ("no devices/emulators found", "device offline", "device not found", "device disconnected",
                               "error: closed", "device still authorizing", "connection reset", "transport error")) or re.search(r"device .* not found", low):
         return api.DeviceNotFound(f"设备 {serial} 未连接或连接已中断", raw)
     if checked:
-        if any(s in low for s in ("permission denied", "operation not permitted", "read-only file system", "must be root", "not running as root", "requires root", "securityexception")):
+        if code and any(s in low for s in ("permission denied", "operation not permitted", "read-only file system", "must be root", "not running as root", "requires root", "securityexception")):
             return api.PermissionDenied("权限不足：请先取得 root 或检查设备权限", raw)
         if code:
             return api.CommandFailed("设备命令执行失败，请查看详细输出", raw, code)
