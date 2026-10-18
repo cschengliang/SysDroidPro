@@ -1,0 +1,80 @@
+Receiver Resolver Table:
+  Non-Data Actions:
+      com.droidtoolbox.backendtest.TEST:
+        2e69cee com.droidtoolbox.backendtest/android.content.BroadcastReceiver filter e15858f
+          Action: "com.droidtoolbox.backendtest.TEST"
+
+Domain verification status:
+
+Key Set Manager:
+  [com.droidtoolbox.backendtest]
+      Signing KeySets: 29
+
+Packages:
+  Package [com.droidtoolbox.backendtest] (9b0551b):
+    appId=10113
+    pkg=Package{24dcd82 com.droidtoolbox.backendtest}
+    codePath=/data/app/~~46XDwp91q4vBtjLZf7H8og==/com.droidtoolbox.backendtest-6WsEXWhrSfErrb_ZHHqF8w==
+    resourcePath=/data/app/~~46XDwp91q4vBtjLZf7H8og==/com.droidtoolbox.backendtest-6WsEXWhrSfErrb_ZHHqF8w==
+    legacyNativeLibraryDir=/data/app/~~46XDwp91q4vBtjLZf7H8og==/com.droidtoolbox.backendtest-6WsEXWhrSfErrb_ZHHqF8w==/lib
+    extractNativeLibs=true
+    primaryCpuAbi=null
+    secondaryCpuAbi=null
+    cpuAbiOverride=null
+    versionCode=1 minSdk=23 targetSdk=28
+    minExtensionVersions=[]
+    versionName=1.0
+    hiddenApiEnforcementPolicy=2
+    usesNonSdkApi=false
+    splits=[base]
+    apkSigningVersion=1
+    flags=[ ALLOW_CLEAR_USER_DATA ALLOW_BACKUP KILL_AFTER_RESTORE ]
+    privateFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION PRIVATE_FLAG_REQUEST_LEGACY_EXTERNAL_STORAGE PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    forceQueryable=false
+    pageSizeCompat=0
+    scannedAsStoppedSystemApp=false
+    supportsScreens=[small, medium, large, xlarge, resizeable, anyDensity]
+    usesLibraries:
+      android.test.base
+    usesLibraryFiles:
+      /system/framework/android.test.base.jar
+    timeStamp=2026-10-18 15:58:16
+    lastUpdateTime=2026-10-18 15:58:16
+    installerPackageName=null
+    installerPackageUid=-1
+    initiatingPackageName=com.android.shell
+    originatingPackageName=null
+    packageSource=1
+    appMetadataFilePath=null
+    appMetadataSource=0
+    signatures=PackageSignatures{3a994d0 version:1, signatures:[56840a3f], past signatures:[]}
+    installPermissionsFixed=false
+    pkgFlags=[ ALLOW_CLEAR_USER_DATA ALLOW_BACKUP KILL_AFTER_RESTORE ]
+    privatePkgFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION PRIVATE_FLAG_REQUEST_LEGACY_EXTERNAL_STORAGE PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    apexModuleName=null
+    requested permissions:
+      android.permission.POST_NOTIFICATIONS
+      android.permission.CAMERA
+    User 0: ceDataInode=557149 deDataInode=393694 installed=true hidden=false suspended=false distractionFlags=0 stopped=true notLaunched=true enabled=0 instant=false virtual=false quarantined=false
+      installReason=0
+      dataDir=/data/user/0/com.droidtoolbox.backendtest
+      firstInstallTime=2026-10-18 15:58:16
+      uninstallReason=0
+      overlay paths:
+        /data/resource-cache/com.android.systemui-neutral-u6zL.frro
+        /data/resource-cache/com.android.systemui-accent-X5Kn.frro
+        /data/resource-cache/com.android.systemui-dynamic-fDr8.frro
+      runtime permissions:
+        android.permission.POST_NOTIFICATIONS: granted=false, flags=[ USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]
+
+Queries:
+  system apps queryable: false
+  queries via forceQueryable:
+  queries via package name:
+  queries via component:
+  queryable via interaction:
+    User 0:
+  queryable via uses-library:
+
+Dexopt state:
+  [com.droidtoolbox.backendtest]

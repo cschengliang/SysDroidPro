@@ -1,0 +1,18 @@
+Toybox 0.8.12-android multicall binary (see toybox --help)
+
+usage: pkill [-fnovx] [-SIGNAL|-l SIGNAL] [PATTERN] [-G GID,] [-g PGRP,] [-P PPID,] [-s SID,] [-t TERM,] [-U UID,] [-u EUID,]
+
+-l	Send SIGNAL (default SIGTERM)
+-V	Verbose
+-f	Check full command line for PATTERN
+-G	Match real Group ID(s)
+-g	Match Process Group(s) (0 is current user)
+-n	Newest match only
+-o	Oldest match only
+-P	Match Parent Process ID(s)
+-s	Match Session ID(s) (0 for current)
+-t	Match Terminal(s)
+-U	Match real User ID(s)
+-u	Match effective User ID(s)
+-v	Negate the match
+-x	Match whole command (not substring)

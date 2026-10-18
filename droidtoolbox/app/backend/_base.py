@@ -47,6 +47,7 @@ class BackendBase:
         self._config_lock = threading.RLock()
         self._paths = {}
         self._versions = {}
+        self._bugreport_locks = {}
         self.configure(None, None, None)
 
     def configure(self, adb_path, fastboot_path, scrcpy_path):

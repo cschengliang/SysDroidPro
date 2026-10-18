@@ -69,3 +69,33 @@ def test_base_maps_launch_errors():
     b = BackendBase(Missing())
     with pytest.raises(api.ToolNotFound):
         b._run(["missing"])
+
+
+def test_error_while_readers_have_pending_data_stops_threads():
+    from tests.fakes import FakeProcess
+    process, done, result = FakeProcess(), threading.Event(), []
+    process.stdout.feed(b"x" * 2_000_000)
+    def fail(*args):
+        raise api.DeviceNotFound("设备已断开")
+    handle = ProcessStream(process, fail, lambda *args: (result.append(args), done.set()))
+    assert done.wait(2) and isinstance(result[0][-1], api.DeviceNotFound)
+    assert not any(thread.is_alive() for thread in handle._readers)
+    assert process.terminated
+
+
+def test_sdk_and_path_discovery(tmp_path, monkeypatch):
+    monkeypatch.setattr(_tools, "ROOT", tmp_path / "empty")
+    monkeypatch.setattr(_tools.shutil, "which", lambda name: None)
+    monkeypatch.delenv("ANDROID_SDK_ROOT", raising=False)
+    monkeypatch.delenv("LOCALAPPDATA", raising=False)
+    monkeypatch.setenv("ANDROID_HOME", str(tmp_path / "sdk"))
+    tool = tmp_path / "sdk/platform-tools" / ("adb.exe" if sys.platform == "win32" else "adb")
+    tool.parent.mkdir(parents=True)
+    tool.touch()
+    assert _tools.find_tool("adb") == str(tool.resolve())
+    monkeypatch.setattr(_tools.shutil, "which", lambda name: str(tmp_path / "path"))
+    assert _tools.find_tool("adb") == str((tmp_path / "path").resolve())
+
+
+def test_successful_log_output_is_not_a_permission_error():
+    assert error_for(0, "Permission denied in an old log entry", "") is None

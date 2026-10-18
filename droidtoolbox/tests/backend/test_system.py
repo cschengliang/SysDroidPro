@@ -60,3 +60,15 @@ def test_init_restart_and_user_fallback():
     runner.add(("shell", "cmd user list -v"), (1, "Unknown command", ""))
     assert backend.list_users("s")[0].id == 0
     assert backend.list_init_services("s")
+
+
+def test_hal_debug_backtrace_and_kill_scoped_arguments():
+    runner = FakeRunner().add(lambda args: True, (0, "raw dump", ""))
+    backend = fake_backend(System, runner)
+    assert backend.hal_debug("s", "android.hardware.example@1.0::IFoo/default", "hidl") == "raw dump"
+    assert shlex.split(runner.calls[-1][-1]) == ["lshal", "debug", "android.hardware.example@1.0::IFoo/default"]
+    assert backend.hal_debug("s", "android.hardware.example.IFoo/default", "aidl") == "raw dump"
+    assert backend.dump_backtrace("s", 12345, timeout=1) == "raw dump"
+    assert runner.calls[-1][-1] == "debuggerd -b 12345"
+    backend.kill_process("s", 12345, signal=15)
+    assert runner.calls[-1][-1] == "kill -15 12345"

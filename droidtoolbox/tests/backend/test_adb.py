@@ -1,5 +1,6 @@
 import inspect
 import threading
+import time
 
 import pytest
 
@@ -27,6 +28,10 @@ def test_scrcpy_options_environment_and_restore():
         show_touches=True, always_on_top=True, audio=False, record_path="C:/a 空.mp4", window_title="中文 ' title",
         window_x=-10, window_y=20, window_width=800, window_height=600)
     handle = backend.start_scrcpy("s", options, lambda *args: None, lambda err: (errors.append(err), done.set()))
+    deadline = time.monotonic() + 2
+    while not runner.spawned and time.monotonic() < deadline:
+        time.sleep(.01)
+    assert runner.spawned
     args = runner.calls[-1]
     assert args[:3] == ["scrcpy", "-s", "s"]
     assert "--video-bit-rate=12M" in args and "--no-audio" in args
@@ -46,3 +51,20 @@ def test_missing_scrcpy_and_unknown_device():
         backend.start_scrcpy("s", ScrcpyOptions(), lambda *args: None, lambda err: None)
     with pytest.raises(api.DeviceNotFound):
         backend.device_detail("no-such-serial")
+
+
+def test_scrcpy_startup_queries_are_asynchronous():
+    backend = fake_backend(AdbBackend)
+    runner = backend._runner
+    entered, release, done = threading.Event(), threading.Event(), threading.Event()
+    def slow(args):
+        entered.set()
+        release.wait(1)
+        return 0, "stay_on_while_plugged_in=0", ""
+    runner.add(("shell", "settings list global"), slow)
+    started = time.monotonic()
+    handle = backend.start_scrcpy("s", ScrcpyOptions(), lambda *args: None, lambda error: done.set())
+    assert time.monotonic() - started < .2 and entered.wait(1)
+    handle.stop()
+    release.set()
+    assert done.wait(2) and not runner.spawned

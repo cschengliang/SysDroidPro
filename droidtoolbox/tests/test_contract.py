@@ -6,6 +6,7 @@
 from __future__ import annotations
 
 import inspect
+import os
 import subprocess
 import sys
 import threading
@@ -16,26 +17,34 @@ import pytest
 
 from app.backend import api, models
 from app.backend.mock import MockBackend
+from app.backend.adb import AdbBackend
+from tests.fakes import fake_backend
 
 ROOT = Path(__file__).resolve().parents[1]
 
 
 def _backends():
     yield pytest.param(MockBackend, id="mock")
-    # 示例（AdbBackend 完成后启用）：
-    # from app.backend.adb import AdbBackend
-    # from tests.fakes import FakeRunner
-    # yield pytest.param(lambda: AdbBackend(runner=FakeRunner.from_fixtures()), id="adb-fake")
+    yield pytest.param(lambda: fake_backend(AdbBackend), id="adb-fake")
+    if os.environ.get("DTB_DEVICE"):
+        yield pytest.param(AdbBackend, id="adb-device", marks=pytest.mark.device)
 
 
 @pytest.fixture(params=list(_backends()))
 def backend(request) -> api.Backend:
-    return request.param()
+    instance = request.param()
+    if isinstance(instance, AdbBackend) and not instance._runner.__class__.__module__.startswith("tests."):
+        if request.node.originalname == "test_root_and_remount_flow":
+            pytest.skip("挂载与 verity 状态机只用假 runner 验证；真机 root 在可恢复用例中单独验证")
+        if request.node.originalname in ("test_settings_roundtrip", "test_long_task_progress_and_cancel") and os.environ.get("DTB_DESTRUCTIVE") != "1":
+            pytest.skip("此真实契约用例需 DTB_DESTRUCTIVE=1；默认只读")
+    return instance
 
 
 @pytest.fixture
 def online(backend) -> models.Device:
-    d = next((d for d in backend.list_devices() if d.state == "device"), None)
+    serial = os.environ.get("DTB_DEVICE") if isinstance(backend, AdbBackend) and type(backend._runner).__module__ != "tests.fakes" else None
+    d = next((d for d in backend.list_devices() if d.state == "device" and (serial is None or d.serial == serial)), None)
     if d is None:
         pytest.skip("没有处于 device 状态的设备")
     return d
@@ -118,10 +127,17 @@ def test_set_ro_prop_is_permission_denied(backend, online):
 def test_settings_roundtrip(backend, online):
     g = backend.list_settings(online.serial, "global")
     assert g and all(isinstance(k, str) and isinstance(v, str) for k, v in g.items())
-    backend.put_setting(online.serial, "system", "dtb_test_key", "42", 0)
-    assert backend.list_settings(online.serial, "system", 0).get("dtb_test_key") == "42"
-    backend.delete_setting(online.serial, "system", "dtb_test_key", 0)
-    assert "dtb_test_key" not in backend.list_settings(online.serial, "system", 0)
+    before = backend.list_settings(online.serial, "system", 0)
+    try:
+        backend.put_setting(online.serial, "system", "dtb_test_key", "42", 0)
+        assert backend.list_settings(online.serial, "system", 0).get("dtb_test_key") == "42"
+        backend.delete_setting(online.serial, "system", "dtb_test_key", 0)
+        assert "dtb_test_key" not in backend.list_settings(online.serial, "system", 0)
+    finally:
+        if "dtb_test_key" in before:
+            backend.put_setting(online.serial, "system", "dtb_test_key", before["dtb_test_key"], 0)
+        else:
+            backend.delete_setting(online.serial, "system", "dtb_test_key", 0)
 
 
 def test_root_and_remount_flow(backend, online):
@@ -238,8 +254,18 @@ def test_long_task_progress_and_cancel(backend, online, tmp_path):
         seen.append(p)
         if len(seen) == 3:
             cancel.set()
-    with pytest.raises(api.Cancelled):
-        backend.bugreport(online.serial, str(tmp_path), progress=progress, cancel=cancel)
+    real = isinstance(backend, AdbBackend) and type(backend._runner).__module__ != "tests.fakes"
+    before = backend.root_state(online.serial) if real else None
+    try:
+        if before is not None and not before.adbd_root:
+            backend.root(online.serial)
+        with pytest.raises(api.Cancelled):
+            backend.bugreport(online.serial, str(tmp_path), progress=progress, cancel=cancel)
+        if real:
+            assert not backend._dumpstate_pids(online.serial), "本次启动的 dumpstate 也应随取消退出"
+    finally:
+        if before is not None and backend.root_state(online.serial).adbd_root != before.adbd_root:
+            backend.root(online.serial, before.adbd_root)
     assert all(isinstance(p, models.Progress) for p in seen)
     assert all(p.percent is None or 0 <= p.percent <= 100 for p in seen)
 

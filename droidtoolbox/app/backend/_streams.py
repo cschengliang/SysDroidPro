@@ -32,7 +32,7 @@ class ShellChannel(ProcessStream, api.ShellSession):
             if stopped:
                 on_exit(None)
             else:
-                on_exit(error or error_for(code, out, err, serial))
+                on_exit(error or error_for(code, out, err, serial, checked=False))
 
         super().__init__(process, output, finish, health=lambda: backend._check_online(serial))
         self.send("echo __DTB_PID__$$")
@@ -127,6 +127,8 @@ class LogStream(api.StreamHandle):
                     self._flush(True)
                     continue
                 error = failure or error_for(code, out, err, self._serial)
+                if "unexpected eof" in combined:
+                    error = api.DeviceNotFound("日志连接已中断，请重新连接", detail(out + err))
                 if error is None:
                     error = api.DeviceNotFound("日志连接已结束，请重新连接")
                 break

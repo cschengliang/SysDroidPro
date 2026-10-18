@@ -100,3 +100,12 @@ def test_dmesg_permission_and_log_disconnect():
         process.finish(1)
         assert wait_for(lambda: result) and isinstance(result[0], error)
         handle.stop()
+
+
+def test_clear_logcat_and_dmesg_only_with_fake_runner():
+    runner = FakeRunner().add(lambda args: True, (0, "", ""))
+    backend = fake_backend(Streams, runner)
+    backend.clear_logcat("s", ["main", "system"])
+    assert runner.calls[-1][1:] == ["-s", "s", "logcat", "-c", "-b", "main", "-b", "system"]
+    backend.clear_logcat("s", ["dmesg"])
+    assert runner.calls[-1][1:] == ["-s", "s", "shell", "dmesg -c"]

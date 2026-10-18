@@ -327,7 +327,7 @@ def components(output, package, user=0):
     rows = {}
     for line in output.splitlines():
         stripped = line.strip()
-        if line and not line[0].isspace():
+        if stripped in kinds or (line and not line[0].isspace()):
             kind, current, authority = kinds.get(stripped), None, None
         if kind is None:
             continue
@@ -350,6 +350,9 @@ def components(output, package, user=0):
             permission = token(line, "permission")
             if permission and permission != "null":
                 row["permission"] = permission
+            provider_authority = token(line, "authority")
+            if kind == "provider" and provider_authority and provider_authority != "null":
+                row["authorities"].add(provider_authority)
     return [M.Component(kind, name, data["exported"], package_enabled and (name in enabled or (name not in disabled and data["enabled"])),
                         data["permission"], ";".join(sorted(data["authorities"])) or None)
             for (kind, name), data in sorted(rows.items())]

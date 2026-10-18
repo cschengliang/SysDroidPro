@@ -2,6 +2,8 @@
 from dataclasses import replace
 from pathlib import Path
 import re
+import threading
+import time
 
 from . import api, parsers as P
 from ._base import detail, error_for, quote_args, text
@@ -58,19 +60,59 @@ class CrashMethods:
             size = len(data)
         else:
             # 只传上限+1 字节，避免把超大 tombstone 全部读入内存。
-            size_out = self._shell(serial, quote_args("stat", "-c", "%s", "--", path))
+            size_out = self._shell(serial, quote_args("stat", "-L", "-c", "%s", "--", path))
             size = P.integer(size_out.strip())
             code, data, err = self._run(self._adb_args(serial, "exec-out", quote_args("head", "-c", max_bytes + 1, "--", path)))
             error = error_for(code, "", text(err), serial)
             if error:
                 raise error
-            if size is None:
-                size = len(data)
-        truncated = size > max_bytes or len(data) > max_bytes
+            if size is not None and len(data) > size:
+                size = None  # /proc 等虚拟文件的 stat 大小可以是 0。
+        truncated = (size is not None and size > max_bytes) or len(data) > max_bytes
         output = data[:max_bytes].decode("utf-8", errors="replace")
-        return output + f"\n…（已截断，原文件 {size} 字节）" if truncated else output
+        suffix = f"原文件 {size} 字节" if size is not None else "原文件大小未知"
+        return output + f"\n…（已截断，{suffix}）" if truncated else output
+
+    def _dumpstate_pids(self, serial):
+        result = self.shell(serial, "pidof dumpstate", timeout=1)
+        return {int(pid) for pid in result.stdout.split() if pid.isdigit()} if result.exit_code == 0 else set()
+
+    def _cancel_dumpstate(self, serial, before):
+        # 只结束本次任务后新出现的 dumpstate，不触碰开始前已有的任务。
+        for pid in self._dumpstate_pids(serial) - before:
+            result = self.shell(serial, f'[ "$(cat /proc/{pid}/comm 2>/dev/null)" = dumpstate ] && kill -INT {pid}', timeout=1)
+            if result.exit_code:
+                continue  # 非 root 可能无权中止远端；本地 adb 仍已停止。
+            deadline = time.monotonic() + .7
+            while pid in self._dumpstate_pids(serial) and time.monotonic() < deadline:
+                time.sleep(.05)
+            if pid in self._dumpstate_pids(serial):
+                self.shell(serial, f'[ "$(cat /proc/{pid}/comm 2>/dev/null)" = dumpstate ] && kill -KILL {pid}', timeout=1)
 
     def bugreport(self, serial, dest_dir, progress=None, cancel=None):
+        with self._config_lock:
+            lock = self._bugreport_locks.setdefault(serial, threading.Lock())
+        while not lock.acquire(timeout=.1):
+            if cancel and cancel.is_set():
+                raise api.Cancelled("已取消")
+        try:
+            if cancel and cancel.is_set():
+                raise api.Cancelled("已取消")
+            before = self._dumpstate_pids(serial)
+            if before:
+                raise api.CommandFailed("设备已有 Bug 报告任务正在运行，请等待它结束后再试")
+            try:
+                return self._bugreport(serial, dest_dir, progress, cancel)
+            except api.Cancelled:
+                try:
+                    self._cancel_dumpstate(serial, before)
+                except api.BackendError:
+                    pass
+                raise
+        finally:
+            lock.release()
+
+    def _bugreport(self, serial, dest_dir, progress=None, cancel=None):
         dest = Path(dest_dir)
         try:
             dest.mkdir(parents=True, exist_ok=True)

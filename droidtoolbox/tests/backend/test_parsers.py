@@ -152,6 +152,9 @@ def test_progress_and_fields():
     assert P.bugreport_path(progress) == "C:/output/bugreport-test.zip"
     assert P.field("  a=null", "a") is None
     assert P.token("a=true b=1", "b") == "1"
+    real_progress = fixture("bugreport_progress.emu36") + fixture("bugreport_progress.stderr.emu36")
+    assert P.bugreport_path(real_progress).endswith(".zip")
+    assert P.progress_percent(real_progress) is None
 
 
 def test_real_file_names_links_and_nodes():

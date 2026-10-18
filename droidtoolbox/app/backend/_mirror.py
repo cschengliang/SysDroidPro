@@ -1,9 +1,10 @@
 """独立 scrcpy 进程，使用选定的 adb 并恢复临时设备设置。"""
 import os
+import threading
 
-from . import api
-from ._base import error_for
-from ._proc import ProcessStream
+from . import api, parsers as P
+from ._base import error_for, quote_args
+from ._proc import DeferredStream, ProcessStream
 
 
 class MirrorMethods:
@@ -24,24 +25,32 @@ class MirrorMethods:
             args.append("--no-audio")
         environment = os.environ.copy()
         environment["ADB"] = self._tool("adb")
-        restore = []
-        for needed, namespace, key in ((options.stay_awake, "global", "stay_on_while_plugged_in"),
-                                       (options.show_touches, "system", "show_touches")):
-            if needed:
-                values = self.list_settings(serial, namespace)
-                restore.append((namespace, key, key in values, values.get(key)))
-        process = self._popen(args, env=environment)
-
-        def finish(code, out, err, stopped, error):
+        def run(handle):
+            restore = []
+            for needed, namespace, key in ((options.stay_awake, "global", "stay_on_while_plugged_in"),
+                                           (options.show_touches, "system", "show_touches")):
+                if handle.stopped:
+                    return None
+                if needed:
+                    values = P.settings(self._shell(serial, quote_args("settings", "list", namespace), timeout=1))
+                    restore.append((namespace, key, key in values, values.get(key)))
+            done, results = threading.Event(), []
+            def finish(*result):
+                results.append(result)
+                done.set()
+            active = handle.attach(lambda: ProcessStream(self._popen(args, env=environment),
+                lambda *data: handle.emit(on_output, *data), finish, health=lambda: self._check_online(serial)))
+            while not done.wait(.05):
+                if handle.stopped:
+                    active.stop()
+            code, out, err, stopped, error = results[0]
             failure = None if stopped else error or error_for(code, out, err, serial)
             for namespace, key, existed, value in restore:
                 try:
-                    if existed:
-                        self.put_setting(serial, namespace, key, value)
-                    else:
-                        self.delete_setting(serial, namespace, key)
+                    self._shell(serial, quote_args("settings", "put" if existed else "delete", namespace,
+                                                  key, *([value] if existed else [])), timeout=1)
                 except api.BackendError as exc:
                     failure = failure or exc
-            on_exit(failure)
+            return failure
 
-        return ProcessStream(process, on_output, finish, health=lambda: self._check_online(serial))
+        return DeferredStream(run, on_exit)

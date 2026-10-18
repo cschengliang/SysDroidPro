@@ -160,6 +160,8 @@ class FakeRunner:
             return 0, (FIXTURES / "detail.emu36").read_bytes(), b""
         if script == ROOT_SCRIPT:
             return 0, (FIXTURES / ("root_state_root.emu36" if self.root else "root_state_nonroot.emu36")).read_bytes(), b""
+        if script == "pidof dumpstate":
+            return 1, b"", b""
         if script.startswith("getprop ro.product.manufacturer;"):
             return 0, b"Google\n16\n36\n==BATTERY\nlevel: 100\n", b""
         words = shlex.split(script)

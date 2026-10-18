@@ -81,17 +81,20 @@ def test_pull_success_stages_and_returns_paths(tmp_path):
 
 
 def test_read_text_limits_bytes_and_does_not_interpret_contents():
-    runner = FakeRunner().add(lambda args: args[-1].startswith("stat -c"), (0, "100", ""))
+    runner = FakeRunner().add(lambda args: args[-1].startswith("stat -L -c"), (0, "100", ""))
     runner.add(lambda args: "exec-out" in args, (0, b"Permission denied in a log body", ""))
     backend = fake_backend(Files, runner)
     assert backend.read_text("s", "/log", 10).startswith("Permission\n…")
     assert "100 字节" in backend.read_text("s", "/log", 10)
+    runner.add(lambda args: args[-1].startswith("stat -L -c"), (0, "0", ""))
+    assert "原文件大小未知" in backend.read_text("s", "/proc/log", 10)
 
 
 def test_dropbox_read_and_bugreport_artifact(tmp_path):
     runner = FakeRunner().add(("shell", "date +%z"), (0, "+0000\n", ""))
     runner.add(lambda args: "dumpsys dropbox --file" in args[-1], (0, fixture("dropbox_file.emu36"), ""))
     runner.add(lambda args: "dumpsys dropbox --print" in args[-1], (0, fixture("dropbox_print.emu36"), ""))
+    runner.add(("shell", "pidof dumpstate"), (1, "", ""))
     backend = fake_backend(Files, runner)
     from app.backend.parsers import dropbox_files, timezone_offset
     boot = next(row for row in dropbox_files(fixture("dropbox_file.emu36"), timezone_offset("+0000")) if row.name.startswith("SYSTEM_BOOT@"))

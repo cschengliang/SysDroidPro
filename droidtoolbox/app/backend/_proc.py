@@ -8,7 +8,7 @@ import subprocess
 import threading
 import time
 
-from .api import BackendError, CommandFailed, StreamHandle
+from .api import BackendError, Cancelled, CommandFailed, StreamHandle
 
 
 class Runner:
@@ -71,6 +71,8 @@ class ProcessStream(StreamHandle):
             last = decoder.decode(b"", final=True)
             if last:
                 self._put((stream, last))
+        except (OSError, ValueError) as exc:
+            self._put(("error", exc))
         finally:
             self._put((stream, None))
 
@@ -87,6 +89,8 @@ class ProcessStream(StreamHandle):
             while len(closed) < 2 and not self._stop.is_set():
                 try:
                     stream, chunk = self._queue.get(timeout=0.05)
+                    if stream == "error":
+                        raise CommandFailed("读取进程管道失败", str(chunk))
                     if chunk is None:
                         closed.add(stream)
                     else:
@@ -125,3 +129,52 @@ class ProcessStream(StreamHandle):
     @property
     def running(self):
         return self._thread.is_alive() and not self._stop.is_set()
+
+
+class DeferredStream(StreamHandle):
+    """启动也可能涉及设备查询时，把整个生命周期移到后台线程。"""
+    def __init__(self, target, on_exit):
+        self._lock = threading.RLock()
+        self._stop = threading.Event()
+        self._active = None
+        self._target, self._exit = target, on_exit
+        self._thread = threading.Thread(target=self._run, daemon=True, name="dtb-startup")
+        self._thread.start()
+
+    @property
+    def stopped(self):
+        return self._stop.is_set()
+
+    def emit(self, fn, *args):
+        with self._lock:
+            if not self.stopped:
+                fn(*args)
+
+    def attach(self, factory):
+        with self._lock:
+            if self.stopped:
+                raise Cancelled("已取消")
+            self._active = factory()
+            return self._active
+
+    def _run(self):
+        try:
+            error = self._target(self)
+        except Cancelled as exc:
+            error = None if self.stopped else exc
+        except BackendError as exc:
+            error = None if self.stopped else exc
+        except Exception as exc:
+            error = CommandFailed("启动后台任务失败", str(exc))
+        self._exit(error)
+
+    def stop(self):
+        with self._lock:
+            self._stop.set()
+            active = self._active
+        if active:
+            active.stop()
+
+    @property
+    def running(self):
+        return self._thread.is_alive() and not self.stopped

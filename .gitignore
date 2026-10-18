@@ -23,3 +23,4 @@ desktop.ini
 backend-adb-checkout/
 .test-tmp/
 pytest-cache-files-*/
+backend-adb.bundle

@@ -6,7 +6,7 @@ import threading
 import time
 
 from . import api, parsers as P
-from ._base import error_for, quote_args, text
+from ._base import detail, error_for, quote_args, text
 from .models import RemountResult
 
 DETAIL_SCRIPT = "\n".join(f"echo =={key}; {cmd}" for key, cmd in [
@@ -122,7 +122,7 @@ class DeviceMethods:
         result = self._adb(serial, "root" if enable else "unroot", checked=False)
         output = result.stdout + result.stderr
         if "cannot run as root in production builds" in output:
-            raise api.CommandFailed("user 版本固件不支持 adb root", output)
+            raise api.CommandFailed("user 版本固件不支持 adb root", detail(output))
         error = error_for(result.exit_code, result.stdout, result.stderr, serial)
         if error:
             raise error
@@ -136,7 +136,7 @@ class DeviceMethods:
         if isinstance(error, api.PermissionDenied):
             raise error
         if result.exit_code or re.search(r"remount failed|not.*writable|failed to remount", output, re.I):
-            raise api.CommandFailed("重新挂载失败：模拟器可能未以 -writable-system 启动，或需要先处理 verity 并重启", output, result.exit_code)
+            raise api.CommandFailed("重新挂载失败：模拟器可能未以 -writable-system 启动，或需要先处理 verity 并重启", detail(output), result.exit_code)
         needs = "reboot" in output.lower() and any(s in output.lower() for s in ("take effect", "now reboot", "reboot your device", "reboot the device"))
         return RemountResult(output, needs)
 
@@ -150,13 +150,13 @@ class DeviceMethods:
         result = self._adb(address, "connect", address)
         match = re.search(r"(?:already )?connected to (\S+)", result.stdout + result.stderr)
         if not match:
-            raise api.CommandFailed(f"无法连接到 {address}：请检查地址与无线调试状态", result.stdout + result.stderr)
+            raise api.CommandFailed(f"无法连接到 {address}：请检查地址与无线调试状态", detail(result.stdout + result.stderr))
         return match[1]
 
     def pair(self, address, code):
         result = self._adb(address, "pair", address, code)
         if "Successfully paired" not in result.stdout + result.stderr:
-            raise api.CommandFailed("配对失败：请检查配对码与无线调试状态", result.stdout + result.stderr)
+            raise api.CommandFailed("配对失败：请检查配对码与无线调试状态", detail(result.stdout + result.stderr))
 
     def disconnect(self, serial):
         self._adb(serial, "disconnect", serial)
