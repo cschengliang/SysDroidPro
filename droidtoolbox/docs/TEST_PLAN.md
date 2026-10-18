@@ -1,6 +1,29 @@
 # 测试计划
 
-> **注意（2026-10-18）**：前端已按 我的需求.txt v3 调整，接口契约 `app/backend/api.py` / `models.py` 已同步更新（新增 root_state、remount 流程、settings、服务 / HAL / 进程、多用户、组件、APEX、run_adb 等，去掉了性能、录屏、fastboot 刷机相关方法）。本文档尚未同步，待确认实施后更新；在此之前以 `api.py` 为准。
+> **v3（2026-10-18）**：第 0 节为 v3 的补充，优先于后文。后文涉及已删除方法（perf、screenrecord、fastboot getvar / flash、sideload）的样本和用例不再需要。
+
+## 0. v3 补充
+
+**现状基线**：`python -m pytest` → 38 passed（契约 23 个只跑 mock，界面 15 个）。
+
+**真机**：本机模拟器 `emulator-5554`（Android 16 / API 36，userdebug，x86_64，只有 user 0）。
+- `DTB_DEVICE=emulator-5554` 运行 `-m device`；`DTB_DESTRUCTIVE=1` 允许在这台模拟器上做可恢复的修改：
+  安装 / 卸载测试 APK、push / pull 到 `/data/local/tmp/dtb_test/`、`setprop debug.dtb.*`、`settings put` 后恢复原值、
+  `adb root` / `adb unroot`、启停非核心 init 服务（如 `traced_probes`，测试后恢复）。
+- 仍然禁止：`reboot`、`remount` 后不恢复、`disable-verity`、刷写或擦除分区、`pm clear` 系统应用、停用系统组件。
+  需要重启的流程（remount → reboot）只用假 runner 测。
+- 测试 APK：本机没有 Android build-tools。可以从模拟器上拉一个可卸载的非系统预装包（`pm list packages -3`）作为安装 / 卸载样本；没有合适的包就跳过安装类真机用例，并在报告里注明。
+
+**需要新增的样本**（从模拟器采集，文件名带 `.emu36`）：`service_list`、`lshal`、`getprop_Z`、`settings_list_{system,secure,global}`、
+`cmd_user_list_v`、`pm_list_users`、`pm_list_packages_user0`、`apex_list`、`ps_A`、`proc_status`、`proc_maps`、
+`dumpsys_package_<pkg>`（至少一个系统包、一个带多组件的包）、`root_state`（root 前后各一份）、`remount_*`（失败与需重启两种输出，可手写 `.synthetic`）、`id_u`。
+
+**契约测试**：`tests/test_contract.py::_backends()` 加入 `AdbBackend(runner=FakeRunner.from_fixtures())`；
+`DTB_DEVICE` 存在时再加入连接 `emulator-5554` 的真实实例，同一组断言全部通过（`test_root_and_remount_flow` 在模拟器上 remount 可能失败，
+此时断言错误类型是 `CommandFailed` / `PermissionDenied` 并跳过即可）。
+
+**界面联调**：`python main.py`（不加 `--mock`）连上模拟器，12 个页面逐个打开，确认没有未处理异常；
+可以复用 `tests/ui/test_pages.py` 的写法另建 `tests/device/test_ui_real.py`（`@pytest.mark.device`），用真实后端打开每页并截图到 `--basetemp`。
 
 
 ## 运行

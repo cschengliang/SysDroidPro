@@ -1,6 +1,58 @@
 # 后端实现规格：AdbBackend
 
-> **注意（2026-10-18）**：前端已按 我的需求.txt v3 调整，接口契约 `app/backend/api.py` / `models.py` 已同步更新（新增 root_state、remount 流程、settings、服务 / HAL / 进程、多用户、组件、APEX、run_adb 等，去掉了性能、录屏、fastboot 刷机相关方法）。本文档尚未同步，待确认实施后更新；在此之前以 `api.py` 为准。
+> **v3（2026-10-18）**：契约按 `我的需求.txt` v3 更新。**第 0 节列出 v3 的增删改，优先于后文**；后文第 2 节中已删除方法（性能、录屏、fastboot 刷机、sideload）的说明可以忽略。始终以 `api.py` / `models.py` 为准。
+
+## 0. v3 变更（优先于后文）
+
+### 0.1 已删除（不要实现）
+
+`start_perf`、`start_screenrecord`、`fastboot_vars`、`list_partitions`、`flash`、`erase`、`set_active_slot`、`boot_image`、`flashing_lock`、`sideload`、`list_services`（改为 `list_binder_services`）。`kill_process` 保留。
+
+### 0.2 工具查找补充
+
+在第 1.2 节的顺序中，**第 1 步（configure 路径）之后、第 2 步（PATH）之前**插入随程序附带的工具目录（相对 `droidtoolbox/` 根目录，即 `Path(app/backend/adb.py).parents[2]`）：
+
+- adb / fastboot：`tool/platform-tools/`（本机为 adb 37.0.1）
+- scrcpy：`tool/scrcpy-win64-v4.1/scrcpy.exe`（scrcpy 4.1）
+
+scrcpy 自带一个 adb，启动 scrcpy 时必须设置环境变量 `ADB=<我们解析出的 adb 路径>`，避免两个版本的 adb 互相杀服务。
+
+### 0.3 新增 / 修改的方法
+
+| 方法 | 命令 | 解析与注意事项 |
+| --- | --- | --- |
+| `root_state` | 一条 shell：`id -u; getprop ro.build.type; getprop ro.boot.veritymode; getprop partition.system.verified; mount \| grep -E ' / \| /system '` | `adbd_root` = `id -u` 为 0；`build_type` 原样；`system_writable`：`/` 或 `/system` 挂载行包含 `rw,`（overlayfs 挂载也算 rw），取不到为 None；`verity_enabled`：`ro.boot.veritymode` 为 `enforcing` / `eio` → True，`disabled` → False，空 → 看 `partition.system.verified`，都取不到为 None |
+| `root(enable)` | `adb root` / `adb unroot`，然后 `adb -s S wait-for-device`（最多 15 秒） | 输出含 `cannot run as root in production builds` → `CommandFailed("user 版本固件不支持 adb root")`；`already running as root` 视为成功。返回 adb 的原始输出 |
+| `remount` | `adb remount` | 未 root → `PermissionDenied`（输出含 `Not running as root`）。返回 `RemountResult(output, needs_reboot)`；`needs_reboot` 当输出包含 `reboot` 且含 `take effect` / `Now reboot` / `reboot your device` / `Reboot the device`（大小写不敏感）。模拟器未以 `-writable-system` 启动时 remount 会失败，抛 `CommandFailed` 并在 message 里说明 |
+| `disable_verity` | `adb disable-verity` | 返回输出；未 root → `PermissionDenied` |
+| `list_apex_modules` | `pm list packages --apex-only --show-versioncode -f` | 行 `package:/system/apex/com.android.adbd.capex=com.android.adbd versionCode:351010000`；按**最后一个** `=` 拆路径与名称；按名称排序 |
+| `run_adb(args)` | `adb -s S <args...>` | 不抛 `CommandFailed`，返回 `ShellResult`；超时抛 `CommandTimeout`。`args[0] == "shell"` 时等价于 `shell()` |
+| `start_command(args, on_output, on_exit)` | `popen([adb, -s, S, *args])` | 按块读 stdout / stderr 回调 `on_output(text, stream)`；进程结束 `on_exit(退出码, None)`；被 `stop()` 终止时 `on_exit(None, None)`；设备断开 `on_exit(None, DeviceNotFound)` |
+| `get_prop_contexts` | `getprop -Z` | 行 `[key]: [u:object_r:xxx_prop:s0]` |
+| `list_settings(ns, user)` | `settings [--user N] list <ns>` | 每行 `key=value`，**按第一个 `=` 拆分**（值里可能有 `=`）；值 `null` 保留字符串 `"null"`。global 不加 `--user` |
+| `put_setting` / `delete_setting` | `settings [--user N] put <ns> <key> <value>` / `settings [--user N] delete <ns> <key>` | value 为空串时传 `''` |
+| `list_binder_services` | `service list` | 行 `12\tactivity: [android.app.IActivityManager]`，方括号为空时 `interface=None`；按名字排序（不区分大小写） |
+| `list_init_services` | `getprop`（复用 `get_props`） | `init.svc.<name>` → `InitService(name, state)`；按名字排序 |
+| `control_init_service(name, action)` | `start <name>` / `stop <name>`；restart = stop 后 start | 需要 root：未 root 时设备输出 `must be root` 或类似 → `PermissionDenied`；名称用 `shlex.quote` |
+| `list_hals` | HIDL：`lshal --neat -itp`（不同版本参数可能不同，先在模拟器上确认，退回 `lshal -itp`）；AIDL：`service list` 中名称以 `android.hardware.` 开头的条目 | HIDL 的 `transport` 为 `hwbinder` / `passthrough`，`pid` 取 Server 列（`N/A` → None）；有 pid 的用一次 `ps -o PID,NAME -p <pid,...>` 补进程名。AIDL 的 pid / 进程名可用 `dumpsys --pid <name>`（Android 12+）获取，取不到为 None。按名称排序 |
+| `hal_debug(name, kind)` | HIDL：`lshal debug <name>`；AIDL：`dumpsys <name>` | 原样返回，超时 30 秒 |
+| `list_processes` | `ps -A -o PID,PPID,USER,RSS,S,NAME` | RSS 是 KB → 字节；跳过表头 |
+| `process_detail(pid)` | 一条 shell，分段：`cat /proc/<pid>/status`、`cat /proc/<pid>/cmdline \| tr '\0' ' '`、`for t in /proc/<pid>/task/*; do echo "${t##*/} $(cat $t/comm)"; done`、`grep '\.so' /proc/<pid>/maps \| awk '{print $6}' \| sort -u`、`ls /proc/<pid>/fd \| wc -l` | 进程不存在 → `CommandFailed("进程 N 不存在（可能已退出）")`；未 root 读不到的段留空列表 / None，`status` 至少返回能读到的内容 |
+| `dump_backtrace(pid)` | `debuggerd -b <pid>` | 需要 root；原样返回 |
+| `list_users` | 优先 `cmd user list -v`（有 `type=full.SYSTEM` / `profile.MANAGED` / `profile.CLONE` / `full.GUEST` 等），失败退回 `pm list users`（`UserInfo{0:Owner:c13} running`） | `kind`：主用户 / 工作资料（MANAGED）/ 分身（CLONE）/ 访客（GUEST）/ 其它；`name` 为 null 时用 “机主”（id 0）或 “用户 N”；`running` 看 `running` 字样；按 id 排序 |
+| `list_packages(user)` | `pm list packages -f -U --show-versioncode --user N`；系统集合 `pm list packages -s --user N`；停用集合 `pm list packages -d --user N` | `enabled` 指**该用户下**是否启用；`uid` 用输出中的 `uid:`（已是该用户的 uid） |
+| `package_detail(pkg, user)` | `dumpsys package <pkg>` | 运行时权限取 `User <user>:` 段内的 `runtime permissions:`；`installed_users` 为所有 `User N: ... installed=true` 的 N；`data_dir` 若只有 user 0 的路径，替换为 `/data/user/<user>/<pkg>` |
+| `package_components(pkg, user)` | `dumpsys package <pkg>`（先在 Android 16 模拟器上确认组件信息出现在哪些段落） | 可用来源：各 Resolver Table 段（带 intent-filter 的组件）、`Activities:` / `Services:` 等段（不同版本不同）、`User N:` 段中的 `disabledComponents:` / `enabledComponents:`。`exported` 取不到为 None；`enabled` 按该用户的 enabled/disabled 列表与默认值推断。**以真机验证为准，拿不到的字段留 None，不要编造** |
+| `set_component_enabled(component, enabled, user)` | `pm enable --user N <pkg/cls>` / `pm disable --user N <pkg/cls>` | 需要 root（userdebug 下 shell 也可能有权限，以实际结果为准）；输出含 `new state:` 为成功 |
+| `dump_package(pkg)` | `dumpsys package <pkg>` | 原样返回 |
+| 包操作带 `user` | `install --user N`（`options.user` 为 None 时不加）；`pm uninstall [-k] [--user N]`；`pm clear --user N`；`am force-stop --user N`；`pm enable/disable-user --user N`；`pm grant/revoke --user N` | `launch(user)`：先 `cmd package resolve-activity --brief --user N -c android.intent.category.LAUNCHER <pkg>` 取组件（最后一行 `pkg/cls`），再 `am start --user N -n <组件>`；解析不到 → `CommandFailed("该应用没有可启动的界面")` |
+| `start_logcat(["dmesg"])` | `adb shell dmesg -w`（需要 root） | 行原样转发（界面不解析）；未 root 时设备输出 `klogctl: Permission denied` → `on_exit(PermissionDenied)` |
+| `start_scrcpy` 新选项 | `--window-title=<title>`、`--window-x=`、`--window-y=`、`--window-width=`、`--window-height=`（None 不加） | scrcpy 4.x 参数名以 `scrcpy --help` 为准；其余见 2.9 节 |
+| `device_detail` 新字段 | 在 2.1 节的分段脚本里补 `cat /proc/version` 与 getprop | `build_date`=`ro.build.date`；`vendor_security_patch`=`ro.vendor.build.security_patch`；`baseband`=`gsm.version.baseband`；`bootloader`=`ro.bootloader`；`verified_boot`=`ro.boot.verifiedbootstate`；`kernel_full`=`/proc/version`；`partition_fingerprints`：`ro.<part>.build.fingerprint`（part ∈ system / system_ext / product / vendor / odm），缺的不放 |
+
+### 0.4 测试设备
+
+本机有一台 Android 16（API 36）userdebug 模拟器 `emulator-5554`（x86_64，SELinux Enforcing，只有 user 0，adbd 默认非 root）。真机测试用它：`DTB_DEVICE=emulator-5554`。
 
 
 界面已经完成，只通过 `app/backend/api.py` 中的 `Backend` 抽象类访问设备。本文档说明如何实现真实后端 `app/backend/adb.py` 里的 `AdbBackend`。
