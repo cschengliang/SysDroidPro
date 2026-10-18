@@ -129,6 +129,9 @@ class AppsPage(Page):
         self.c_filter = bar.add(grow(ui.FilterField("Filter: class", width=200), 160))
         self.c_kind = bar.add(narrow_select([("all", "all"), ("activity", "Activity"), ("service", "Service"),
                                          ("receiver", "Receiver"), ("provider", "Provider")], "all", 96, "组件类型"))
+        hint = bar.add(label("dumpsys subset", "faint", px=11))
+        hint.setToolTip("组件列表来自 dumpsys package，是可见子集：带 intent-filter 的组件、Provider 和被改过启停状态的组件。\n"
+                        "没有列出的组件不代表不存在；导出、权限等取不到的字段显示为 —。")
         c_on = bar.add(tbtn("Enable", "启用所选组件（pm enable，需要 root）"))
         c_off = bar.add(tbtn("Disable", "停用所选组件（pm disable，需要 root）"))
         cl.addWidget(bar)

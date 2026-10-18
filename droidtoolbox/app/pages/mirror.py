@@ -87,6 +87,8 @@ class MirrorPage(Page):
         self._proc = None
         self._serial: str | None = None
         self._gen = 0
+        self._ready = True
+        self._title = ""
 
     def load(self, device):
         self._check_tool()
@@ -164,8 +166,11 @@ class MirrorPage(Page):
             self.ctx.report(e, "无法启动 scrcpy")
             return
         self._serial = d.serial
+        self._title = opts.window_title
+        self._ready = False                       # 收到 scrcpy 的 Renderer / Texture 输出才算窗口已打开
         self._set_running(True)
-        self.ctx.notify("ok", "投屏窗口已打开", opts.window_title)
+        self.state_lbl.setText(f"● starting {d.serial}")
+        self.ctx.notify("info", "正在启动投屏…", opts.window_title)
 
     def _stop(self):
         self._gen += 1
@@ -178,8 +183,15 @@ class MirrorPage(Page):
     def _out(self, text: str, stream: str):
         for line in text.rstrip("\n").split("\n"):
             self.log.write(line, "error" if stream == "stderr" or line.startswith("ERROR") else "output")
+            if not self._ready and ("Renderer:" in line or "Texture:" in line):
+                self._ready = True
+                self.state_lbl.setText(f"● mirroring {self._serial}")
+                self.ctx.notify("ok", "投屏窗口已打开", self._title)
 
     def _exited(self, err):
+        if not self._ready and err is None:
+            self.ctx.notify("warn", "投屏没有启动成功", "scrcpy 在窗口出现前退出了，详细信息见输出区。")
+        self._ready = True
         self._proc = None
         self._set_running(False)
         self.log.write(f"scrcpy 已退出：{err}" if err else "投屏窗口已关闭。", "error" if err else "system")

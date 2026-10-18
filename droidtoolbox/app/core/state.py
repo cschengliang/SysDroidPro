@@ -71,14 +71,19 @@ class AppState(QtCore.QObject):
         self._set_devices(devices)
 
     def _set_devices(self, devices: list[Device]):
+        appeared = {d.serial for d in devices} - {d.serial for d in self.devices}
         if devices != self.devices:
             self.devices = devices
             self.devicesChanged.emit(devices)
         self._auto_root(devices)
         cur = next((d for d in devices if d.serial == self._serial), None)
-        if cur is None and devices and self._serial is None:
-            cur = next((d for d in devices if d.is_adb), devices[0])
-            self._serial = cur.serial
+        if cur is None and devices:
+            # 从未选过：选第一台；选中的设备已不在列表：只在有新设备插入时切换过去
+            # （已选设备重启时会短暂消失，期间不因为别的设备一直在线就切走，回来后仍选中它）
+            pool = devices if self._serial is None else [d for d in devices if d.serial in appeared]
+            if pool:
+                cur = next((d for d in pool if d.is_adb), pool[0])
+                self._serial = cur.serial
         prev = self.current
         self.current = cur
         if (prev is None) != (cur is None) or (prev and cur and (prev.serial != cur.serial or prev.state != cur.state)):

@@ -47,7 +47,8 @@ class Device:
 
     @property
     def display_name(self) -> str:
-        return " ".join(x for x in (self.manufacturer, self.model) if x) or self.product or self.serial
+        maker = self.manufacturer if self.manufacturer and self.manufacturer.lower() != "unknown" else None  # 模拟器厂商为 unknown
+        return " ".join(x for x in (maker, self.model) if x) or self.product or self.serial
 
     @property
     def is_adb(self) -> bool:

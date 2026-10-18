@@ -42,9 +42,9 @@ class PrefsPage(Page):
         tl.setContentsMargins(16, 16, 16, 16)
         tl.setSpacing(12)
         self.fields = {}
-        for key, name, hint in (("adb_path", "adb", "留空则从 PATH、ANDROID_HOME / ANDROID_SDK_ROOT 自动查找"),
-                                ("fastboot_path", "fastboot", "留空则在 adb 同目录或 PATH 中查找"),
-                                ("scrcpy_path", "scrcpy", "用于屏幕投射；留空则从 PATH 查找")):
+        for key, name, hint in (("adb_path", "adb", "留空则依次查找：附带的 tool/platform-tools → PATH → ANDROID_HOME / ANDROID_SDK_ROOT → Android Studio 默认 SDK；填写了但文件不存在视为未找到"),
+                                ("fastboot_path", "fastboot", "留空则依次查找：adb 同目录 → 附带的 tool/platform-tools → PATH → SDK"),
+                                ("scrcpy_path", "scrcpy", "用于屏幕投射；留空则依次查找：附带的 tool/scrcpy-win64-v4.1 → PATH")):
             f = ui.TextField(f"{name} 路径", f"自动（{name}.exe）", hint, mono=True)
             f.edit.setText(s.get(key))
             f.edit.editingFinished.connect(lambda k=key, f=f: self._save_path(k, f))

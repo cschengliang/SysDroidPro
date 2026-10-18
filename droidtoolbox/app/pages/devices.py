@@ -112,7 +112,8 @@ class DevicesPage(Page):
     def _as_dict(d: Device) -> dict:
         state = "fastboot" if d.state == "bootloader" else d.state
         return dict(serial=d.serial, state=state, transport=d.transport, model=d.model or d.product or d.serial,
-                    manufacturer=d.manufacturer, android=d.android, api=d.api, battery=d.battery)
+                    manufacturer=None if (d.manufacturer or '').lower() == 'unknown' else d.manufacturer,
+                    android=d.android, api=d.api, battery=d.battery)
 
     def _current(self, d: Device | None):
         if d and d.serial == self._pending_remount and d.state == "device":
