@@ -1,0 +1,240 @@
+Android 系统工程师工具箱 —— 需求说明（v3，方案已定）
+=====================================================
+
+使用场景（据此做取舍）
+- 使用者：Android 系统开发工程师。
+- 设备：userdebug 固件，通常同时只连一台。
+- 主要目的：方便地查询系统各模块、组件的信息（属性、settings、服务、HAL、进程、应用组件、版本），
+  其次是 root / remount 后做少量修改与验证。
+
+由此得出的取舍原则
+1. userdebug 下 adb root 一定可用 → 只做 adb root，不做 Magisk su；连接设备后默认自动 root，查询能力才完整。
+2. 单设备为主 → 不做多设备批量执行、不做多设备同时投屏，界面围绕“当前设备”。
+3. 以“查”为核心 → 查询类页面做深（服务 / HAL / init 服务 / 进程 / 应用组件 / 快照对比）；
+   性能监控、截屏录屏、刷机这类与查询关系弱的页面本期去掉。
+4. 少做跨用户写操作 → 多用户只做识别、按用户查看与 dump，常规操作带 --user，不做跨用户复制。
+
+优先级：P0 = 第一期必须完成；P1 = 第一期完成，可以晚于 P0；本期不做 = 从导航中移除。
+
+
+一、设备主界面（原需求 1）【P0】
+-----------------------------------------------------
+1.1 设备选择
+    - 启动默认进入“设备总览”；左侧列出 adb / fastboot 设备及状态（在线 / 未授权 / 离线 / Recovery / Fastboot / Sideload）。
+    - 选中即成为“当前设备”，侧栏顶部切换器同步；插拔每 2 秒自动刷新，当前无设备时自动选中新插入的设备。
+
+1.2 Root / Remount / Reboot 做成一排独立按钮，按钮旁显示状态
+    - Root（已定：只做 adb root）
+        · 状态：“adbd：root / 非 root”。按钮 adb root；已 root 时变为 adb unroot。
+        · 连接后自动 adb root：默认开启，可在偏好设置关闭；ro.build.type=user 时自动跳过并提示。
+    - Remount（已定：自动处理 verity，只确认一次）
+        · 状态：“/system：只读 / 可写”。
+        · 流程：未 root 先自动 root 并等待重连 → adb remount →
+          若输出提示需要重启（verity 被关闭 / overlayfs 首次启用）→ 弹框“需要重启后生效，立即重启？” →
+          确认后重启并等待设备回来 → 自动再执行 root + remount → 提示“/system 已可写”。
+        · 每一步在页面“操作输出”区域显示实际命令与原始输出。
+    - Reboot：主按钮重启系统；下拉 Recovery / Bootloader / Fastbootd / Sideload / 关机（关机需确认）；fastboot 状态下同样可用。
+    - 截屏：保留一个“截屏”快捷按钮（原截屏页面去掉），截图直接保存到导出目录并在提示里给出路径。
+
+1.3 版本信息卡片（第一眼可见，每行可单击复制，右上角“复制全部”按“项目: 值”格式，方便贴 bug 单）
+    | Android 版本 / API  | ro.build.version.release / ro.build.version.sdk  |
+    | Build ID / 类型     | ro.build.id / ro.build.type                       |
+    | 构建指纹            | ro.build.fingerprint                              |
+    | 各分区指纹          | ro.system / vendor / product / odm / system_ext .build.fingerprint（不同则高亮，混刷时一眼看出） |
+    | 构建时间            | ro.build.date                                     |
+    | 安全补丁            | ro.build.version.security_patch                   |
+    | Vendor 安全补丁     | ro.vendor.build.security_patch                    |
+    | 基带 / Bootloader   | gsm.version.baseband / ro.bootloader              |
+    | 内核版本            | uname -r（完整 /proc/version 放悬停提示）          |
+    | 平台 / SoC          | ro.board.platform / ro.soc.model                  |
+    | 当前槽位            | ro.boot.slot_suffix                               |
+    | Verified Boot       | ro.boot.verifiedbootstate                         |
+    | SELinux             | getenforce                                        |
+    - 新增“Mainline / APEX 模块”折叠区：列出 APEX 模块名称与版本（pm list packages --apex-only --show-versioncode），可过滤、复制。
+    - 电量、内存、存储状态卡片保留，放在版本信息右侧。
+
+
+二、ADB 命令管理（原需求 2，新增）【P0】
+-----------------------------------------------------
+2.1 布局：左侧命令列表（按分组折叠 + 搜索），中间编辑区，下方执行结果区。
+
+2.2 一条命令包含
+    - 名称（必填）、分组、说明
+    - 类型：adb shell 命令（自动加 adb -s <当前设备> shell）/ adb 命令（自动加 adb -s <当前设备>）
+    - 命令内容（可多行，逐行顺序执行，可选“失败即停止”）
+    - 需要确认（危险命令执行前弹框）
+    - 超时（默认 30 秒）/ 持续运行（不限时，可点“停止”，用于 logcat、top、watch 类命令）
+    - 参数占位：{包名}、{服务名}、{路径} 等，执行时弹框填写，记住上次的值
+
+2.3 管理（已定：只存本机，不做多设备批量）
+    - 新建、复制、删除（确认）、拖动排序、移动分组
+    - 存储 data/commands.json；导入 / 导出 JSON 用于和同事共享
+    - 内置一批面向系统开发的预设命令（只读，可“复制为我的命令”），例如：
+      当前焦点窗口、栈顶 Activity、Binder 服务列表、lshal、init 服务状态、SELinux 拒绝日志
+      （dmesg | grep avc / logcat -b events 中的 avc）、挂载与分区、/proc/cmdline、温度节点、
+      查看某属性的 SELinux 上下文（getprop -Z）、重启某个 init 服务（stop/start {服务名}）
+
+2.4 执行与结果
+    - 执行按钮或 Ctrl+Enter，对象是当前设备；设备不在线时禁用并说明原因
+    - 结果显示：完整命令行、退出码（0 绿 / 非 0 红）、耗时；stdout 正常色、stderr 红色；多行命令按行分段各自显示退出码
+    - 结果区：查找、自动换行、复制、保存为 txt
+    - 执行历史：最近 50 次（命令、设备、时间、退出码），可回看输出
+    - Shell 页的“常用命令”菜单改为读取命令库，两边共用一份
+
+
+三、系统设置 settings（原需求 3，新增）【P0】
+-----------------------------------------------------
+    - 工具箱原“设置”页改名“偏好设置”；新增“系统设置”页，放在“系统属性”旁边，交互与属性页一致。
+    - 分段切换 system / secure / global；表格“键 / 值”；过滤；双击编辑（settings put）、新增、删除（确认）；刷新、复制、导出。
+    - system / secure 可选用户（自动识别，见第四节），global 不分用户。
+    - 敏感键二次确认并说明后果：adb_enabled、development_settings_enabled、device_provisioned、user_setup_complete。
+    - “常用”标签（放在 system / secure / global 之后）：样式与其它标签一致的表格，列为 命名空间 / 键 / 值 / 备注，
+      备注说明该键的作用；双击弹出修改框（下拉候选值或手填），右键可直接“设为 …”。过滤框同时匹配键、值、备注。
+      目前预设 14 个键：三项动画缩放、show_touches、pointer_location、verifier_verify_adb_installs、
+      stay_on_while_plugged_in、screen_off_timeout、screen_brightness_mode、screen_brightness、accelerometer_rotation、
+      font_scale、development_settings_enabled、adb_enabled。预设在 settings_db.py 的 PRESETS 中维护。
+
+    界面风格：整体保持紧凑、信息量大；新功能优先用表格 + 备注列，不做卡片式松散表单。
+
+    全局控件规范（所有页面）：
+    - 工具栏控件高度统一 24px；主输入框（过滤 / 查找）占满工具栏剩余宽度。
+    - 按钮、下拉、分段、开关的文字用英文或通用缩写（Run / Save / Install / Regex / Snapshot / Diff / u0 / 3rd …），
+      中文说明放在悬停提示（tooltip）里；能用图标按钮表达的操作（复制、导出、上传、下载、截屏、投屏）只用图标。
+    - 下拉框用窄样式，只显示缩写（如日志级别 V–F、缓冲区 main、用户 u0、前缀 ro.）；弹出列表每项 tooltip 为中文说明。
+    - 状态栏文字也用紧凑英文（如 “403 / 403 rows”、“u0 · 15 pkgs · 3rd 6 · sys 9”）。
+    - 表格列标题、面板标题、对话框正文、确认框、提示消息、日志与命令输出等内容保持中文。
+    - 快照对比（已定：要做，这是查询场景下最省时间的功能）：
+        · “记录快照” → 在手机上改某个开关 → “对比”，列出新增 / 删除 / 变化的键（旧值 → 新值）
+        · 快照可命名、保存多个（data/snapshots/），不做跨设备对比
+        · 三个命名空间同时快照，一次对比全部看到
+
+
+四、系统属性（现有页增强）【P0】
+-----------------------------------------------------
+    - 保留现有浏览、前缀过滤、setprop、复制、导出。
+    - 增加与系统设置相同的快照对比（找“某个操作改了哪些属性”）。
+    - 增加“SELinux 上下文”列（getprop -Z），默认隐藏，可在表头右键打开。
+    - 属性值变化时可“监视”选中的若干属性：每秒刷新并高亮变化（用于观察 init.svc.*、sys.* 状态切换）。
+
+
+五、系统服务与组件（原“系统服务”页升级）【P0】
+-----------------------------------------------------
+这是“查询系统模块”的核心页面，分 4 个标签：
+
+5.1 Binder 服务
+    - dumpsys -l + service list：服务名、接口名（如 android.os.IPowerManager）
+    - 选中执行 dumpsys，可带参数；“帮助”按钮执行 dumpsys <服务> -h；查找、保存
+    - 常用服务置顶（activity、window、SurfaceFlinger、package、power、battery、display、input …）
+
+5.2 init 服务
+    - 来源 getprop 中的 init.svc.* ：服务名、状态（running / stopped / restarting），状态着色
+    - 操作（需要 root，确认后执行）：启动 start、停止 stop、重启（stop + start）
+    - 典型用途：push 修改后的模块后重启对应服务，并在旁边看到状态变化
+
+5.3 HAL
+    - HIDL：lshal（接口、实例、传输方式、服务端 PID）
+    - AIDL HAL：service list 中 android.hardware.* 的条目
+    - 选中可 dumpsys / lshal debug 查看该 HAL 的调试输出
+
+5.4 进程
+    - ps -A：PID、PPID、用户、名称、RSS；过滤
+    - 选中进程查看：/proc/<pid>/status、cmdline、线程列表、已加载库（maps 去重后的 .so 列表）、打开的文件数
+    - 操作（确认后）：打印调用栈 debuggerd -b <pid>（userdebug + root 可用）、结束进程（kill）
+    - 替代原“性能监控”里的进程表
+
+
+六、应用管理（原需求 4）【P0】
+-----------------------------------------------------
+6.1 用户识别：pm list users 自动列出全部用户（ID、名称、类型、是否运行中）；工具栏“用户”下拉，默认 user 0。
+6.2 包列表：所选用户下的包（pm list packages --user N）；过滤改为 全部 / 第三方 / 系统 / 已停用；
+    详情显示“已安装于用户：0、10 …”。
+6.3 详情标签：
+    - 概览：版本、路径、UID、targetSdk、安装来源、时间
+    - 组件（新增，查询组件信息）：Activity / Service / Receiver / Provider 列表，含是否导出、是否启用、权限；
+      可启用 / 停用单个组件（pm enable / disable <包名>/<类名>，确认后执行）
+    - 权限：运行时权限开关（针对所选用户）、安装时权限列表
+    - 原始 dump：dumpsys package <包名> 完整输出，查找、复制、保存
+6.4 操作（均带 --user N）：启动、强行停止、清除数据、启用 / 停用、权限、为当前用户卸载（系统应用可用，可 install-existing 恢复）、安装 APK（选目标用户）、导出 APK。
+6.5 批量 dump：把所选用户的第三方（或全部）包的 dumpsys 导出到文件夹，每个包一个 txt。
+（已定：不做跨用户复制包）
+
+
+七、屏幕投射（原需求 5）【P0】
+-----------------------------------------------------
+    - scrcpy 在独立新窗口打开，不嵌入主窗口（已定：单设备，不做多设备同时投屏）。
+    - 窗口标题“设备名 · 序列号”；记住窗口位置和大小；关闭窗口即结束投屏，页面状态同步。
+    - 设备总览加“投屏”快捷按钮，用上次参数直接打开。
+    - 按键面板（返回、主屏幕、最近任务、电源、音量）保留。
+
+
+八、主题（原需求 6）【P0】
+-----------------------------------------------------
+    - 首次启动默认浅色；Ctrl+T 与偏好设置可切换并记住；已保存过的设置不强制改回。
+
+
+九、保留但优先级较低的页面【P1】
+-----------------------------------------------------
+    - Logcat：保留（系统调试必需）。工具栏：暂停、清空 | 过滤框（占满剩余宽度，内含区分大小写 / 全字匹配）、
+      Regex 按钮、最低级别窄下拉（V / D / I / W / E / F）| 跟随 | 缓冲区窄下拉（default / main / system / crash /
+      events / radio / kernel / all / dmesg）、重新连接、导出（图标按钮）。
+      控件文字用英文或通用缩写，中文说明放在悬停提示里；控件高度统一 24px，宽度尽量短。
+      不做 PID / 包名输入框和“SELinux 拒绝”快捷按钮（需要时用正则过滤，如 avc: denied）。
+    - Shell 终端：保留，常用命令读取命令库。
+    - 崩溃与 Bug 报告：保留。userdebug + root 可直接读 /data/tombstones、/data/anr，查询价值高。
+    - 文件管理：保留现状。root 后可浏览 /system、/vendor、/data，用于确认模块文件是否部署到位。
+
+
+十、本期去掉的页面
+-----------------------------------------------------
+    - 性能监控：进程信息并入“系统服务与组件 → 进程”；性能分析建议用 Perfetto。
+    - 截屏与录屏：截屏改为设备总览上的快捷按钮；录屏可用命令库中的 screenrecord 命令。
+    - 刷机与分区：本期不做；重启到 Bootloader / Fastbootd 仍在 Reboot 菜单里。
+
+
+十一、调整后的导航
+-----------------------------------------------------
+设备    设备总览
+调试    ADB 命令 · Shell 终端 · Logcat 日志 · 崩溃与 Bug 报告
+系统    系统属性 · 系统设置 · 服务与组件
+管理    应用管理 · 文件管理 · 屏幕投射
+工具箱  偏好设置
+
+
+十二、对后端接口的影响（交给后端实现时同步更新 api.py / mock.py / BACKEND_SPEC.md / TEST_PLAN.md）
+-----------------------------------------------------
+新增：
+    - root_state(serial) -> adbd 是否 root、/system 是否可写
+    - disable_verity(serial)
+    - run_adb(serial, args, timeout) 与 start_command(serial, args, on_output, on_exit)   —— ADB 命令执行
+    - list_settings / put_setting / delete_setting(serial, namespace, user)
+    - get_props 增加 with_context 参数（getprop -Z）
+    - list_binder_services(serial) -> 名称 + 接口
+    - list_init_services(serial) / control_init_service(serial, name, action)
+    - list_hals(serial)（lshal + AIDL HAL）、hal_debug(serial, name)
+    - list_processes(serial) / process_detail(serial, pid) / dump_backtrace(serial, pid)
+    - list_users(serial)
+    - package_components(serial, package, user) / set_component_enabled(serial, component, enabled, user)
+    - dump_package(serial, package) -> str
+    - list_apex_modules(serial)
+修改：
+    - list_packages / package_detail / 各包操作 增加 user 参数
+    - start_scrcpy 增加窗口标题、位置、大小参数
+    - start_logcat 支持 dmesg
+去掉（不再要求实现）：
+    - start_perf、start_screenrecord、fastboot_vars、list_partitions、flash、erase、set_active_slot、
+      boot_image、flashing_lock、sideload
+
+
+原始需求（保留原文）
+-----------------------------------------------------
+1. 主界面可以选择控制的设备，root，reboot，remount, 并且显示版本信息
+
+2. 增加一个adb 命令管理界面，可以编辑，自定义adb命令保存，之后可以点击执行，执行结果可以清晰显示
+
+3.加个一个settings 设置功能的界面，这个应该和属性管理逻辑差不多
+
+4.应用管理的 user应该是自动识别的，每个user下那些package,可以dump包信息
+
+5.投屏工具默认显示窗口为新建窗口，不是内嵌的
+
+6.主题默认为亮色

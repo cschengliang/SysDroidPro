@@ -1,0 +1,18 @@
+# 运行环境与第三方二进制（体积大、可重新下载）
+python-3.14.8-embed-amd64/
+droidtoolbox/tool/
+
+# 运行时数据（设置、命令库、快照）
+droidtoolbox/data/
+
+# Python / 测试缓存
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+
+# 编辑器 / 系统
+.vscode/
+.idea/
+Thumbs.db
+desktop.ini

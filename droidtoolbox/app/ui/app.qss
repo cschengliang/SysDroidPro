@@ -1,0 +1,65 @@
+/* 工具箱自己的补充样式，语法与 tbui/style.qss 相同（@令牌名），拼接在它后面。 */
+
+/* 页面内的面板标题条：40px，与 Toolbar 同高 */
+QFrame[panelhead="true"] { background: @bg-200; border: none; border-bottom: 1px solid @line; }
+QFrame[panelhead="true"] QLabel[role="subtitle"] { font-size: 13px; }
+
+/* 普通列表（服务列表、历史记录）*/
+QListView[plain="true"] { background: @bg-200; }
+QListView[plain="true"]::item { min-height: 28px; padding: 0 12px; border: none; color: @ink-muted; }
+QListView[plain="true"]::item:hover { background: @bg-400; color: @ink; }
+QListView[plain="true"]::item:selected { background: @signal-soft; color: @ink; }
+
+/* 窄下拉（工具栏里只显示缩写的选择框）：箭头区域缩小 */
+QComboBox[narrow="true"] { padding: 0 18px 0 8px; }
+QComboBox[narrow="true"]:focus { padding: 0 17px 0 7px; }
+QComboBox[narrow="true"]::drop-down { width: 16px; }
+
+/* 可勾选的普通按钮（监视所选等）*/
+QPushButton:checked { background: @signal-soft; border-color: @signal-ink; color: @signal-ink; }
+
+/* 分组树（命令库）*/
+QTreeView[plain="true"] { background: @bg-200; border: none; outline: 0; }
+QTreeView[plain="true"]::item { min-height: 26px; padding: 0 4px; border: none; color: @ink-muted; }
+QTreeView[plain="true"]::item:hover { background: @bg-400; color: @ink; }
+QTreeView[plain="true"]::item:selected { background: @signal-soft; color: @ink; }
+
+/* 多行输入（命令编辑）*/
+QPlainTextEdit[field="true"] { padding: 6px 8px; }
+QPlainTextEdit[field="true"]:focus { border: 2px solid @focus; padding: 5px 7px; }
+QPlainTextEdit[field="true"][readonly="true"] { background: @bg-200; color: @ink-muted; }
+
+/* 数据表：行高 28，紧凑 */
+QTableView[data="true"]::item { padding: 0 8px; border: none; border-bottom: 1px solid @line; }
+QTableView[data="true"]::item:selected { background: @bg-500; color: @ink; }
+QTableView[data="true"] QHeaderView::section { padding: 0 8px; }
+
+/* 只读文本查看器（dumpsys 输出、tombstone、ANR）*/
+QPlainTextEdit[viewer="true"] {
+  background: @bg-100; color: @ink; border: none; padding: 8px 12px;
+  selection-background-color: @bg-500; selection-color: @ink;
+}
+
+/* 指标卡片 */
+QFrame[stat="true"] { background: @bg-100; border: 1px solid @line; border-radius: @radius-lg; }
+QLabel[statvalue="true"] { font-size: 24px; font-weight: 600; }
+QLabel[statunit="true"] { color: @ink-faint; font-size: 12px; }
+
+/* 浮动提示：在 Banner 的底色上加描边 */
+QFrame[toast="true"] { border: 1px solid @line-strong; }
+
+/* 表单区块 */
+QLabel[formlabel="true"] { color: @ink-muted; font-size: 12px; }
+QLabel[section="true"] { color: @ink-faint; font-size: 11px; font-weight: 600; padding-top: 8px; }
+
+/* 截屏预览底板 */
+QLabel[preview="true"] { background: @bg-000; border: 1px solid @line; border-radius: @radius-lg; }
+
+/* 侧栏顶部的设备切换器 */
+QFrame[switcher="true"] { background: @bg-200; border: none; border-bottom: 1px solid @line; border-right: 1px solid @line; }
+QFrame[switcher="true"]:hover { background: @bg-400; }
+QFrame[sidefoot="true"] { background: @bg-200; border: none; border-top: 1px solid @line; border-right: 1px solid @line; }
+
+/* 路径栏 */
+QLineEdit[path="true"] { min-height: 22px; max-height: 22px; }
+QLineEdit[path="true"]:focus { min-height: 20px; max-height: 20px; }
