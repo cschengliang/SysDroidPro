@@ -7,7 +7,7 @@ import pytest
 from app.backend import api
 from app.backend._base import BackendBase
 from app.backend._crashes import CrashMethods
-from app.backend._files import FileMethods, remove_stage
+from app.backend._files import FileMethods, local_name, remove_stage
 from app.backend._jobs import JobMethods
 from tests.fakes import FakeProcess, FakeRunner, fake_backend, fixture
 
@@ -50,6 +50,7 @@ def test_pull_cancel_preserves_existing_destination(tmp_path):
     existing = tmp_path / "a.txt"
     existing.write_bytes(b"original")
     runner = FakeRunner().add(lambda args: "du -sb --" in args[-1], (0, "100\t/a.txt", ""))
+    runner.add(lambda args: args[-1].startswith("test -d"), (1, "", ""))
     backend = fake_backend(Files, runner)
     cancel = threading.Event()
     count = []
@@ -65,10 +66,11 @@ def test_pull_cancel_preserves_existing_destination(tmp_path):
 
 def test_pull_success_stages_and_returns_paths(tmp_path):
     runner = FakeRunner().add(lambda args: "du -sb --" in args[-1], (0, "5\t/a.txt", ""))
+    runner.add(lambda args: args[-1].startswith("test -d"), (1, "", ""))
     original_popen = runner.popen
     def popen(args):
         process = original_popen(args)
-        (Path(args[-1]) / "a.txt").write_bytes(b"hello")
+        Path(args[-1]).write_bytes(b"hello")
         process.finish()
         return process
     runner.popen = popen
@@ -109,3 +111,26 @@ def test_cleanup_refuses_wrong_parent(tmp_path):
     with pytest.raises(api.CommandFailed):
         remove_stage(stage, tmp_path)
     assert stage.exists()
+    with pytest.raises(api.CommandFailed):
+        local_name("../escape")
+
+
+def test_upload_explicit_unicode_target_and_directory_plan(tmp_path):
+    source = tmp_path / "中文 a'b.txt"
+    source.write_text("hello")
+    folder = tmp_path / "中文目录"
+    folder.mkdir()
+    (folder / "中文子文件.txt").write_text("child")
+    runner = FakeRunner().add(lambda args: True, (0, "", ""))
+    original_popen = runner.popen
+    def popen(args):
+        process = original_popen(args)
+        process.finish()
+        return process
+    runner.popen = popen
+    backend = fake_backend(Files, runner)
+    backend.push("s", [str(source), str(folder)], "/tmp/target")
+    commands = [args for args in runner.calls if "push" in args]
+    assert len(commands) == 2
+    assert commands[0][-1].endswith("/中文 a'b.txt")
+    assert commands[1][-1].endswith("/中文目录/中文子文件.txt")

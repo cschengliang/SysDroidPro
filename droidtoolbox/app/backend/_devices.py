@@ -19,6 +19,15 @@ ROOT_SCRIPT = "id -u; getprop ro.build.type; getprop ro.boot.veritymode; getprop
 
 
 class DeviceMethods:
+    def configure(self, adb_path, fastboot_path, scrcpy_path):
+        super().configure(adb_path, fastboot_path, scrcpy_path)
+        if hasattr(self, "_inventory_lock"):
+            with self._inventory_lock:
+                self._device_cache.clear()
+                self._device_states.clear()
+                self._pending.clear()
+                self._enumerations.clear()
+
     def __init__(self, runner=None):
         super().__init__(runner)
         self._inventory_lock = threading.RLock()

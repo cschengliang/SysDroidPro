@@ -37,7 +37,7 @@ def test_command_nonzero_normal_exit_and_disconnect():
 
 
 def test_shell_hidden_pid_partial_output_and_interrupt():
-    runner = FakeRunner.from_fixtures().add(("shell", "pkill -INT -P 1234"), (0, "", ""))
+    runner = FakeRunner.from_fixtures().add(("shell", "pkill -INT -P 1234 '.*'"), (0, "", ""))
     backend = fake_backend(Streams, runner)
     output, done = [], threading.Event()
     session = backend.open_shell("s", lambda t, s: output.append(t), lambda e: done.set())
@@ -45,7 +45,7 @@ def test_shell_hidden_pid_partial_output_and_interrupt():
     assert wait_for(lambda: "hello" in "".join(output))
     assert "__DTB_PID__" not in "".join(output)
     session.interrupt()
-    assert runner.calls[-1][-1] == "pkill -INT -P 1234"
+    assert runner.calls[-1][-1] == "pkill -INT -P 1234 '.*'"
     session.stop()
     assert done.wait(2)
     with pytest.raises(api.CommandFailed):

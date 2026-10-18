@@ -1,6 +1,7 @@
 """文件操作：私有临时目标承接传输，取消时不删除用户已有文件。"""
 from dataclasses import replace
 from pathlib import Path
+import os
 import posixpath
 import shutil
 import time
@@ -25,7 +26,33 @@ def remove_stage(stage, parent):
         shutil.rmtree(stage)
 
 
+def local_name(name):
+    if not name or name in (".", "..") or Path(name).name != name or (os.name == "nt" and (any(char in name for char in '\\/:*?"<>|') or name[-1] in ". ")):
+        raise api.CommandFailed("设备文件名无法安全映射到本地文件系统")
+    return name
+
+
 class FileMethods:
+    def _upload_plan(self, sources, cancel=None):
+        directories, files, links = [], [], []
+        for source in sources:
+            if source.is_dir() and not source.is_symlink():
+                directories.append(source.name)
+                entries = source.rglob("*")
+            else:
+                entries = [source]
+            for entry in entries:
+                if cancel and cancel.is_set():
+                    raise api.Cancelled("已取消")
+                relative = posixpath.join(source.name, *entry.relative_to(source).parts) if source.is_dir() and not source.is_symlink() else source.name
+                if entry.is_symlink():
+                    links.append((entry, relative))
+                elif entry.is_dir():
+                    directories.append(relative)
+                else:
+                    files.append((entry, relative))
+        return directories, files, links
+
     def list_dir(self, serial, path):
         path = posixpath.normpath("/" + path.lstrip("/"))
         rows = P.file_entries(self._shell(serial, quote_args("ls", "-la", path.rstrip("/") + "/")), path)
@@ -65,11 +92,28 @@ class FileMethods:
         if len({path.name for path in sources}) != len(sources):
             raise api.CommandFailed("上传文件的名称重复，请分开上传")
         stage = posixpath.join(remote_dir, ".dtb-upload-" + uuid.uuid4().hex)
-        total, started = sum(local_size(path) for path in sources), time.monotonic()
+        try:
+            directories, files, links = self._upload_plan(sources, cancel)
+            total, started = sum(path.stat().st_size for path, _ in files), time.monotonic()
+        except OSError as exc:
+            raise api.CommandFailed("无法读取本地上传文件", str(exc)) from exc
         self.mkdir(serial, stage)
         try:
-            self._run_job(serial, ["push", *map(str, sources), stage + "/"], progress, cancel, "正在上传",
-                          measure=lambda: self._measure(lambda: self._remote_size(serial, [stage]), total, started, "正在上传"))
+            if directories:
+                self._shell(serial, quote_args("mkdir", "-p", "--", *(posixpath.join(stage, path) for path in directories)))
+            completed = 0
+            for source, relative in files:
+                target = posixpath.join(stage, relative)
+                def measured():
+                    current = self._remote_size(serial, [target])
+                    return completed + current if current is not None else None
+                # adb 37 Windows 把含中文的本地 basename 传给目录目标时会截短；
+                # 每个文件显式指定完整目标，目录由 Python 遍历，避免原生递归卡住。
+                self._run_job(serial, ["push", str(source), target], progress, cancel, "正在上传",
+                              measure=lambda: self._measure(measured, total, started, "正在上传"))
+                completed += source.stat().st_size
+            for source, relative in links:
+                self._shell(serial, quote_args("ln", "-s", "--", str(source.readlink()), posixpath.join(stage, relative)))
             if cancel and cancel.is_set():
                 raise api.Cancelled("已取消")
             for source in sources:
@@ -79,6 +123,8 @@ class FileMethods:
                 self._shell(serial, script, timeout=120)
             if progress:
                 progress(Progress(100, "上传完成"))
+        except OSError as exc:
+            raise api.CommandFailed("无法读取本地上传文件", str(exc)) from exc
         finally:
             try:
                 self.delete(serial, [stage])
@@ -91,8 +137,8 @@ class FileMethods:
             return []
         if cancel and cancel.is_set():
             raise api.Cancelled("已取消")
-        names = [posixpath.basename(path.rstrip("/")) for path in remote_paths]
-        if any(not name or name in (".", "..") or "\\" in name or ":" in name for name in names) or len(set(names)) != len(names):
+        names = [local_name(posixpath.basename(path.rstrip("/"))) for path in remote_paths]
+        if len(set(names)) != len(names):
             raise api.CommandFailed("下载文件的名称无效或重复，请分开下载")
         parent = Path(local_dir)
         stage = parent / (".dtb-download-" + uuid.uuid4().hex)
@@ -100,8 +146,24 @@ class FileMethods:
             parent.mkdir(parents=True, exist_ok=True)
             stage.mkdir()
             total, started = self._remote_size(serial, remote_paths), time.monotonic()
-            self._run_job(serial, ["pull", *remote_paths, str(stage)], progress, cancel, "正在下载",
-                          measure=lambda: self._measure(lambda: local_size(stage), total, started, "正在下载"))
+            plan = []
+            def walk(remote, local):
+                if cancel and cancel.is_set():
+                    raise api.Cancelled("已取消")
+                if self.shell(serial, quote_args("test", "-d", remote)).exit_code == 0:
+                    local.mkdir(parents=True, exist_ok=True)
+                    for entry in self.list_dir(serial, remote):
+                        if entry.is_link and entry.is_dir:
+                            raise api.CommandFailed("下载目录中有目录符号链接，请单独下载该链接目标，避免循环")
+                        walk(entry.path, local / local_name(entry.name))
+                else:
+                    plan.append((remote, local))
+            for remote, name in zip(remote_paths, names):
+                walk(remote.rstrip("/"), stage / name)
+            for remote, local in plan:
+                local.parent.mkdir(parents=True, exist_ok=True)
+                self._run_job(serial, ["pull", remote, str(local)], progress, cancel, "正在下载",
+                              measure=lambda: self._measure(lambda: local_size(stage), total, started, "正在下载"))
             paths = []
             for name in names:
                 source, target = stage / name, parent / name

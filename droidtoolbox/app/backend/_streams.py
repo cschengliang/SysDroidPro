@@ -51,7 +51,7 @@ class ShellChannel(ProcessStream, api.ShellSession):
         if not self._pid_ready.wait(1) or self._pid is None:
             raise api.CommandFailed("尚未取得 Shell 进程 ID，请稍后重试")
         # 只中断这条会话的子进程，不按程序名匹配其它会话。
-        result = self._backend.shell(self._serial, quote_args("pkill", "-INT", "-P", self._pid))
+        result = self._backend.shell(self._serial, quote_args("pkill", "-INT", "-P", self._pid, ".*"))
         if result.exit_code not in (0, 1):
             raise api.CommandFailed("无法中断当前 Shell 命令", detail(result.stderr), result.exit_code)
 

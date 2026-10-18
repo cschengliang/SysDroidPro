@@ -39,6 +39,7 @@ class ProcessStream(StreamHandle):
         self._output, self._finish = on_output, on_finish
         self._tick, self._health = tick, health
         self._stop = threading.Event()
+        self._closing = threading.Event()
         self._lock = threading.RLock()
         self._queue = queue.Queue(maxsize=128)
         self._readers = []
@@ -52,7 +53,7 @@ class ProcessStream(StreamHandle):
                 fn(*args)
 
     def _put(self, item):
-        while not self._stop.is_set():
+        while not self._stop.is_set() and not self._closing.is_set():
             try:
                 self._queue.put(item, timeout=0.05)
                 return
@@ -104,6 +105,7 @@ class ProcessStream(StreamHandle):
         except Exception as exc:
             error = CommandFailed("读取进程输出失败", str(exc))
         finally:
+            self._closing.set()
             terminate(self.process)
             for reader in self._readers:
                 reader.join(timeout=1)
