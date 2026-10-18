@@ -1,0 +1,22 @@
+android.frameworks.sensorservice@1.0::ISensorManager/default          hwbinder    N/A
+android.hardware.audio.effect@7.0::IEffectsFactory/default            hwbinder    N/A
+android.hardware.audio@7.0::IDevicesFactory/default                   hwbinder    N/A
+android.hardware.audio@7.1::IDevicesFactory/default                   hwbinder    N/A
+android.hardware.media.c2@1.0::IComponentStore/default                hwbinder    536
+android.hardware.media.c2@1.0::IComponentStore/software               hwbinder    650
+android.hardware.media.c2@1.1::IComponentStore/software               hwbinder    650
+android.hardware.media.c2@1.2::IComponentStore/software               hwbinder    650
+android.hidl.allocator@1.0::IAllocator/ashmem                         hwbinder    527
+android.hidl.base@1.0::IBase/ashmem                                   hwbinder    N/A
+android.hidl.base@1.0::IBase/default                                  hwbinder    N/A
+android.hidl.base@1.0::IBase/software                                 hwbinder    N/A
+android.hidl.manager@1.0::IServiceManager/default                     hwbinder    275
+android.hidl.manager@1.1::IServiceManager/default                     hwbinder    275
+android.hidl.manager@1.2::IServiceManager/default                     hwbinder    275
+android.hidl.token@1.0::ITokenManager/default                         hwbinder    275
+android.hardware.audio.effect@7.0::IEffectsFactory/default            passthrough 528
+android.hardware.audio@7.1::IDevicesFactory/default                   passthrough 528
+android.hardware.audio.effect@7.0::I*/* (/vendor/lib64/hw/)           passthrough N/A
+android.hardware.audio.legacy@7.1::I*/* (/vendor/lib64/hw/) (.ranchu) passthrough N/A
+android.hardware.audio@7.1::I*/* (/vendor/lib64/hw/) (.ranchu)        passthrough N/A
+android.hardware.sensors@2.1::I*/* (/vendor/lib64/hw/) (.ranchu)      passthrough N/A

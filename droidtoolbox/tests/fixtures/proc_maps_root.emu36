@@ -1,0 +1,1088 @@
+560a46220000-560a46287000 r--p 00000000 00:1a 392                        /system/bin/init
+560a46288000-560a464f0000 r-xp 00068000 00:1a 392                        /system/bin/init
+560a464f0000-560a464f7000 r--p 002d0000 00:1a 392                        /system/bin/init
+560a464f8000-560a464fa000 rw-p 002d8000 00:1a 392                        /system/bin/init
+560a464fa000-560a464fb000 rw-p 00000000 00:00 0                          [anon:.bss]
+7f7233b18000-7f7233b1c000 ---p 00000000 00:00 0 
+7f7233b1c000-7f7233c18000 rw-p 00000000 00:00 0                          [anon:stack_and_tls:137]
+7f7233c18000-7f7233c20000 ---p 00000000 00:00 0 
+7f7233c20000-7f7233d1c000 rw-p 00000000 00:00 0                          [anon:stack_and_tls:136]
+7f7233d1c000-7f7233d20000 ---p 00000000 00:00 0 
+7f7233d20000-7f7233d40000 rw-s 00000000 00:13 799                        /dev/__properties__/appcompat_override/properties_serial
+7f7233d40000-7f7233d60000 rw-s 00000000 00:13 798                        /dev/__properties__/appcompat_override/u:object_r:zygote_wrap_prop:s0
+7f7233d60000-7f7233d80000 rw-s 00000000 00:13 797                        /dev/__properties__/appcompat_override/u:object_r:zygote_config_prop:s0
+7f7233d80000-7f7233da0000 rw-s 00000000 00:13 796                        /dev/__properties__/appcompat_override/u:object_r:zram_control_prop:s0
+7f7233da0000-7f7233dc0000 rw-s 00000000 00:13 795                        /dev/__properties__/appcompat_override/u:object_r:zram_config_prop:s0
+7f7233dc0000-7f7233de0000 rw-s 00000000 00:13 794                        /dev/__properties__/appcompat_override/u:object_r:wifi_prop:s0
+7f7233de0000-7f7233e00000 rw-s 00000000 00:13 793                        /dev/__properties__/appcompat_override/u:object_r:wifi_log_prop:s0
+7f7233e00000-7f7233e20000 rw-s 00000000 00:13 792                        /dev/__properties__/appcompat_override/u:object_r:wifi_hal_prop:s0
+7f7233e20000-7f7233e40000 rw-s 00000000 00:13 791                        /dev/__properties__/appcompat_override/u:object_r:wifi_config_prop:s0
+7f7233e40000-7f7233e60000 rw-s 00000000 00:13 790                        /dev/__properties__/appcompat_override/u:object_r:wallet_prop:s0
+7f7233e60000-7f7233e80000 rw-s 00000000 00:13 789                        /dev/__properties__/appcompat_override/u:object_r:vts_status_prop:s0
+7f7233e80000-7f7233ea0000 rw-s 00000000 00:13 788                        /dev/__properties__/appcompat_override/u:object_r:vts_config_prop:s0
+7f7233ea0000-7f7233ec0000 rw-s 00000000 00:13 787                        /dev/__properties__/appcompat_override/u:object_r:vold_status_prop:s0
+7f7233ec0000-7f7233ee0000 rw-s 00000000 00:13 786                        /dev/__properties__/appcompat_override/u:object_r:vold_prop:s0
+7f7233ee0000-7f7233f00000 rw-s 00000000 00:13 785                        /dev/__properties__/appcompat_override/u:object_r:vold_post_fs_data_prop:s0
+7f7233f00000-7f7233f20000 rw-s 00000000 00:13 784                        /dev/__properties__/appcompat_override/u:object_r:vold_config_prop:s0
+7f7233f20000-7f7233f40000 rw-s 00000000 00:13 783                        /dev/__properties__/appcompat_override/u:object_r:vndk_prop:s0
+7f7233f40000-7f7233f60000 rw-s 00000000 00:13 782                        /dev/__properties__/appcompat_override/u:object_r:virtualizationservice_prop:s0
+7f7233f60000-7f7233f80000 rw-s 00000000 00:13 781                        /dev/__properties__/appcompat_override/u:object_r:virtual_fingerprint_prop:s0
+7f7233f80000-7f7233fa0000 rw-s 00000000 00:13 780                        /dev/__properties__/appcompat_override/u:object_r:virtual_face_prop:s0
+7f7233fa0000-7f7233fc0000 rw-s 00000000 00:13 779                        /dev/__properties__/appcompat_override/u:object_r:virtual_ab_prop:s0
+7f7233fc0000-7f7233fe0000 rw-s 00000000 00:13 778                        /dev/__properties__/appcompat_override/u:object_r:verity_status_prop:s0
+7f7233fe0000-7f7234000000 rw-s 00000000 00:13 777                        /dev/__properties__/appcompat_override/u:object_r:vendor_wlan_versions_prop:s0
+7f7234000000-7f7234020000 rw-s 00000000 00:13 776                        /dev/__properties__/appcompat_override/u:object_r:vendor_socket_hook_prop:s0
+7f7234020000-7f7234040000 rw-s 00000000 00:13 775                        /dev/__properties__/appcompat_override/u:object_r:vendor_security_patch_level_prop:s0
+7f7234040000-7f7234060000 rw-s 00000000 00:13 774                        /dev/__properties__/appcompat_override/u:object_r:vendor_qemu_prop:s0
+7f7234060000-7f7234080000 rw-s 00000000 00:13 773                        /dev/__properties__/appcompat_override/u:object_r:vendor_net_wlan0_prop:s0
+7f7234080000-7f72340a0000 rw-s 00000000 00:13 772                        /dev/__properties__/appcompat_override/u:object_r:vendor_net_share_prop:s0
+7f72340a0000-7f72340c0000 rw-s 00000000 00:13 771                        /dev/__properties__/appcompat_override/u:object_r:vendor_net_radio0_prop:s0
+7f72340c0000-7f72340e0000 rw-s 00000000 00:13 770                        /dev/__properties__/appcompat_override/u:object_r:vendor_net_eth0_prop:s0
+7f72340e0000-7f7234100000 rw-s 00000000 00:13 769                        /dev/__properties__/appcompat_override/u:object_r:vendor_dlkm_prop:s0
+7f7234100000-7f7234120000 rw-s 00000000 00:13 768                        /dev/__properties__/appcompat_override/u:object_r:vendor_default_prop:s0
+7f7234120000-7f7234140000 rw-s 00000000 00:13 767                        /dev/__properties__/appcompat_override/u:object_r:vehicle_hal_prop:s0
+7f7234140000-7f7234160000 rw-s 00000000 00:13 766                        /dev/__properties__/appcompat_override/u:object_r:userspace_reboot_test_prop:s0
+7f7234160000-7f7234180000 rw-s 00000000 00:13 765                        /dev/__properties__/appcompat_override/u:object_r:userspace_reboot_log_prop:s0
+7f7234180000-7f72341a0000 rw-s 00000000 00:13 764                        /dev/__properties__/appcompat_override/u:object_r:userspace_reboot_exported_prop:s0
+7f72341a0000-7f72341c0000 rw-s 00000000 00:13 763                        /dev/__properties__/appcompat_override/u:object_r:userspace_reboot_config_prop:s0
+7f72341c0000-7f72341e0000 rw-s 00000000 00:13 762                        /dev/__properties__/appcompat_override/u:object_r:userdebug_or_eng_prop:s0
+7f72341e0000-7f7234200000 rw-s 00000000 00:13 761                        /dev/__properties__/appcompat_override/u:object_r:userdata_alias_remove_prop:s0
+7f7234200000-7f7234220000 rw-s 00000000 00:13 760                        /dev/__properties__/appcompat_override/u:object_r:use_memfd_prop:s0
+7f7234220000-7f7234240000 rw-s 00000000 00:13 759                        /dev/__properties__/appcompat_override/u:object_r:usb_uvc_enabled_prop:s0
+7f7234240000-7f7234260000 rw-s 00000000 00:13 758                        /dev/__properties__/appcompat_override/u:object_r:usb_prop:s0
+7f7234260000-7f7234280000 rw-s 00000000 00:13 757                        /dev/__properties__/appcompat_override/u:object_r:usb_disable_when_locked_prop:s0
+7f7234280000-7f72342a0000 rw-s 00000000 00:13 756                        /dev/__properties__/appcompat_override/u:object_r:usb_control_prop:s0
+7f72342a0000-7f72342c0000 rw-s 00000000 00:13 755                        /dev/__properties__/appcompat_override/u:object_r:usb_config_prop:s0
+7f72342c0000-7f72342e0000 rw-s 00000000 00:13 754                        /dev/__properties__/appcompat_override/u:object_r:uprobestats_start_with_config_prop:s0
+7f72342e0000-7f7234300000 rw-s 00000000 00:13 753                        /dev/__properties__/appcompat_override/u:object_r:tuner_server_ctl_prop:s0
+7f7234300000-7f7234320000 rw-s 00000000 00:13 752                        /dev/__properties__/appcompat_override/u:object_r:tuner_config_prop:s0
+7f7234320000-7f7234340000 rw-s 00000000 00:13 751                        /dev/__properties__/appcompat_override/u:object_r:trusty_widevine_vm_sys_prop:s0
+7f7234340000-7f7234360000 rw-s 00000000 00:13 750                        /dev/__properties__/appcompat_override/u:object_r:trusty_security_vm_sys_vendor_prop:s0
+7f7234360000-7f7234380000 rw-s 00000000 00:13 749                        /dev/__properties__/appcompat_override/u:object_r:trusty_security_vm_sys_prop:s0
+7f7234380000-7f72343a0000 rw-s 00000000 00:13 748                        /dev/__properties__/appcompat_override/u:object_r:trusty_coverage_prop:s0
+7f72343a0000-7f72343c0000 rw-s 00000000 00:13 747                        /dev/__properties__/appcompat_override/u:object_r:traced_relay_relay_port_prop:s0
+7f72343c0000-7f72343e0000 rw-s 00000000 00:13 746                        /dev/__properties__/appcompat_override/u:object_r:traced_perf_enabled_prop:s0
+7f72343e0000-7f7234400000 rw-s 00000000 00:13 745                        /dev/__properties__/appcompat_override/u:object_r:traced_oome_heap_session_count_prop:s0
+7f7234400000-7f7234420000 rw-s 00000000 00:13 744                        /dev/__properties__/appcompat_override/u:object_r:traced_lazy_prop:s0
+7f7234420000-7f7234440000 rw-s 00000000 00:13 743                        /dev/__properties__/appcompat_override/u:object_r:traced_enabled_prop:s0
+7f7234440000-7f7234460000 rw-s 00000000 00:13 742                        /dev/__properties__/appcompat_override/u:object_r:traced_config_prop:s0
+7f7234460000-7f7234480000 rw-s 00000000 00:13 741                        /dev/__properties__/appcompat_override/u:object_r:tombstone_config_prop:s0
+7f7234480000-7f72344a0000 rw-s 00000000 00:13 740                        /dev/__properties__/appcompat_override/u:object_r:timezone_prop:s0
+7f72344a0000-7f72344c0000 rw-s 00000000 00:13 739                        /dev/__properties__/appcompat_override/u:object_r:timezone_metadata_prop:s0
+7f72344c0000-7f72344e0000 rw-s 00000000 00:13 738                        /dev/__properties__/appcompat_override/u:object_r:time_prop:s0
+7f72344e0000-7f7234500000 rw-s 00000000 00:13 737                        /dev/__properties__/appcompat_override/u:object_r:threadnetwork_config_prop:s0
+7f7234500000-7f7234520000 rw-s 00000000 00:13 736                        /dev/__properties__/appcompat_override/u:object_r:theme_prop:s0
+7f7234520000-7f7234540000 rw-s 00000000 00:13 735                        /dev/__properties__/appcompat_override/u:object_r:test_harness_prop:s0
+7f7234540000-7f7234560000 rw-s 00000000 00:13 734                        /dev/__properties__/appcompat_override/u:object_r:test_boot_reason_prop:s0
+7f7234560000-7f7234580000 rw-s 00000000 00:13 733                        /dev/__properties__/appcompat_override/u:object_r:telephony_status_prop:s0
+7f7234580000-7f72345a0000 rw-s 00000000 00:13 732                        /dev/__properties__/appcompat_override/u:object_r:telephony_config_prop:s0
+7f72345a0000-7f72345c0000 rw-s 00000000 00:13 731                        /dev/__properties__/appcompat_override/u:object_r:systemsound_config_prop:s0
+7f72345c0000-7f72345e0000 rw-s 00000000 00:13 730                        /dev/__properties__/appcompat_override/u:object_r:system_user_mode_emulation_prop:s0
+7f72345e0000-7f7234600000 rw-s 00000000 00:13 729                        /dev/__properties__/appcompat_override/u:object_r:system_trace_prop:s0
+7f7234600000-7f7234620000 rw-s 00000000 00:13 728                        /dev/__properties__/appcompat_override/u:object_r:system_service_enable_prop:s0
+7f7234620000-7f7234640000 rw-s 00000000 00:13 727                        /dev/__properties__/appcompat_override/u:object_r:system_prop:s0
+7f7234640000-7f7234660000 rw-s 00000000 00:13 726                        /dev/__properties__/appcompat_override/u:object_r:system_lmk_prop:s0
+7f7234660000-7f7234680000 rw-s 00000000 00:13 725                        /dev/__properties__/appcompat_override/u:object_r:system_jvmti_agent_prop:s0
+7f7234680000-7f72346a0000 rw-s 00000000 00:13 724                        /dev/__properties__/appcompat_override/u:object_r:system_boot_reason_prop:s0
+7f72346a0000-7f72346c0000 rw-s 00000000 00:13 723                        /dev/__properties__/appcompat_override/u:object_r:system_audio_config_prop:s0
+7f72346c0000-7f72346e0000 rw-s 00000000 00:13 722                        /dev/__properties__/appcompat_override/u:object_r:system_adbd_prop:s0
+7f72346e0000-7f7234700000 rw-s 00000000 00:13 721                        /dev/__properties__/appcompat_override/u:object_r:suspend_prop:s0
+7f7234700000-7f7234720000 rw-s 00000000 00:13 720                        /dev/__properties__/appcompat_override/u:object_r:suspend_debug_prop:s0
+7f7234720000-7f7234740000 rw-s 00000000 00:13 719                        /dev/__properties__/appcompat_override/u:object_r:surfaceflinger_prop:s0
+7f7234740000-7f7234760000 rw-s 00000000 00:13 718                        /dev/__properties__/appcompat_override/u:object_r:surfaceflinger_display_prop:s0
+7f7234760000-7f7234780000 rw-s 00000000 00:13 717                        /dev/__properties__/appcompat_override/u:object_r:surfaceflinger_color_prop:s0
+7f7234780000-7f72347a0000 rw-s 00000000 00:13 716                        /dev/__properties__/appcompat_override/u:object_r:storagemanager_config_prop:s0
+7f72347a0000-7f72347c0000 rw-s 00000000 00:13 715                        /dev/__properties__/appcompat_override/u:object_r:storage_config_prop:s0
+7f72347c0000-7f72347e0000 rw-s 00000000 00:13 714                        /dev/__properties__/appcompat_override/u:object_r:statsd_atoms_list_version_prop:s0
+7f72347e0000-7f7234800000 rw-s 00000000 00:13 713                        /dev/__properties__/appcompat_override/u:object_r:sqlite_log_prop:s0
+7f7234800000-7f7234820000 rw-s 00000000 00:13 712                        /dev/__properties__/appcompat_override/u:object_r:socket_hook_prop:s0
+7f7234820000-7f7234840000 rw-s 00000000 00:13 711                        /dev/__properties__/appcompat_override/u:object_r:soc_prop:s0
+7f7234840000-7f7234860000 rw-s 00000000 00:13 710                        /dev/__properties__/appcompat_override/u:object_r:snapuserd_prop:s0
+7f7234860000-7f7234880000 rw-s 00000000 00:13 709                        /dev/__properties__/appcompat_override/u:object_r:snapshotctl_prop:s0
+7f7234880000-7f72348a0000 rw-s 00000000 00:13 708                        /dev/__properties__/appcompat_override/u:object_r:smart_idle_maint_enabled_prop:s0
+7f72348a0000-7f72348c0000 rw-s 00000000 00:13 707                        /dev/__properties__/appcompat_override/u:object_r:shell_prop:s0
+7f72348c0000-7f72348e0000 rw-s 00000000 00:13 706                        /dev/__properties__/appcompat_override/u:object_r:setupwizard_prop:s0
+7f72348e0000-7f7234900000 rw-s 00000000 00:13 705                        /dev/__properties__/appcompat_override/u:object_r:setupwizard_mode_prop:s0
+7f7234900000-7f7234920000 rw-s 00000000 00:13 704                        /dev/__properties__/appcompat_override/u:object_r:servicemanager_prop:s0
+7f7234920000-7f7234940000 rw-s 00000000 00:13 703                        /dev/__properties__/appcompat_override/u:object_r:service_sf_present_timestamp_prop:s0
+7f7234940000-7f7234960000 rw-s 00000000 00:13 702                        /dev/__properties__/appcompat_override/u:object_r:serialno_prop:s0
+7f7234960000-7f7234980000 rw-s 00000000 00:13 701                        /dev/__properties__/appcompat_override/u:object_r:sensors_hal_prop:s0
+7f7234980000-7f72349a0000 rw-s 00000000 00:13 700                        /dev/__properties__/appcompat_override/u:object_r:sensors_config_prop:s0
+7f72349a0000-7f72349c0000 rw-s 00000000 00:13 699                        /dev/__properties__/appcompat_override/u:object_r:sendbug_config_prop:s0
+7f72349c0000-7f72349e0000 rw-s 00000000 00:13 698                        /dev/__properties__/appcompat_override/u:object_r:safemode_prop:s0
+7f72349e0000-7f7234a00000 rw-s 00000000 00:13 697                        /dev/__properties__/appcompat_override/u:object_r:rollback_test_prop:s0
+7f7234a00000-7f7234a20000 rw-s 00000000 00:13 696                        /dev/__properties__/appcompat_override/u:object_r:retaildemo_prop:s0
+7f7234a20000-7f7234a40000 rw-s 00000000 00:13 695                        /dev/__properties__/appcompat_override/u:object_r:restorecon_prop:s0
+7f7234a40000-7f7234a60000 rw-s 00000000 00:13 694                        /dev/__properties__/appcompat_override/u:object_r:remote_prov_prop:s0
+7f7234a60000-7f7234a80000 rw-s 00000000 00:13 693                        /dev/__properties__/appcompat_override/u:object_r:remote_prov_cert_prop:s0
+7f7234a80000-7f7234aa0000 rw-s 00000000 00:13 692                        /dev/__properties__/appcompat_override/u:object_r:recovery_usb_config_prop:s0
+7f7234aa0000-7f7234ac0000 rw-s 00000000 00:13 691                        /dev/__properties__/appcompat_override/u:object_r:recovery_config_prop:s0
+7f7234ac0000-7f7234ae0000 rw-s 00000000 00:13 690                        /dev/__properties__/appcompat_override/u:object_r:rebootescrow_hal_prop:s0
+7f7234ae0000-7f7234b00000 rw-s 00000000 00:13 689                        /dev/__properties__/appcompat_override/u:object_r:radio_prop:s0
+7f7234b00000-7f7234b20000 rw-s 00000000 00:13 688                        /dev/__properties__/appcompat_override/u:object_r:radio_control_prop:s0
+7f7234b20000-7f7234b40000 rw-s 00000000 00:13 687                        /dev/__properties__/appcompat_override/u:object_r:radio_cdma_ecm_prop:s0
+7f7234b40000-7f7234b60000 rw-s 00000000 00:13 686                        /dev/__properties__/appcompat_override/u:object_r:quick_start_prop:s0
+7f7234b60000-7f7234b80000 rw-s 00000000 00:13 685                        /dev/__properties__/appcompat_override/u:object_r:qemu_sf_lcd_density_prop:s0
+7f7234b80000-7f7234ba0000 rw-s 00000000 00:13 684                        /dev/__properties__/appcompat_override/u:object_r:qemu_hw_prop:s0
+7f7234ba0000-7f7234bc0000 rw-s 00000000 00:13 683                        /dev/__properties__/appcompat_override/u:object_r:provisioned_prop:s0
+7f7234bc0000-7f7234be0000 rw-s 00000000 00:13 682                        /dev/__properties__/appcompat_override/u:object_r:property_service_version_prop:s0
+7f7234be0000-7f7234c00000 rw-s 00000000 00:13 681                        /dev/__properties__/appcompat_override/u:object_r:profcollectd_node_id_prop:s0
+7f7234c00000-7f7234c20000 rw-s 00000000 00:13 680                        /dev/__properties__/appcompat_override/u:object_r:profcollectd_etr_prop:s0
+7f7234c20000-7f7234c40000 rw-s 00000000 00:13 679                        /dev/__properties__/appcompat_override/u:object_r:profcollectd_enabled_prop:s0
+7f7234c40000-7f7234c60000 rw-s 00000000 00:13 678                        /dev/__properties__/appcompat_override/u:object_r:prefetch_service_prop:s0
+7f7234c60000-7f7234c80000 rw-s 00000000 00:13 677                        /dev/__properties__/appcompat_override/u:object_r:prefetch_boot_prop:s0
+7f7234c80000-7f7234ca0000 rw-s 00000000 00:13 676                        /dev/__properties__/appcompat_override/u:object_r:powerctl_prop:s0
+7f7234ca0000-7f7234cc0000 rw-s 00000000 00:13 675                        /dev/__properties__/appcompat_override/u:object_r:power_debug_prop:s0
+7f7234cc0000-7f7234ce0000 rw-s 00000000 00:13 674                        /dev/__properties__/appcompat_override/u:object_r:pm_prop:s0
+7f7234ce0000-7f7234d00000 rw-s 00000000 00:13 673                        /dev/__properties__/appcompat_override/u:object_r:pm_16kb_app_compat_prop:s0
+7f7234d00000-7f7234d20000 rw-s 00000000 00:13 672                        /dev/__properties__/appcompat_override/u:object_r:persistent_properties_ready_prop:s0
+7f7234d20000-7f7234d40000 rw-s 00000000 00:13 671                        /dev/__properties__/appcompat_override/u:object_r:persist_wm_debug_prop:s0
+7f7234d40000-7f7234d60000 rw-s 00000000 00:13 670                        /dev/__properties__/appcompat_override/u:object_r:persist_vendor_debug_wifi_prop:s0
+7f7234d60000-7f7234d80000 rw-s 00000000 00:13 669                        /dev/__properties__/appcompat_override/u:object_r:persist_sysui_ranking_update_prop:s0
+7f7234d80000-7f7234da0000 rw-s 00000000 00:13 668                        /dev/__properties__/appcompat_override/u:object_r:persist_sysui_builder_extras_prop:s0
+7f7234da0000-7f7234dc0000 rw-s 00000000 00:13 667                        /dev/__properties__/appcompat_override/u:object_r:persist_debug_prop:s0
+7f7234dc0000-7f7234de0000 rw-s 00000000 00:13 666                        /dev/__properties__/appcompat_override/u:object_r:permissive_mte_prop:s0
+7f7234de0000-7f7234e00000 rw-s 00000000 00:13 665                        /dev/__properties__/appcompat_override/u:object_r:perf_drop_caches_prop:s0
+7f7234e00000-7f7234e20000 rw-s 00000000 00:13 664                        /dev/__properties__/appcompat_override/u:object_r:pan_result_prop:s0
+7f7234e20000-7f7234e40000 rw-s 00000000 00:13 663                        /dev/__properties__/appcompat_override/u:object_r:page_size_prop:s0
+7f7234e40000-7f7234e60000 rw-s 00000000 00:13 662                        /dev/__properties__/appcompat_override/u:object_r:packagemanager_config_prop:s0
+7f7234e60000-7f7234e80000 rw-s 00000000 00:13 661                        /dev/__properties__/appcompat_override/u:object_r:overlay_prop:s0
+7f7234e80000-7f7234ea0000 rw-s 00000000 00:13 660                        /dev/__properties__/appcompat_override/u:object_r:ota_prop:s0
+7f7234ea0000-7f7234ec0000 rw-s 00000000 00:13 659                        /dev/__properties__/appcompat_override/u:object_r:ota_build_prop:s0
+7f7234ec0000-7f7234ee0000 rw-s 00000000 00:13 658                        /dev/__properties__/appcompat_override/u:object_r:oem_unlock_prop:s0
+7f7234ee0000-7f7234f00000 rw-s 00000000 00:13 657                        /dev/__properties__/appcompat_override/u:object_r:odsign_prop:s0
+7f7234f00000-7f7234f20000 rw-s 00000000 00:13 656                        /dev/__properties__/appcompat_override/u:object_r:nnapi_ext_deny_product_prop:s0
+7f7234f20000-7f7234f40000 rw-s 00000000 00:13 655                        /dev/__properties__/appcompat_override/u:object_r:nfc_prop:s0
+7f7234f40000-7f7234f60000 rw-s 00000000 00:13 654                        /dev/__properties__/appcompat_override/u:object_r:next_boot_prop:s0
+7f7234f60000-7f7234f80000 rw-s 00000000 00:13 653                        /dev/__properties__/appcompat_override/u:object_r:netd_stable_secret_prop:s0
+7f7234f80000-7f7234fa0000 rw-s 00000000 00:13 652                        /dev/__properties__/appcompat_override/u:object_r:net_radio_prop:s0
+7f7234fa0000-7f7234fc0000 rw-s 00000000 00:13 651                        /dev/__properties__/appcompat_override/u:object_r:net_dns_prop:s0
+7f7234fc0000-7f7234fe0000 rw-s 00000000 00:13 650                        /dev/__properties__/appcompat_override/u:object_r:net_connectivity_prop:s0
+7f7234fe0000-7f7235000000 rw-s 00000000 00:13 649                        /dev/__properties__/appcompat_override/u:object_r:net_464xlat_fromvendor_prop:s0
+7f7235000000-7f7235020000 rw-s 00000000 00:13 648                        /dev/__properties__/appcompat_override/u:object_r:native_binder_stats_prop:s0
+7f7235020000-7f7235040000 rw-s 00000000 00:13 647                        /dev/__properties__/appcompat_override/u:object_r:module_sdkextensions_prop:s0
+7f7235040000-7f7235060000 rw-s 00000000 00:13 646                        /dev/__properties__/appcompat_override/u:object_r:mock_ota_prop:s0
+7f7235060000-7f7235080000 rw-s 00000000 00:13 645                        /dev/__properties__/appcompat_override/u:object_r:mmd_status_prop:s0
+7f7235080000-7f72350a0000 rw-s 00000000 00:13 644                        /dev/__properties__/appcompat_override/u:object_r:mmd_shared_status_prop:s0
+7f72350a0000-7f72350c0000 rw-s 00000000 00:13 643                        /dev/__properties__/appcompat_override/u:object_r:mmd_shared_prop:s0
+7f72350c0000-7f72350e0000 rw-s 00000000 00:13 642                        /dev/__properties__/appcompat_override/u:object_r:mmd_prop:s0
+7f72350e0000-7f7235100000 rw-s 00000000 00:13 641                        /dev/__properties__/appcompat_override/u:object_r:mmc_prop:s0
+7f7235100000-7f7235120000 rw-s 00000000 00:13 640                        /dev/__properties__/appcompat_override/u:object_r:mm_events_config_prop:s0
+7f7235120000-7f7235140000 rw-s 00000000 00:13 639                        /dev/__properties__/appcompat_override/u:object_r:misctrl_prop:s0
+7f7235140000-7f7235160000 rw-s 00000000 00:13 638                        /dev/__properties__/appcompat_override/u:object_r:mediadrm_config_prop:s0
+7f7235160000-7f7235180000 rw-s 00000000 00:13 637                        /dev/__properties__/appcompat_override/u:object_r:media_variant_prop:s0
+7f7235180000-7f72351a0000 rw-s 00000000 00:13 636                        /dev/__properties__/appcompat_override/u:object_r:media_config_prop:s0
+7f72351a0000-7f72351c0000 rw-s 00000000 00:13 635                        /dev/__properties__/appcompat_override/u:object_r:lpdumpd_prop:s0
+7f72351c0000-7f72351e0000 rw-s 00000000 00:13 634                        /dev/__properties__/appcompat_override/u:object_r:lowpan_prop:s0
+7f72351e0000-7f7235200000 rw-s 00000000 00:13 633                        /dev/__properties__/appcompat_override/u:object_r:lower_kptr_restrict_prop:s0
+7f7235200000-7f7235220000 rw-s 00000000 00:13 632                        /dev/__properties__/appcompat_override/u:object_r:logpersistd_logging_prop:s0
+7f7235220000-7f7235240000 rw-s 00000000 00:13 631                        /dev/__properties__/appcompat_override/u:object_r:logd_prop:s0
+7f7235240000-7f7235260000 rw-s 00000000 00:13 630                        /dev/__properties__/appcompat_override/u:object_r:logd_auditrate_prop:s0
+7f7235260000-7f7235280000 rw-s 00000000 00:13 629                        /dev/__properties__/appcompat_override/u:object_r:log_tag_prop:s0
+7f7235280000-7f72352a0000 rw-s 00000000 00:13 628                        /dev/__properties__/appcompat_override/u:object_r:log_prop:s0
+7f72352a0000-7f72352c0000 rw-s 00000000 00:13 627                        /dev/__properties__/appcompat_override/u:object_r:log_file_logger_prop:s0
+7f72352c0000-7f72352e0000 rw-s 00000000 00:13 626                        /dev/__properties__/appcompat_override/u:object_r:localization_prop:s0
+7f72352e0000-7f7235300000 rw-s 00000000 00:13 625                        /dev/__properties__/appcompat_override/u:object_r:locale_prop:s0
+7f7235300000-7f7235320000 rw-s 00000000 00:13 624                        /dev/__properties__/appcompat_override/u:object_r:lmkd_prop:s0
+7f7235320000-7f7235340000 rw-s 00000000 00:13 623                        /dev/__properties__/appcompat_override/u:object_r:lmkd_config_prop:s0
+7f7235340000-7f7235360000 rw-s 00000000 00:13 622                        /dev/__properties__/appcompat_override/u:object_r:llkd_prop:s0
+7f7235360000-7f7235380000 rw-s 00000000 00:13 621                        /dev/__properties__/appcompat_override/u:object_r:libc_debug_prop:s0
+7f7235380000-7f72353a0000 rw-s 00000000 00:13 620                        /dev/__properties__/appcompat_override/u:object_r:last_boot_reason_prop:s0
+7f72353a0000-7f72353c0000 rw-s 00000000 00:13 619                        /dev/__properties__/appcompat_override/u:object_r:keystore_listen_prop:s0
+7f72353c0000-7f72353e0000 rw-s 00000000 00:13 618                        /dev/__properties__/appcompat_override/u:object_r:keystore_diagnostics_prop:s0
+7f72353e0000-7f7235400000 rw-s 00000000 00:13 617                        /dev/__properties__/appcompat_override/u:object_r:keystore_config_prop:s0
+7f7235400000-7f7235420000 rw-s 00000000 00:13 616                        /dev/__properties__/appcompat_override/u:object_r:keyguard_config_prop:s0
+7f7235420000-7f7235440000 rw-s 00000000 00:13 615                        /dev/__properties__/appcompat_override/u:object_r:kcmdline_prop:s0
+7f7235440000-7f7235460000 rw-s 00000000 00:13 614                        /dev/__properties__/appcompat_override/u:object_r:input_device_config_prop:s0
+7f7235460000-7f7235480000 rw-s 00000000 00:13 613                        /dev/__properties__/appcompat_override/u:object_r:init_svc_debug_prop:s0
+7f7235480000-7f72354a0000 rw-s 00000000 00:13 612                        /dev/__properties__/appcompat_override/u:object_r:init_storage_prop:s0
+7f72354a0000-7f72354c0000 rw-s 00000000 00:13 611                        /dev/__properties__/appcompat_override/u:object_r:init_service_status_prop:s0
+7f72354c0000-7f72354e0000 rw-s 00000000 00:13 610                        /dev/__properties__/appcompat_override/u:object_r:init_service_status_private_prop:s0
+7f72354e0000-7f7235500000 rw-s 00000000 00:13 609                        /dev/__properties__/appcompat_override/u:object_r:init_perf_lsm_hooks_prop:s0
+7f7235500000-7f7235520000 rw-s 00000000 00:13 608                        /dev/__properties__/appcompat_override/u:object_r:init_mnt_ns_prop:s0
+7f7235520000-7f7235540000 rw-s 00000000 00:13 607                        /dev/__properties__/appcompat_override/u:object_r:incremental_prop:s0
+7f7235540000-7f7235560000 rw-s 00000000 00:13 606                        /dev/__properties__/appcompat_override/u:object_r:hypervisor_virtualizationmanager_prop:s0
+7f7235560000-7f7235580000 rw-s 00000000 00:13 605                        /dev/__properties__/appcompat_override/u:object_r:hypervisor_restricted_prop:s0
+7f7235580000-7f72355a0000 rw-s 00000000 00:13 604                        /dev/__properties__/appcompat_override/u:object_r:hypervisor_pvmfw_prop:s0
+7f72355a0000-7f72355c0000 rw-s 00000000 00:13 603                        /dev/__properties__/appcompat_override/u:object_r:hypervisor_prop:s0
+7f72355c0000-7f72355e0000 rw-s 00000000 00:13 602                        /dev/__properties__/appcompat_override/u:object_r:hwservicemanager_prop:s0
+7f72355e0000-7f7235600000 rw-s 00000000 00:13 601                        /dev/__properties__/appcompat_override/u:object_r:hw_timeout_multiplier_prop:s0
+7f7235600000-7f7235620000 rw-s 00000000 00:13 600                        /dev/__properties__/appcompat_override/u:object_r:hsum_boot_strategy_prop:s0
+7f7235620000-7f7235640000 rw-s 00000000 00:13 599                        /dev/__properties__/appcompat_override/u:object_r:hint_manager_config_prop:s0
+7f7235640000-7f7235660000 rw-s 00000000 00:13 598                        /dev/__properties__/appcompat_override/u:object_r:high_barometer_quality_prop:s0
+7f7235660000-7f7235680000 rw-s 00000000 00:13 597                        /dev/__properties__/appcompat_override/u:object_r:hidl_memory_prop:s0
+7f7235680000-7f72356a0000 rw-s 00000000 00:13 596                        /dev/__properties__/appcompat_override/u:object_r:heapprofd_prop:s0
+7f72356a0000-7f72356c0000 rw-s 00000000 00:13 595                        /dev/__properties__/appcompat_override/u:object_r:heapprofd_enabled_prop:s0
+7f72356c0000-7f72356e0000 rw-s 00000000 00:13 594                        /dev/__properties__/appcompat_override/u:object_r:hdmi_config_prop:s0
+7f72356e0000-7f7235700000 rw-s 00000000 00:13 593                        /dev/__properties__/appcompat_override/u:object_r:hal_instrumentation_prop:s0
+7f7235700000-7f7235720000 rw-s 00000000 00:13 592                        /dev/__properties__/appcompat_override/u:object_r:hal_dumpstate_config_prop:s0
+7f7235720000-7f7235740000 rw-s 00000000 00:13 591                        /dev/__properties__/appcompat_override/u:object_r:gwp_asan_prop:s0
+7f7235740000-7f7235760000 rw-s 00000000 00:13 590                        /dev/__properties__/appcompat_override/u:object_r:gsid_prop:s0
+7f7235760000-7f7235780000 rw-s 00000000 00:13 589                        /dev/__properties__/appcompat_override/u:object_r:graphics_config_writable_prop:s0
+7f7235780000-7f72357a0000 rw-s 00000000 00:13 588                        /dev/__properties__/appcompat_override/u:object_r:graphics_config_prop:s0
+7f72357a0000-7f72357c0000 rw-s 00000000 00:13 587                        /dev/__properties__/appcompat_override/u:object_r:gesture_prop:s0
+7f72357c0000-7f72357e0000 rw-s 00000000 00:13 586                        /dev/__properties__/appcompat_override/u:object_r:game_manager_config_prop:s0
+7f72357e0000-7f7235800000 rw-s 00000000 00:13 585                        /dev/__properties__/appcompat_override/u:object_r:future_pm_prop:s0
+7f7235800000-7f7235820000 rw-s 00000000 00:13 584                        /dev/__properties__/appcompat_override/u:object_r:fstype_prop:s0
+7f7235820000-7f7235840000 rw-s 00000000 00:13 583                        /dev/__properties__/appcompat_override/u:object_r:framework_watchdog_config_prop:s0
+7f7235840000-7f7235860000 rw-s 00000000 00:13 582                        /dev/__properties__/appcompat_override/u:object_r:framework_status_prop:s0
+7f7235860000-7f7235880000 rw-s 00000000 00:13 581                        /dev/__properties__/appcompat_override/u:object_r:firstboot_prop:s0
+7f7235880000-7f72358a0000 rw-s 00000000 00:13 580                        /dev/__properties__/appcompat_override/u:object_r:fingerprint_prop:s0
+7f72358a0000-7f72358c0000 rw-s 00000000 00:13 579                        /dev/__properties__/appcompat_override/u:object_r:ffs_control_prop:s0
+7f72358c0000-7f72358e0000 rw-s 00000000 00:13 578                        /dev/__properties__/appcompat_override/u:object_r:ffs_config_prop:s0
+7f72358e0000-7f7235900000 rw-s 00000000 00:13 577                        /dev/__properties__/appcompat_override/u:object_r:fastbootd_protocol_prop:s0
+7f7235900000-7f7235920000 rw-s 00000000 00:13 576                        /dev/__properties__/appcompat_override/u:object_r:exported_system_prop:s0
+7f7235920000-7f7235940000 rw-s 00000000 00:13 575                        /dev/__properties__/appcompat_override/u:object_r:exported_pm_prop:s0
+7f7235940000-7f7235960000 rw-s 00000000 00:13 574                        /dev/__properties__/appcompat_override/u:object_r:exported_overlay_prop:s0
+7f7235960000-7f7235980000 rw-s 00000000 00:13 573                        /dev/__properties__/appcompat_override/u:object_r:exported_dumpstate_prop:s0
+7f7235980000-7f72359a0000 rw-s 00000000 00:13 572                        /dev/__properties__/appcompat_override/u:object_r:exported_default_prop:s0
+7f72359a0000-7f72359c0000 rw-s 00000000 00:13 571                        /dev/__properties__/appcompat_override/u:object_r:exported_config_prop:s0
+7f72359c0000-7f72359e0000 rw-s 00000000 00:13 570                        /dev/__properties__/appcompat_override/u:object_r:exported_bluetooth_prop:s0
+7f72359e0000-7f7235a00000 rw-s 00000000 00:13 569                        /dev/__properties__/appcompat_override/u:object_r:exported3_system_prop:s0
+7f7235a00000-7f7235a20000 rw-s 00000000 00:13 568                        /dev/__properties__/appcompat_override/u:object_r:enable_16k_pages_prop:s0
+7f7235a20000-7f7235a40000 rw-s 00000000 00:13 567                        /dev/__properties__/appcompat_override/u:object_r:dynamic_system_prop:s0
+7f7235a40000-7f7235a60000 rw-s 00000000 00:13 566                        /dev/__properties__/appcompat_override/u:object_r:dumpstate_prop:s0
+7f7235a60000-7f7235a80000 rw-s 00000000 00:13 565                        /dev/__properties__/appcompat_override/u:object_r:dumpstate_options_prop:s0
+7f7235a80000-7f7235aa0000 rw-s 00000000 00:13 564                        /dev/__properties__/appcompat_override/u:object_r:drm_service_config_prop:s0
+7f7235aa0000-7f7235ac0000 rw-s 00000000 00:13 563                        /dev/__properties__/appcompat_override/u:object_r:drm_forcel3_prop:s0
+7f7235ac0000-7f7235ae0000 rw-s 00000000 00:13 562                        /dev/__properties__/appcompat_override/u:object_r:drm_config_prop:s0
+7f7235ae0000-7f7235b00000 rw-s 00000000 00:13 561                        /dev/__properties__/appcompat_override/u:object_r:dmesgd_start_prop:s0
+7f7235b00000-7f7235b20000 rw-s 00000000 00:13 560                        /dev/__properties__/appcompat_override/u:object_r:dhcp_prop:s0
+7f7235b20000-7f7235b40000 rw-s 00000000 00:13 559                        /dev/__properties__/appcompat_override/u:object_r:device_logging_prop:s0
+7f7235b40000-7f7235b60000 rw-s 00000000 00:13 558                        /dev/__properties__/appcompat_override/u:object_r:device_config_window_manager_native_boot_prop:s0
+7f7235b60000-7f7235b80000 rw-s 00000000 00:13 557                        /dev/__properties__/appcompat_override/u:object_r:device_config_virtualization_framework_native_prop:s0
+7f7235b80000-7f7235ba0000 rw-s 00000000 00:13 556                        /dev/__properties__/appcompat_override/u:object_r:device_config_vendor_system_native_prop:s0
+7f7235ba0000-7f7235bc0000 rw-s 00000000 00:13 555                        /dev/__properties__/appcompat_override/u:object_r:device_config_vendor_system_native_boot_prop:s0
+7f7235bc0000-7f7235be0000 rw-s 00000000 00:13 554                        /dev/__properties__/appcompat_override/u:object_r:device_config_tethering_u_or_later_native_prop:s0
+7f7235be0000-7f7235c00000 rw-s 00000000 00:13 553                        /dev/__properties__/appcompat_override/u:object_r:device_config_sys_traced_prop:s0
+7f7235c00000-7f7235c20000 rw-s 00000000 00:13 552                        /dev/__properties__/appcompat_override/u:object_r:device_config_swcodec_native_prop:s0
+7f7235c20000-7f7235c40000 rw-s 00000000 00:13 551                        /dev/__properties__/appcompat_override/u:object_r:device_config_surface_flinger_native_boot_prop:s0
+7f7235c40000-7f7235c60000 rw-s 00000000 00:13 550                        /dev/__properties__/appcompat_override/u:object_r:device_config_storage_native_boot_prop:s0
+7f7235c60000-7f7235c80000 rw-s 00000000 00:13 549                        /dev/__properties__/appcompat_override/u:object_r:device_config_statsd_native_prop:s0
+7f7235c80000-7f7235ca0000 rw-s 00000000 00:13 548                        /dev/__properties__/appcompat_override/u:object_r:device_config_statsd_native_boot_prop:s0
+7f7235ca0000-7f7235cc0000 rw-s 00000000 00:13 547                        /dev/__properties__/appcompat_override/u:object_r:device_config_runtime_native_prop:s0
+7f7235cc0000-7f7235ce0000 rw-s 00000000 00:13 546                        /dev/__properties__/appcompat_override/u:object_r:device_config_runtime_native_boot_prop:s0
+7f7235ce0000-7f7235d00000 rw-s 00000000 00:13 545                        /dev/__properties__/appcompat_override/u:object_r:device_config_reset_performed_prop:s0
+7f7235d00000-7f7235d20000 rw-s 00000000 00:13 544                        /dev/__properties__/appcompat_override/u:object_r:device_config_remote_key_provisioning_native_prop:s0
+7f7235d20000-7f7235d40000 rw-s 00000000 00:13 543                        /dev/__properties__/appcompat_override/u:object_r:device_config_profcollect_native_boot_prop:s0
+7f7235d40000-7f7235d60000 rw-s 00000000 00:13 542                        /dev/__properties__/appcompat_override/u:object_r:device_config_nnapi_native_prop:s0
+7f7235d60000-7f7235d80000 rw-s 00000000 00:13 541                        /dev/__properties__/appcompat_override/u:object_r:device_config_netd_native_prop:s0
+7f7235d80000-7f7235da0000 rw-s 00000000 00:13 540                        /dev/__properties__/appcompat_override/u:object_r:device_config_mmd_native_prop:s0
+7f7235da0000-7f7235dc0000 rw-s 00000000 00:13 539                        /dev/__properties__/appcompat_override/u:object_r:device_config_mglru_native_prop:s0
+7f7235dc0000-7f7235de0000 rw-s 00000000 00:13 538                        /dev/__properties__/appcompat_override/u:object_r:device_config_memory_safety_native_prop:s0
+7f7235de0000-7f7235e00000 rw-s 00000000 00:13 537                        /dev/__properties__/appcompat_override/u:object_r:device_config_memory_safety_native_boot_prop:s0
+7f7235e00000-7f7235e20000 rw-s 00000000 00:13 536                        /dev/__properties__/appcompat_override/u:object_r:device_config_media_native_prop:s0
+7f7235e20000-7f7235e40000 rw-s 00000000 00:13 535                        /dev/__properties__/appcompat_override/u:object_r:device_config_lmkd_native_prop:s0
+7f7235e40000-7f7235e60000 rw-s 00000000 00:13 534                        /dev/__properties__/appcompat_override/u:object_r:device_config_input_native_boot_prop:s0
+7f7235e60000-7f7235e80000 rw-s 00000000 00:13 533                        /dev/__properties__/appcompat_override/u:object_r:device_config_edgetpu_native_prop:s0
+7f7235e80000-7f7235ea0000 rw-s 00000000 00:13 532                        /dev/__properties__/appcompat_override/u:object_r:device_config_core_experiments_team_internal_prop:s0
+7f7235ea0000-7f7235ec0000 rw-s 00000000 00:13 531                        /dev/__properties__/appcompat_override/u:object_r:device_config_connectivity_prop:s0
+7f7235ec0000-7f7235ee0000 rw-s 00000000 00:13 530                        /dev/__properties__/appcompat_override/u:object_r:device_config_configuration_prop:s0
+7f7235ee0000-7f7235f00000 rw-s 00000000 00:13 529                        /dev/__properties__/appcompat_override/u:object_r:device_config_camera_native_prop:s0
+7f7235f00000-7f7235f20000 rw-s 00000000 00:13 528                        /dev/__properties__/appcompat_override/u:object_r:device_config_boot_count_prop:s0
+7f7235f20000-7f7235f40000 rw-s 00000000 00:13 527                        /dev/__properties__/appcompat_override/u:object_r:device_config_activity_manager_native_boot_prop:s0
+7f7235f40000-7f7235f60000 rw-s 00000000 00:13 526                        /dev/__properties__/appcompat_override/u:object_r:device_config_aconfig_flags_prop:s0
+7f7235f60000-7f7235f80000 rw-s 00000000 00:13 525                        /dev/__properties__/appcompat_override/u:object_r:default_prop:s0
+7f7235f80000-7f7235fa0000 rw-s 00000000 00:13 524                        /dev/__properties__/appcompat_override/u:object_r:debuggerd_prop:s0
+7f7235fa0000-7f7235fc0000 rw-s 00000000 00:13 523                        /dev/__properties__/appcompat_override/u:object_r:debugfs_restriction_prop:s0
+7f7235fc0000-7f7235fe0000 rw-s 00000000 00:13 522                        /dev/__properties__/appcompat_override/u:object_r:debug_tracing_desktop_mode_visible_tasks_prop:s0
+7f7235fe0000-7f7236000000 rw-s 00000000 00:13 521                        /dev/__properties__/appcompat_override/u:object_r:debug_prop:s0
+7f7236000000-7f7236020000 rw-s 00000000 00:13 520                        /dev/__properties__/appcompat_override/u:object_r:dck_prop:s0
+7f7236020000-7f7236040000 rw-s 00000000 00:13 519                        /dev/__properties__/appcompat_override/u:object_r:dalvik_runtime_prop:s0
+7f7236040000-7f7236060000 rw-s 00000000 00:13 518                        /dev/__properties__/appcompat_override/u:object_r:dalvik_prop:s0
+7f7236060000-7f7236080000 rw-s 00000000 00:13 517                        /dev/__properties__/appcompat_override/u:object_r:dalvik_dynamic_config_prop:s0
+7f7236080000-7f72360a0000 rw-s 00000000 00:13 516                        /dev/__properties__/appcompat_override/u:object_r:dalvik_config_prop:s0
+7f72360a0000-7f72360c0000 rw-s 00000000 00:13 515                        /dev/__properties__/appcompat_override/u:object_r:ctl_uprobestats_prop:s0
+7f72360c0000-7f72360e0000 rw-s 00000000 00:13 514                        /dev/__properties__/appcompat_override/u:object_r:ctl_stop_prop:s0
+7f72360e0000-7f7236100000 rw-s 00000000 00:13 513                        /dev/__properties__/appcompat_override/u:object_r:ctl_start_prop:s0
+7f7236100000-7f7236120000 rw-s 00000000 00:13 512                        /dev/__properties__/appcompat_override/u:object_r:ctl_snapuserd_prop:s0
+7f7236120000-7f7236140000 rw-s 00000000 00:13 511                        /dev/__properties__/appcompat_override/u:object_r:ctl_sigstop_prop:s0
+7f7236140000-7f7236160000 rw-s 00000000 00:13 510                        /dev/__properties__/appcompat_override/u:object_r:ctl_rildaemon_prop:s0
+7f7236160000-7f7236180000 rw-s 00000000 00:13 509                        /dev/__properties__/appcompat_override/u:object_r:ctl_restart_prop:s0
+7f7236180000-7f72361a0000 rw-s 00000000 00:13 508                        /dev/__properties__/appcompat_override/u:object_r:ctl_prefetch_prop:s0
+7f72361a0000-7f72361c0000 rw-s 00000000 00:13 507                        /dev/__properties__/appcompat_override/u:object_r:ctl_odsign_prop:s0
+7f72361c0000-7f72361e0000 rw-s 00000000 00:13 506                        /dev/__properties__/appcompat_override/u:object_r:ctl_mediatranscoding_prop:s0
+7f72361e0000-7f7236200000 rw-s 00000000 00:13 505                        /dev/__properties__/appcompat_override/u:object_r:ctl_mdnsd_prop:s0
+7f7236200000-7f7236220000 rw-s 00000000 00:13 504                        /dev/__properties__/appcompat_override/u:object_r:ctl_interface_stop_prop:s0
+7f7236220000-7f7236240000 rw-s 00000000 00:13 503                        /dev/__properties__/appcompat_override/u:object_r:ctl_interface_start_prop:s0
+7f7236240000-7f7236260000 rw-s 00000000 00:13 502                        /dev/__properties__/appcompat_override/u:object_r:ctl_interface_restart_prop:s0
+7f7236260000-7f7236280000 rw-s 00000000 00:13 501                        /dev/__properties__/appcompat_override/u:object_r:ctl_gsid_prop:s0
+7f7236280000-7f72362a0000 rw-s 00000000 00:13 500                        /dev/__properties__/appcompat_override/u:object_r:ctl_fuse_prop:s0
+7f72362a0000-7f72362c0000 rw-s 00000000 00:13 499                        /dev/__properties__/appcompat_override/u:object_r:ctl_dumpstate_prop:s0
+7f72362c0000-7f72362e0000 rw-s 00000000 00:13 498                        /dev/__properties__/appcompat_override/u:object_r:ctl_default_prop:s0
+7f72362e0000-7f7236300000 rw-s 00000000 00:13 497                        /dev/__properties__/appcompat_override/u:object_r:ctl_console_prop:s0
+7f7236300000-7f7236320000 rw-s 00000000 00:13 496                        /dev/__properties__/appcompat_override/u:object_r:ctl_bugreport_prop:s0
+7f7236320000-7f7236340000 rw-s 00000000 00:13 495                        /dev/__properties__/appcompat_override/u:object_r:ctl_bootanim_prop:s0
+7f7236340000-7f7236360000 rw-s 00000000 00:13 494                        /dev/__properties__/appcompat_override/u:object_r:ctl_artd_pre_reboot_prop:s0
+7f7236360000-7f7236380000 rw-s 00000000 00:13 493                        /dev/__properties__/appcompat_override/u:object_r:ctl_apexd_prop:s0
+7f7236380000-7f72363a0000 rw-s 00000000 00:13 492                        /dev/__properties__/appcompat_override/u:object_r:ctl_apex_load_prop:s0
+7f72363a0000-7f72363c0000 rw-s 00000000 00:13 491                        /dev/__properties__/appcompat_override/u:object_r:ctl_adbd_prop:s0
+7f72363c0000-7f72363e0000 rw-s 00000000 00:13 490                        /dev/__properties__/appcompat_override/u:object_r:crashrecovery_prop:s0
+7f72363e0000-7f7236400000 rw-s 00000000 00:13 489                        /dev/__properties__/appcompat_override/u:object_r:cpu_variant_prop:s0
+7f7236400000-7f7236420000 rw-s 00000000 00:13 488                        /dev/__properties__/appcompat_override/u:object_r:cppreopt_prop:s0
+7f7236420000-7f7236440000 rw-s 00000000 00:13 487                        /dev/__properties__/appcompat_override/u:object_r:config_prop:s0
+7f7236440000-7f7236460000 rw-s 00000000 00:13 486                        /dev/__properties__/appcompat_override/u:object_r:composd_vm_vendor_prop:s0
+7f7236460000-7f7236480000 rw-s 00000000 00:13 485                        /dev/__properties__/appcompat_override/u:object_r:composd_vm_art_prop:s0
+7f7236480000-7f72364a0000 rw-s 00000000 00:13 484                        /dev/__properties__/appcompat_override/u:object_r:cold_boot_done_prop:s0
+7f72364a0000-7f72364c0000 rw-s 00000000 00:13 483                        /dev/__properties__/appcompat_override/u:object_r:codec2_config_prop:s0
+7f72364c0000-7f72364e0000 rw-s 00000000 00:13 482                        /dev/__properties__/appcompat_override/u:object_r:chengliang_logcollector_prop:s0
+7f72364e0000-7f7236500000 rw-s 00000000 00:13 481                        /dev/__properties__/appcompat_override/u:object_r:charger_status_prop:s0
+7f7236500000-7f7236520000 rw-s 00000000 00:13 480                        /dev/__properties__/appcompat_override/u:object_r:charger_prop:s0
+7f7236520000-7f7236540000 rw-s 00000000 00:13 479                        /dev/__properties__/appcompat_override/u:object_r:charger_config_prop:s0
+7f7236540000-7f7236560000 rw-s 00000000 00:13 478                        /dev/__properties__/appcompat_override/u:object_r:camerax_extensions_prop:s0
+7f7236560000-7f7236580000 rw-s 00000000 00:13 477                        /dev/__properties__/appcompat_override/u:object_r:camera_config_prop:s0
+7f7236580000-7f72365a0000 rw-s 00000000 00:13 476                        /dev/__properties__/appcompat_override/u:object_r:camera_calibration_prop:s0
+7f72365a0000-7f72365c0000 rw-s 00000000 00:13 475                        /dev/__properties__/appcompat_override/u:object_r:camera2_extensions_prop:s0
+7f72365c0000-7f72365e0000 rw-s 00000000 00:13 474                        /dev/__properties__/appcompat_override/u:object_r:build_vendor_prop:s0
+7f72365e0000-7f7236600000 rw-s 00000000 00:13 473                        /dev/__properties__/appcompat_override/u:object_r:build_prop:s0
+7f7236600000-7f7236620000 rw-s 00000000 00:13 472                        /dev/__properties__/appcompat_override/u:object_r:build_odm_prop:s0
+7f7236620000-7f7236640000 rw-s 00000000 00:13 471                        /dev/__properties__/appcompat_override/u:object_r:build_config_prop:s0
+7f7236640000-7f7236660000 rw-s 00000000 00:13 470                        /dev/__properties__/appcompat_override/u:object_r:build_bootimage_prop:s0
+7f7236660000-7f7236680000 rw-s 00000000 00:13 469                        /dev/__properties__/appcompat_override/u:object_r:build_attestation_prop:s0
+7f7236680000-7f72366a0000 rw-s 00000000 00:13 468                        /dev/__properties__/appcompat_override/u:object_r:bq_config_prop:s0
+7f72366a0000-7f72366c0000 rw-s 00000000 00:13 467                        /dev/__properties__/appcompat_override/u:object_r:bpf_progs_loaded_prop:s0
+7f72366c0000-7f72366e0000 rw-s 00000000 00:13 466                        /dev/__properties__/appcompat_override/u:object_r:boottime_public_prop:s0
+7f72366e0000-7f7236700000 rw-s 00000000 00:13 465                        /dev/__properties__/appcompat_override/u:object_r:boottime_prop:s0
+7f7236700000-7f7236720000 rw-s 00000000 00:13 464                        /dev/__properties__/appcompat_override/u:object_r:bootloader_prop:s0
+7f7236720000-7f7236740000 rw-s 00000000 00:13 463                        /dev/__properties__/appcompat_override/u:object_r:bootloader_boot_reason_prop:s0
+7f7236740000-7f7236760000 rw-s 00000000 00:13 462                        /dev/__properties__/appcompat_override/u:object_r:bootanim_system_prop:s0
+7f7236760000-7f7236780000 rw-s 00000000 00:13 461                        /dev/__properties__/appcompat_override/u:object_r:bootanim_config_prop:s0
+7f7236780000-7f72367a0000 rw-s 00000000 00:13 460                        /dev/__properties__/appcompat_override/u:object_r:boot_status_prop:s0
+7f72367a0000-7f72367c0000 rw-s 00000000 00:13 459                        /dev/__properties__/appcompat_override/u:object_r:bluetooth_prop:s0
+7f72367c0000-7f72367e0000 rw-s 00000000 00:13 458                        /dev/__properties__/appcompat_override/u:object_r:bluetooth_lea_prop:s0
+7f72367e0000-7f7236800000 rw-s 00000000 00:13 457                        /dev/__properties__/appcompat_override/u:object_r:bluetooth_finder_prop:s0
+7f7236800000-7f7236820000 rw-s 00000000 00:13 456                        /dev/__properties__/appcompat_override/u:object_r:bluetooth_config_prop:s0
+7f7236820000-7f7236840000 rw-s 00000000 00:13 455                        /dev/__properties__/appcompat_override/u:object_r:bluetooth_audio_hal_prop:s0
+7f7236840000-7f7236860000 rw-s 00000000 00:13 454                        /dev/__properties__/appcompat_override/u:object_r:bluetooth_a2dp_offload_prop:s0
+7f7236860000-7f7236880000 rw-s 00000000 00:13 453                        /dev/__properties__/appcompat_override/u:object_r:bionic_linker_16kb_app_compat_prop:s0
+7f7236880000-7f72368a0000 rw-s 00000000 00:13 452                        /dev/__properties__/appcompat_override/u:object_r:binder_cache_telephony_server_prop:s0
+7f72368a0000-7f72368c0000 rw-s 00000000 00:13 451                        /dev/__properties__/appcompat_override/u:object_r:binder_cache_system_server_prop:s0
+7f72368c0000-7f72368e0000 rw-s 00000000 00:13 450                        /dev/__properties__/appcompat_override/u:object_r:binder_cache_bluetooth_server_prop:s0
+7f72368e0000-7f7236900000 rw-s 00000000 00:13 449                        /dev/__properties__/appcompat_override/u:object_r:binder_cache_adservices_server_prop:s0
+7f7236900000-7f7236920000 rw-s 00000000 00:13 448                        /dev/__properties__/appcompat_override/u:object_r:avf_vm_traced_relay_enabled_prop:s0
+7f7236920000-7f7236940000 rw-s 00000000 00:13 447                        /dev/__properties__/appcompat_override/u:object_r:avf_virtualizationservice_prop:s0
+7f7236940000-7f7236960000 rw-s 00000000 00:13 446                        /dev/__properties__/appcompat_override/u:object_r:audio_prop:s0
+7f7236960000-7f7236980000 rw-s 00000000 00:13 445                        /dev/__properties__/appcompat_override/u:object_r:audio_config_prop:s0
+7f7236980000-7f72369a0000 rw-s 00000000 00:13 444                        /dev/__properties__/appcompat_override/u:object_r:arm64_memtag_prop:s0
+7f72369a0000-7f72369c0000 rw-s 00000000 00:13 443                        /dev/__properties__/appcompat_override/u:object_r:arm64_memtag_bootctl_prop:s0
+7f72369c0000-7f72369e0000 rw-s 00000000 00:13 442                        /dev/__properties__/appcompat_override/u:object_r:appsearch_vm_prop:s0
+7f72369e0000-7f7236a00000 rw-s 00000000 00:13 441                        /dev/__properties__/appcompat_override/u:object_r:apexd_select_prop:s0
+7f7236a00000-7f7236a20000 rw-s 00000000 00:13 440                        /dev/__properties__/appcompat_override/u:object_r:apexd_prop:s0
+7f7236a20000-7f7236a40000 rw-s 00000000 00:13 439                        /dev/__properties__/appcompat_override/u:object_r:apexd_private_prop:s0
+7f7236a40000-7f7236a60000 rw-s 00000000 00:13 438                        /dev/__properties__/appcompat_override/u:object_r:apexd_payload_metadata_prop:s0
+7f7236a60000-7f7236a80000 rw-s 00000000 00:13 437                        /dev/__properties__/appcompat_override/u:object_r:apexd_config_prop:s0
+7f7236a80000-7f7236aa0000 rw-s 00000000 00:13 436                        /dev/__properties__/appcompat_override/u:object_r:apex_ready_prop:s0
+7f7236aa0000-7f7236ac0000 rw-s 00000000 00:13 435                        /dev/__properties__/appcompat_override/u:object_r:adbd_tradeinmode_prop:s0
+7f7236ac0000-7f7236ae0000 rw-s 00000000 00:13 434                        /dev/__properties__/appcompat_override/u:object_r:adbd_prop:s0
+7f7236ae0000-7f7236b00000 rw-s 00000000 00:13 433                        /dev/__properties__/appcompat_override/u:object_r:adbd_config_prop:s0
+7f7236b00000-7f7236b20000 rw-s 00000000 00:13 432                        /dev/__properties__/appcompat_override/u:object_r:adaptive_haptics_prop:s0
+7f7236b20000-7f7236b40000 rw-s 00000000 00:13 431                        /dev/__properties__/appcompat_override/u:object_r:ab_update_gki_prop:s0
+7f7236b40000-7f7236b60000 rw-s 00000000 00:13 430                        /dev/__properties__/appcompat_override/u:object_r:aaudio_config_prop:s0
+7f7236b60000-7f7236b80000 rw-s 00000000 00:13 429                        /dev/__properties__/appcompat_override/u:object_r:aac_drc_prop:s0
+7f7236b80000-7f7236ba0000 rw-s 00000000 00:13 428                        /dev/__properties__/properties_serial
+7f7236ba0000-7f7236bc0000 rw-s 00000000 00:13 427                        /dev/__properties__/u:object_r:zygote_wrap_prop:s0
+7f7236bc0000-7f7236be0000 rw-s 00000000 00:13 426                        /dev/__properties__/u:object_r:zygote_config_prop:s0
+7f7236be0000-7f7236c00000 rw-s 00000000 00:13 425                        /dev/__properties__/u:object_r:zram_control_prop:s0
+7f7236c00000-7f7236c20000 rw-s 00000000 00:13 424                        /dev/__properties__/u:object_r:zram_config_prop:s0
+7f7236c20000-7f7236c40000 rw-s 00000000 00:13 423                        /dev/__properties__/u:object_r:wifi_prop:s0
+7f7236c40000-7f7236c60000 rw-s 00000000 00:13 422                        /dev/__properties__/u:object_r:wifi_log_prop:s0
+7f7236c60000-7f7236c80000 rw-s 00000000 00:13 421                        /dev/__properties__/u:object_r:wifi_hal_prop:s0
+7f7236c80000-7f7236ca0000 rw-s 00000000 00:13 420                        /dev/__properties__/u:object_r:wifi_config_prop:s0
+7f7236ca0000-7f7236cc0000 rw-s 00000000 00:13 419                        /dev/__properties__/u:object_r:wallet_prop:s0
+7f7236cc0000-7f7236ce0000 rw-s 00000000 00:13 418                        /dev/__properties__/u:object_r:vts_status_prop:s0
+7f7236ce0000-7f7236d00000 rw-s 00000000 00:13 417                        /dev/__properties__/u:object_r:vts_config_prop:s0
+7f7236d00000-7f7236d20000 rw-s 00000000 00:13 416                        /dev/__properties__/u:object_r:vold_status_prop:s0
+7f7236d20000-7f7236d40000 rw-s 00000000 00:13 415                        /dev/__properties__/u:object_r:vold_prop:s0
+7f7236d40000-7f7236d60000 rw-s 00000000 00:13 414                        /dev/__properties__/u:object_r:vold_post_fs_data_prop:s0
+7f7236d60000-7f7236d80000 rw-s 00000000 00:13 413                        /dev/__properties__/u:object_r:vold_config_prop:s0
+7f7236d80000-7f7236da0000 rw-s 00000000 00:13 412                        /dev/__properties__/u:object_r:vndk_prop:s0
+7f7236da0000-7f7236dc0000 rw-s 00000000 00:13 411                        /dev/__properties__/u:object_r:virtualizationservice_prop:s0
+7f7236dc0000-7f7236de0000 rw-s 00000000 00:13 410                        /dev/__properties__/u:object_r:virtual_fingerprint_prop:s0
+7f7236de0000-7f7236e00000 rw-s 00000000 00:13 409                        /dev/__properties__/u:object_r:virtual_face_prop:s0
+7f7236e00000-7f7236e20000 rw-s 00000000 00:13 408                        /dev/__properties__/u:object_r:virtual_ab_prop:s0
+7f7236e20000-7f7236e40000 rw-s 00000000 00:13 407                        /dev/__properties__/u:object_r:verity_status_prop:s0
+7f7236e40000-7f7236e60000 rw-s 00000000 00:13 406                        /dev/__properties__/u:object_r:vendor_wlan_versions_prop:s0
+7f7236e60000-7f7236e80000 rw-s 00000000 00:13 405                        /dev/__properties__/u:object_r:vendor_socket_hook_prop:s0
+7f7236e80000-7f7236ea0000 rw-s 00000000 00:13 404                        /dev/__properties__/u:object_r:vendor_security_patch_level_prop:s0
+7f7236ea0000-7f7236ec0000 rw-s 00000000 00:13 403                        /dev/__properties__/u:object_r:vendor_qemu_prop:s0
+7f7236ec0000-7f7236ee0000 rw-s 00000000 00:13 402                        /dev/__properties__/u:object_r:vendor_net_wlan0_prop:s0
+7f7236ee0000-7f7236f00000 rw-s 00000000 00:13 401                        /dev/__properties__/u:object_r:vendor_net_share_prop:s0
+7f7236f00000-7f7236f20000 rw-s 00000000 00:13 400                        /dev/__properties__/u:object_r:vendor_net_radio0_prop:s0
+7f7236f20000-7f7236f40000 rw-s 00000000 00:13 399                        /dev/__properties__/u:object_r:vendor_net_eth0_prop:s0
+7f7236f40000-7f7236f60000 rw-s 00000000 00:13 398                        /dev/__properties__/u:object_r:vendor_dlkm_prop:s0
+7f7236f60000-7f7236f80000 rw-s 00000000 00:13 397                        /dev/__properties__/u:object_r:vendor_default_prop:s0
+7f7236f80000-7f7236fa0000 rw-s 00000000 00:13 396                        /dev/__properties__/u:object_r:vehicle_hal_prop:s0
+7f7236fa0000-7f7236fc0000 rw-s 00000000 00:13 395                        /dev/__properties__/u:object_r:userspace_reboot_test_prop:s0
+7f7236fc0000-7f7236fe0000 rw-s 00000000 00:13 394                        /dev/__properties__/u:object_r:userspace_reboot_log_prop:s0
+7f7236fe0000-7f7237000000 rw-s 00000000 00:13 393                        /dev/__properties__/u:object_r:userspace_reboot_exported_prop:s0
+7f7237000000-7f7237020000 rw-s 00000000 00:13 392                        /dev/__properties__/u:object_r:userspace_reboot_config_prop:s0
+7f7237020000-7f7237040000 rw-s 00000000 00:13 391                        /dev/__properties__/u:object_r:userdebug_or_eng_prop:s0
+7f7237040000-7f7237060000 rw-s 00000000 00:13 390                        /dev/__properties__/u:object_r:userdata_alias_remove_prop:s0
+7f7237060000-7f7237080000 rw-s 00000000 00:13 389                        /dev/__properties__/u:object_r:use_memfd_prop:s0
+7f7237080000-7f72370a0000 rw-s 00000000 00:13 388                        /dev/__properties__/u:object_r:usb_uvc_enabled_prop:s0
+7f72370a0000-7f72370c0000 rw-s 00000000 00:13 387                        /dev/__properties__/u:object_r:usb_prop:s0
+7f72370c0000-7f72370e0000 rw-s 00000000 00:13 386                        /dev/__properties__/u:object_r:usb_disable_when_locked_prop:s0
+7f72370e0000-7f7237100000 rw-s 00000000 00:13 385                        /dev/__properties__/u:object_r:usb_control_prop:s0
+7f7237100000-7f7237120000 rw-s 00000000 00:13 384                        /dev/__properties__/u:object_r:usb_config_prop:s0
+7f7237120000-7f7237140000 rw-s 00000000 00:13 383                        /dev/__properties__/u:object_r:uprobestats_start_with_config_prop:s0
+7f7237140000-7f7237160000 rw-s 00000000 00:13 382                        /dev/__properties__/u:object_r:tuner_server_ctl_prop:s0
+7f7237160000-7f7237180000 rw-s 00000000 00:13 381                        /dev/__properties__/u:object_r:tuner_config_prop:s0
+7f7237180000-7f72371a0000 rw-s 00000000 00:13 380                        /dev/__properties__/u:object_r:trusty_widevine_vm_sys_prop:s0
+7f72371a0000-7f72371c0000 rw-s 00000000 00:13 379                        /dev/__properties__/u:object_r:trusty_security_vm_sys_vendor_prop:s0
+7f72371c0000-7f72371e0000 rw-s 00000000 00:13 378                        /dev/__properties__/u:object_r:trusty_security_vm_sys_prop:s0
+7f72371e0000-7f7237200000 rw-s 00000000 00:13 377                        /dev/__properties__/u:object_r:trusty_coverage_prop:s0
+7f7237200000-7f7237220000 rw-s 00000000 00:13 376                        /dev/__properties__/u:object_r:traced_relay_relay_port_prop:s0
+7f7237220000-7f7237240000 rw-s 00000000 00:13 375                        /dev/__properties__/u:object_r:traced_perf_enabled_prop:s0
+7f7237240000-7f7237260000 rw-s 00000000 00:13 374                        /dev/__properties__/u:object_r:traced_oome_heap_session_count_prop:s0
+7f7237260000-7f7237280000 rw-s 00000000 00:13 373                        /dev/__properties__/u:object_r:traced_lazy_prop:s0
+7f7237280000-7f72372a0000 rw-s 00000000 00:13 372                        /dev/__properties__/u:object_r:traced_enabled_prop:s0
+7f72372a0000-7f72372c0000 rw-s 00000000 00:13 371                        /dev/__properties__/u:object_r:traced_config_prop:s0
+7f72372c0000-7f72372e0000 rw-s 00000000 00:13 370                        /dev/__properties__/u:object_r:tombstone_config_prop:s0
+7f72372e0000-7f7237300000 rw-s 00000000 00:13 369                        /dev/__properties__/u:object_r:timezone_prop:s0
+7f7237300000-7f7237320000 rw-s 00000000 00:13 368                        /dev/__properties__/u:object_r:timezone_metadata_prop:s0
+7f7237320000-7f7237340000 rw-s 00000000 00:13 367                        /dev/__properties__/u:object_r:time_prop:s0
+7f7237340000-7f7237360000 rw-s 00000000 00:13 366                        /dev/__properties__/u:object_r:threadnetwork_config_prop:s0
+7f7237360000-7f7237380000 rw-s 00000000 00:13 365                        /dev/__properties__/u:object_r:theme_prop:s0
+7f7237380000-7f72373a0000 rw-s 00000000 00:13 364                        /dev/__properties__/u:object_r:test_harness_prop:s0
+7f72373a0000-7f72373c0000 rw-s 00000000 00:13 363                        /dev/__properties__/u:object_r:test_boot_reason_prop:s0
+7f72373c0000-7f72373e0000 rw-s 00000000 00:13 362                        /dev/__properties__/u:object_r:telephony_status_prop:s0
+7f72373e0000-7f7237400000 rw-s 00000000 00:13 361                        /dev/__properties__/u:object_r:telephony_config_prop:s0
+7f7237400000-7f7237420000 rw-s 00000000 00:13 360                        /dev/__properties__/u:object_r:systemsound_config_prop:s0
+7f7237420000-7f7237440000 rw-s 00000000 00:13 359                        /dev/__properties__/u:object_r:system_user_mode_emulation_prop:s0
+7f7237440000-7f7237460000 rw-s 00000000 00:13 358                        /dev/__properties__/u:object_r:system_trace_prop:s0
+7f7237460000-7f7237480000 rw-s 00000000 00:13 357                        /dev/__properties__/u:object_r:system_service_enable_prop:s0
+7f7237480000-7f72374a0000 rw-s 00000000 00:13 356                        /dev/__properties__/u:object_r:system_prop:s0
+7f72374a0000-7f72374c0000 rw-s 00000000 00:13 355                        /dev/__properties__/u:object_r:system_lmk_prop:s0
+7f72374c0000-7f72374e0000 rw-s 00000000 00:13 354                        /dev/__properties__/u:object_r:system_jvmti_agent_prop:s0
+7f72374e0000-7f7237500000 rw-s 00000000 00:13 353                        /dev/__properties__/u:object_r:system_boot_reason_prop:s0
+7f7237500000-7f7237520000 rw-s 00000000 00:13 352                        /dev/__properties__/u:object_r:system_audio_config_prop:s0
+7f7237520000-7f7237540000 rw-s 00000000 00:13 351                        /dev/__properties__/u:object_r:system_adbd_prop:s0
+7f7237540000-7f7237560000 rw-s 00000000 00:13 350                        /dev/__properties__/u:object_r:suspend_prop:s0
+7f7237560000-7f7237580000 rw-s 00000000 00:13 349                        /dev/__properties__/u:object_r:suspend_debug_prop:s0
+7f7237580000-7f72375a0000 rw-s 00000000 00:13 348                        /dev/__properties__/u:object_r:surfaceflinger_prop:s0
+7f72375a0000-7f72375c0000 rw-s 00000000 00:13 347                        /dev/__properties__/u:object_r:surfaceflinger_display_prop:s0
+7f72375c0000-7f72375e0000 rw-s 00000000 00:13 346                        /dev/__properties__/u:object_r:surfaceflinger_color_prop:s0
+7f72375e0000-7f7237600000 rw-s 00000000 00:13 345                        /dev/__properties__/u:object_r:storagemanager_config_prop:s0
+7f7237600000-7f7237620000 rw-s 00000000 00:13 344                        /dev/__properties__/u:object_r:storage_config_prop:s0
+7f7237620000-7f7237640000 rw-s 00000000 00:13 343                        /dev/__properties__/u:object_r:statsd_atoms_list_version_prop:s0
+7f7237640000-7f7237660000 rw-s 00000000 00:13 342                        /dev/__properties__/u:object_r:sqlite_log_prop:s0
+7f7237660000-7f7237680000 rw-s 00000000 00:13 341                        /dev/__properties__/u:object_r:socket_hook_prop:s0
+7f7237680000-7f72376a0000 rw-s 00000000 00:13 340                        /dev/__properties__/u:object_r:soc_prop:s0
+7f72376a0000-7f72376c0000 rw-s 00000000 00:13 339                        /dev/__properties__/u:object_r:snapuserd_prop:s0
+7f72376c0000-7f72376e0000 rw-s 00000000 00:13 338                        /dev/__properties__/u:object_r:snapshotctl_prop:s0
+7f72376e0000-7f7237700000 rw-s 00000000 00:13 337                        /dev/__properties__/u:object_r:smart_idle_maint_enabled_prop:s0
+7f7237700000-7f7237720000 rw-s 00000000 00:13 336                        /dev/__properties__/u:object_r:shell_prop:s0
+7f7237720000-7f7237740000 rw-s 00000000 00:13 335                        /dev/__properties__/u:object_r:setupwizard_prop:s0
+7f7237740000-7f7237760000 rw-s 00000000 00:13 334                        /dev/__properties__/u:object_r:setupwizard_mode_prop:s0
+7f7237760000-7f7237780000 rw-s 00000000 00:13 333                        /dev/__properties__/u:object_r:servicemanager_prop:s0
+7f7237780000-7f72377a0000 rw-s 00000000 00:13 332                        /dev/__properties__/u:object_r:service_sf_present_timestamp_prop:s0
+7f72377a0000-7f72377c0000 rw-s 00000000 00:13 331                        /dev/__properties__/u:object_r:serialno_prop:s0
+7f72377c0000-7f72377e0000 rw-s 00000000 00:13 330                        /dev/__properties__/u:object_r:sensors_hal_prop:s0
+7f72377e0000-7f7237800000 rw-s 00000000 00:13 329                        /dev/__properties__/u:object_r:sensors_config_prop:s0
+7f7237800000-7f7237820000 rw-s 00000000 00:13 328                        /dev/__properties__/u:object_r:sendbug_config_prop:s0
+7f7237820000-7f7237840000 rw-s 00000000 00:13 327                        /dev/__properties__/u:object_r:safemode_prop:s0
+7f7237840000-7f7237860000 rw-s 00000000 00:13 326                        /dev/__properties__/u:object_r:rollback_test_prop:s0
+7f7237860000-7f7237880000 rw-s 00000000 00:13 325                        /dev/__properties__/u:object_r:retaildemo_prop:s0
+7f7237880000-7f72378a0000 rw-s 00000000 00:13 324                        /dev/__properties__/u:object_r:restorecon_prop:s0
+7f72378a0000-7f72378c0000 rw-s 00000000 00:13 323                        /dev/__properties__/u:object_r:remote_prov_prop:s0
+7f72378c0000-7f72378e0000 rw-s 00000000 00:13 322                        /dev/__properties__/u:object_r:remote_prov_cert_prop:s0
+7f72378e0000-7f7237900000 rw-s 00000000 00:13 321                        /dev/__properties__/u:object_r:recovery_usb_config_prop:s0
+7f7237900000-7f7237920000 rw-s 00000000 00:13 320                        /dev/__properties__/u:object_r:recovery_config_prop:s0
+7f7237920000-7f7237940000 rw-s 00000000 00:13 319                        /dev/__properties__/u:object_r:rebootescrow_hal_prop:s0
+7f7237940000-7f7237960000 rw-s 00000000 00:13 318                        /dev/__properties__/u:object_r:radio_prop:s0
+7f7237960000-7f7237980000 rw-s 00000000 00:13 317                        /dev/__properties__/u:object_r:radio_control_prop:s0
+7f7237980000-7f72379a0000 rw-s 00000000 00:13 316                        /dev/__properties__/u:object_r:radio_cdma_ecm_prop:s0
+7f72379a0000-7f72379c0000 rw-s 00000000 00:13 315                        /dev/__properties__/u:object_r:quick_start_prop:s0
+7f72379c0000-7f72379e0000 rw-s 00000000 00:13 314                        /dev/__properties__/u:object_r:qemu_sf_lcd_density_prop:s0
+7f72379e0000-7f7237a00000 rw-s 00000000 00:13 313                        /dev/__properties__/u:object_r:qemu_hw_prop:s0
+7f7237a00000-7f7237a20000 rw-s 00000000 00:13 312                        /dev/__properties__/u:object_r:provisioned_prop:s0
+7f7237a20000-7f7237a40000 rw-s 00000000 00:13 311                        /dev/__properties__/u:object_r:property_service_version_prop:s0
+7f7237a40000-7f7237a60000 rw-s 00000000 00:13 310                        /dev/__properties__/u:object_r:profcollectd_node_id_prop:s0
+7f7237a60000-7f7237a80000 rw-s 00000000 00:13 309                        /dev/__properties__/u:object_r:profcollectd_etr_prop:s0
+7f7237a80000-7f7237aa0000 rw-s 00000000 00:13 308                        /dev/__properties__/u:object_r:profcollectd_enabled_prop:s0
+7f7237aa0000-7f7237ac0000 rw-s 00000000 00:13 307                        /dev/__properties__/u:object_r:prefetch_service_prop:s0
+7f7237ac0000-7f7237ae0000 rw-s 00000000 00:13 306                        /dev/__properties__/u:object_r:prefetch_boot_prop:s0
+7f7237ae0000-7f7237b00000 rw-s 00000000 00:13 305                        /dev/__properties__/u:object_r:powerctl_prop:s0
+7f7237b00000-7f7237b20000 rw-s 00000000 00:13 304                        /dev/__properties__/u:object_r:power_debug_prop:s0
+7f7237b20000-7f7237b40000 rw-s 00000000 00:13 303                        /dev/__properties__/u:object_r:pm_prop:s0
+7f7237b40000-7f7237b60000 rw-s 00000000 00:13 302                        /dev/__properties__/u:object_r:pm_16kb_app_compat_prop:s0
+7f7237b60000-7f7237b80000 rw-s 00000000 00:13 301                        /dev/__properties__/u:object_r:persistent_properties_ready_prop:s0
+7f7237b80000-7f7237ba0000 rw-s 00000000 00:13 300                        /dev/__properties__/u:object_r:persist_wm_debug_prop:s0
+7f7237ba0000-7f7237bc0000 rw-s 00000000 00:13 299                        /dev/__properties__/u:object_r:persist_vendor_debug_wifi_prop:s0
+7f7237bc0000-7f7237be0000 rw-s 00000000 00:13 298                        /dev/__properties__/u:object_r:persist_sysui_ranking_update_prop:s0
+7f7237be0000-7f7237c00000 rw-s 00000000 00:13 297                        /dev/__properties__/u:object_r:persist_sysui_builder_extras_prop:s0
+7f7237c00000-7f7237c20000 rw-s 00000000 00:13 296                        /dev/__properties__/u:object_r:persist_debug_prop:s0
+7f7237c20000-7f7237c40000 rw-s 00000000 00:13 295                        /dev/__properties__/u:object_r:permissive_mte_prop:s0
+7f7237c40000-7f7237c60000 rw-s 00000000 00:13 294                        /dev/__properties__/u:object_r:perf_drop_caches_prop:s0
+7f7237c60000-7f7237c80000 rw-s 00000000 00:13 293                        /dev/__properties__/u:object_r:pan_result_prop:s0
+7f7237c80000-7f7237ca0000 rw-s 00000000 00:13 292                        /dev/__properties__/u:object_r:page_size_prop:s0
+7f7237ca0000-7f7237cc0000 rw-s 00000000 00:13 291                        /dev/__properties__/u:object_r:packagemanager_config_prop:s0
+7f7237cc0000-7f7237ce0000 rw-s 00000000 00:13 290                        /dev/__properties__/u:object_r:overlay_prop:s0
+7f7237ce0000-7f7237d00000 rw-s 00000000 00:13 289                        /dev/__properties__/u:object_r:ota_prop:s0
+7f7237d00000-7f7237d20000 rw-s 00000000 00:13 288                        /dev/__properties__/u:object_r:ota_build_prop:s0
+7f7237d20000-7f7237d40000 rw-s 00000000 00:13 287                        /dev/__properties__/u:object_r:oem_unlock_prop:s0
+7f7237d40000-7f7237d60000 rw-s 00000000 00:13 286                        /dev/__properties__/u:object_r:odsign_prop:s0
+7f7237d60000-7f7237d80000 rw-s 00000000 00:13 285                        /dev/__properties__/u:object_r:nnapi_ext_deny_product_prop:s0
+7f7237d80000-7f7237da0000 rw-s 00000000 00:13 284                        /dev/__properties__/u:object_r:nfc_prop:s0
+7f7237da0000-7f7237dc0000 rw-s 00000000 00:13 283                        /dev/__properties__/u:object_r:next_boot_prop:s0
+7f7237dc0000-7f7237de0000 rw-s 00000000 00:13 282                        /dev/__properties__/u:object_r:netd_stable_secret_prop:s0
+7f7237de0000-7f7237e00000 rw-s 00000000 00:13 281                        /dev/__properties__/u:object_r:net_radio_prop:s0
+7f7237e00000-7f7237e20000 rw-s 00000000 00:13 280                        /dev/__properties__/u:object_r:net_dns_prop:s0
+7f7237e20000-7f7237e40000 rw-s 00000000 00:13 279                        /dev/__properties__/u:object_r:net_connectivity_prop:s0
+7f7237e40000-7f7237e60000 rw-s 00000000 00:13 278                        /dev/__properties__/u:object_r:net_464xlat_fromvendor_prop:s0
+7f7237e60000-7f7237e80000 rw-s 00000000 00:13 277                        /dev/__properties__/u:object_r:native_binder_stats_prop:s0
+7f7237e80000-7f7237ea0000 rw-s 00000000 00:13 276                        /dev/__properties__/u:object_r:module_sdkextensions_prop:s0
+7f7237ea0000-7f7237ec0000 rw-s 00000000 00:13 275                        /dev/__properties__/u:object_r:mock_ota_prop:s0
+7f7237ec0000-7f7237ee0000 rw-s 00000000 00:13 274                        /dev/__properties__/u:object_r:mmd_status_prop:s0
+7f7237ee0000-7f7237f00000 rw-s 00000000 00:13 273                        /dev/__properties__/u:object_r:mmd_shared_status_prop:s0
+7f7237f00000-7f7237f20000 rw-s 00000000 00:13 272                        /dev/__properties__/u:object_r:mmd_shared_prop:s0
+7f7237f20000-7f7237f40000 rw-s 00000000 00:13 271                        /dev/__properties__/u:object_r:mmd_prop:s0
+7f7237f40000-7f7237f60000 rw-s 00000000 00:13 270                        /dev/__properties__/u:object_r:mmc_prop:s0
+7f7237f60000-7f7237f80000 rw-s 00000000 00:13 269                        /dev/__properties__/u:object_r:mm_events_config_prop:s0
+7f7237f80000-7f7237fa0000 rw-s 00000000 00:13 268                        /dev/__properties__/u:object_r:misctrl_prop:s0
+7f7237fa0000-7f7237fc0000 rw-s 00000000 00:13 267                        /dev/__properties__/u:object_r:mediadrm_config_prop:s0
+7f7237fc0000-7f7237fe0000 rw-s 00000000 00:13 266                        /dev/__properties__/u:object_r:media_variant_prop:s0
+7f7237fe0000-7f7238000000 rw-s 00000000 00:13 265                        /dev/__properties__/u:object_r:media_config_prop:s0
+7f7238000000-7f7238020000 rw-s 00000000 00:13 264                        /dev/__properties__/u:object_r:lpdumpd_prop:s0
+7f7238020000-7f7238040000 rw-s 00000000 00:13 263                        /dev/__properties__/u:object_r:lowpan_prop:s0
+7f7238040000-7f7238060000 rw-s 00000000 00:13 262                        /dev/__properties__/u:object_r:lower_kptr_restrict_prop:s0
+7f7238060000-7f7238080000 rw-s 00000000 00:13 261                        /dev/__properties__/u:object_r:logpersistd_logging_prop:s0
+7f7238080000-7f72380a0000 rw-s 00000000 00:13 260                        /dev/__properties__/u:object_r:logd_prop:s0
+7f72380a0000-7f72380c0000 rw-s 00000000 00:13 259                        /dev/__properties__/u:object_r:logd_auditrate_prop:s0
+7f72380c0000-7f72380e0000 rw-s 00000000 00:13 258                        /dev/__properties__/u:object_r:log_tag_prop:s0
+7f72380e0000-7f7238100000 rw-s 00000000 00:13 257                        /dev/__properties__/u:object_r:log_prop:s0
+7f7238100000-7f7238120000 rw-s 00000000 00:13 256                        /dev/__properties__/u:object_r:log_file_logger_prop:s0
+7f7238120000-7f7238140000 rw-s 00000000 00:13 255                        /dev/__properties__/u:object_r:localization_prop:s0
+7f7238140000-7f7238160000 rw-s 00000000 00:13 254                        /dev/__properties__/u:object_r:locale_prop:s0
+7f7238160000-7f7238180000 rw-s 00000000 00:13 253                        /dev/__properties__/u:object_r:lmkd_prop:s0
+7f7238180000-7f72381a0000 rw-s 00000000 00:13 252                        /dev/__properties__/u:object_r:lmkd_config_prop:s0
+7f72381a0000-7f72381c0000 rw-s 00000000 00:13 251                        /dev/__properties__/u:object_r:llkd_prop:s0
+7f72381c0000-7f72381e0000 rw-s 00000000 00:13 250                        /dev/__properties__/u:object_r:libc_debug_prop:s0
+7f72381e0000-7f7238200000 rw-s 00000000 00:13 249                        /dev/__properties__/u:object_r:last_boot_reason_prop:s0
+7f7238200000-7f7238220000 rw-s 00000000 00:13 248                        /dev/__properties__/u:object_r:keystore_listen_prop:s0
+7f7238220000-7f7238240000 rw-s 00000000 00:13 247                        /dev/__properties__/u:object_r:keystore_diagnostics_prop:s0
+7f7238240000-7f7238260000 rw-s 00000000 00:13 246                        /dev/__properties__/u:object_r:keystore_config_prop:s0
+7f7238260000-7f7238280000 rw-s 00000000 00:13 245                        /dev/__properties__/u:object_r:keyguard_config_prop:s0
+7f7238280000-7f72382a0000 rw-s 00000000 00:13 244                        /dev/__properties__/u:object_r:kcmdline_prop:s0
+7f72382a0000-7f72382c0000 rw-s 00000000 00:13 243                        /dev/__properties__/u:object_r:input_device_config_prop:s0
+7f72382c0000-7f72382e0000 rw-s 00000000 00:13 242                        /dev/__properties__/u:object_r:init_svc_debug_prop:s0
+7f72382e0000-7f7238300000 rw-s 00000000 00:13 241                        /dev/__properties__/u:object_r:init_storage_prop:s0
+7f7238300000-7f7238320000 rw-s 00000000 00:13 240                        /dev/__properties__/u:object_r:init_service_status_prop:s0
+7f7238320000-7f7238340000 rw-s 00000000 00:13 239                        /dev/__properties__/u:object_r:init_service_status_private_prop:s0
+7f7238340000-7f7238360000 rw-s 00000000 00:13 238                        /dev/__properties__/u:object_r:init_perf_lsm_hooks_prop:s0
+7f7238360000-7f7238380000 rw-s 00000000 00:13 237                        /dev/__properties__/u:object_r:init_mnt_ns_prop:s0
+7f7238380000-7f72383a0000 rw-s 00000000 00:13 236                        /dev/__properties__/u:object_r:incremental_prop:s0
+7f72383a0000-7f72383c0000 rw-s 00000000 00:13 235                        /dev/__properties__/u:object_r:hypervisor_virtualizationmanager_prop:s0
+7f72383c0000-7f72383e0000 rw-s 00000000 00:13 234                        /dev/__properties__/u:object_r:hypervisor_restricted_prop:s0
+7f72383e0000-7f7238400000 rw-s 00000000 00:13 233                        /dev/__properties__/u:object_r:hypervisor_pvmfw_prop:s0
+7f7238400000-7f7238420000 rw-s 00000000 00:13 232                        /dev/__properties__/u:object_r:hypervisor_prop:s0
+7f7238420000-7f7238440000 rw-s 00000000 00:13 231                        /dev/__properties__/u:object_r:hwservicemanager_prop:s0
+7f7238440000-7f7238460000 rw-s 00000000 00:13 230                        /dev/__properties__/u:object_r:hw_timeout_multiplier_prop:s0
+7f7238460000-7f7238480000 rw-s 00000000 00:13 229                        /dev/__properties__/u:object_r:hsum_boot_strategy_prop:s0
+7f7238480000-7f72384a0000 rw-s 00000000 00:13 228                        /dev/__properties__/u:object_r:hint_manager_config_prop:s0
+7f72384a0000-7f72384c0000 rw-s 00000000 00:13 227                        /dev/__properties__/u:object_r:high_barometer_quality_prop:s0
+7f72384c0000-7f72384e0000 rw-s 00000000 00:13 226                        /dev/__properties__/u:object_r:hidl_memory_prop:s0
+7f72384e0000-7f7238500000 rw-s 00000000 00:13 225                        /dev/__properties__/u:object_r:heapprofd_prop:s0
+7f7238500000-7f7238520000 rw-s 00000000 00:13 224                        /dev/__properties__/u:object_r:heapprofd_enabled_prop:s0
+7f7238520000-7f7238540000 rw-s 00000000 00:13 223                        /dev/__properties__/u:object_r:hdmi_config_prop:s0
+7f7238540000-7f7238560000 rw-s 00000000 00:13 222                        /dev/__properties__/u:object_r:hal_instrumentation_prop:s0
+7f7238560000-7f7238580000 rw-s 00000000 00:13 221                        /dev/__properties__/u:object_r:hal_dumpstate_config_prop:s0
+7f7238580000-7f72385a0000 rw-s 00000000 00:13 220                        /dev/__properties__/u:object_r:gwp_asan_prop:s0
+7f72385a0000-7f72385c0000 rw-s 00000000 00:13 219                        /dev/__properties__/u:object_r:gsid_prop:s0
+7f72385c0000-7f72385e0000 rw-s 00000000 00:13 218                        /dev/__properties__/u:object_r:graphics_config_writable_prop:s0
+7f72385e0000-7f7238600000 rw-s 00000000 00:13 217                        /dev/__properties__/u:object_r:graphics_config_prop:s0
+7f7238600000-7f7238620000 rw-s 00000000 00:13 216                        /dev/__properties__/u:object_r:gesture_prop:s0
+7f7238620000-7f7238640000 rw-s 00000000 00:13 215                        /dev/__properties__/u:object_r:game_manager_config_prop:s0
+7f7238640000-7f7238660000 rw-s 00000000 00:13 214                        /dev/__properties__/u:object_r:future_pm_prop:s0
+7f7238660000-7f7238680000 rw-s 00000000 00:13 213                        /dev/__properties__/u:object_r:fstype_prop:s0
+7f7238680000-7f72386a0000 rw-s 00000000 00:13 212                        /dev/__properties__/u:object_r:framework_watchdog_config_prop:s0
+7f72386a0000-7f72386c0000 rw-s 00000000 00:13 211                        /dev/__properties__/u:object_r:framework_status_prop:s0
+7f72386c0000-7f72386e0000 rw-s 00000000 00:13 210                        /dev/__properties__/u:object_r:firstboot_prop:s0
+7f72386e0000-7f7238700000 rw-s 00000000 00:13 209                        /dev/__properties__/u:object_r:fingerprint_prop:s0
+7f7238700000-7f7238720000 rw-s 00000000 00:13 208                        /dev/__properties__/u:object_r:ffs_control_prop:s0
+7f7238720000-7f7238740000 rw-s 00000000 00:13 207                        /dev/__properties__/u:object_r:ffs_config_prop:s0
+7f7238740000-7f7238760000 rw-s 00000000 00:13 206                        /dev/__properties__/u:object_r:fastbootd_protocol_prop:s0
+7f7238760000-7f7238780000 rw-s 00000000 00:13 205                        /dev/__properties__/u:object_r:exported_system_prop:s0
+7f7238780000-7f72387a0000 rw-s 00000000 00:13 204                        /dev/__properties__/u:object_r:exported_pm_prop:s0
+7f72387a0000-7f72387c0000 rw-s 00000000 00:13 203                        /dev/__properties__/u:object_r:exported_overlay_prop:s0
+7f72387c0000-7f72387e0000 rw-s 00000000 00:13 202                        /dev/__properties__/u:object_r:exported_dumpstate_prop:s0
+7f72387e0000-7f7238800000 rw-s 00000000 00:13 201                        /dev/__properties__/u:object_r:exported_default_prop:s0
+7f7238800000-7f7238820000 rw-s 00000000 00:13 200                        /dev/__properties__/u:object_r:exported_config_prop:s0
+7f7238820000-7f7238840000 rw-s 00000000 00:13 199                        /dev/__properties__/u:object_r:exported_bluetooth_prop:s0
+7f7238840000-7f7238860000 rw-s 00000000 00:13 198                        /dev/__properties__/u:object_r:exported3_system_prop:s0
+7f7238860000-7f7238880000 rw-s 00000000 00:13 197                        /dev/__properties__/u:object_r:enable_16k_pages_prop:s0
+7f7238880000-7f72388a0000 rw-s 00000000 00:13 196                        /dev/__properties__/u:object_r:dynamic_system_prop:s0
+7f72388a0000-7f72388c0000 rw-s 00000000 00:13 195                        /dev/__properties__/u:object_r:dumpstate_prop:s0
+7f72388c0000-7f72388e0000 rw-s 00000000 00:13 194                        /dev/__properties__/u:object_r:dumpstate_options_prop:s0
+7f72388e0000-7f7238900000 rw-s 00000000 00:13 193                        /dev/__properties__/u:object_r:drm_service_config_prop:s0
+7f7238900000-7f7238920000 rw-s 00000000 00:13 192                        /dev/__properties__/u:object_r:drm_forcel3_prop:s0
+7f7238920000-7f7238940000 rw-s 00000000 00:13 191                        /dev/__properties__/u:object_r:drm_config_prop:s0
+7f7238940000-7f7238960000 rw-s 00000000 00:13 190                        /dev/__properties__/u:object_r:dmesgd_start_prop:s0
+7f7238960000-7f7238980000 rw-s 00000000 00:13 189                        /dev/__properties__/u:object_r:dhcp_prop:s0
+7f7238980000-7f72389a0000 rw-s 00000000 00:13 188                        /dev/__properties__/u:object_r:device_logging_prop:s0
+7f72389a0000-7f72389c0000 rw-s 00000000 00:13 187                        /dev/__properties__/u:object_r:device_config_window_manager_native_boot_prop:s0
+7f72389c0000-7f72389e0000 rw-s 00000000 00:13 186                        /dev/__properties__/u:object_r:device_config_virtualization_framework_native_prop:s0
+7f72389e0000-7f7238a00000 rw-s 00000000 00:13 185                        /dev/__properties__/u:object_r:device_config_vendor_system_native_prop:s0
+7f7238a00000-7f7238a20000 rw-s 00000000 00:13 184                        /dev/__properties__/u:object_r:device_config_vendor_system_native_boot_prop:s0
+7f7238a20000-7f7238a40000 rw-s 00000000 00:13 183                        /dev/__properties__/u:object_r:device_config_tethering_u_or_later_native_prop:s0
+7f7238a40000-7f7238a60000 rw-s 00000000 00:13 182                        /dev/__properties__/u:object_r:device_config_sys_traced_prop:s0
+7f7238a60000-7f7238a80000 rw-s 00000000 00:13 181                        /dev/__properties__/u:object_r:device_config_swcodec_native_prop:s0
+7f7238a80000-7f7238aa0000 rw-s 00000000 00:13 180                        /dev/__properties__/u:object_r:device_config_surface_flinger_native_boot_prop:s0
+7f7238aa0000-7f7238ac0000 rw-s 00000000 00:13 179                        /dev/__properties__/u:object_r:device_config_storage_native_boot_prop:s0
+7f7238ac0000-7f7238ae0000 rw-s 00000000 00:13 178                        /dev/__properties__/u:object_r:device_config_statsd_native_prop:s0
+7f7238ae0000-7f7238b00000 rw-s 00000000 00:13 177                        /dev/__properties__/u:object_r:device_config_statsd_native_boot_prop:s0
+7f7238b00000-7f7238b20000 rw-s 00000000 00:13 176                        /dev/__properties__/u:object_r:device_config_runtime_native_prop:s0
+7f7238b20000-7f7238b40000 rw-s 00000000 00:13 175                        /dev/__properties__/u:object_r:device_config_runtime_native_boot_prop:s0
+7f7238b40000-7f7238b60000 rw-s 00000000 00:13 174                        /dev/__properties__/u:object_r:device_config_reset_performed_prop:s0
+7f7238b60000-7f7238b80000 rw-s 00000000 00:13 173                        /dev/__properties__/u:object_r:device_config_remote_key_provisioning_native_prop:s0
+7f7238b80000-7f7238ba0000 rw-s 00000000 00:13 172                        /dev/__properties__/u:object_r:device_config_profcollect_native_boot_prop:s0
+7f7238ba0000-7f7238bc0000 rw-s 00000000 00:13 171                        /dev/__properties__/u:object_r:device_config_nnapi_native_prop:s0
+7f7238bc0000-7f7238be0000 rw-s 00000000 00:13 170                        /dev/__properties__/u:object_r:device_config_netd_native_prop:s0
+7f7238be0000-7f7238c00000 rw-s 00000000 00:13 169                        /dev/__properties__/u:object_r:device_config_mmd_native_prop:s0
+7f7238c00000-7f7238c20000 rw-s 00000000 00:13 168                        /dev/__properties__/u:object_r:device_config_mglru_native_prop:s0
+7f7238c20000-7f7238c40000 rw-s 00000000 00:13 167                        /dev/__properties__/u:object_r:device_config_memory_safety_native_prop:s0
+7f7238c40000-7f7238c60000 rw-s 00000000 00:13 166                        /dev/__properties__/u:object_r:device_config_memory_safety_native_boot_prop:s0
+7f7238c60000-7f7238c80000 rw-s 00000000 00:13 165                        /dev/__properties__/u:object_r:device_config_media_native_prop:s0
+7f7238c80000-7f7238ca0000 rw-s 00000000 00:13 164                        /dev/__properties__/u:object_r:device_config_lmkd_native_prop:s0
+7f7238ca0000-7f7238cc0000 rw-s 00000000 00:13 163                        /dev/__properties__/u:object_r:device_config_input_native_boot_prop:s0
+7f7238cc0000-7f7238ce0000 rw-s 00000000 00:13 162                        /dev/__properties__/u:object_r:device_config_edgetpu_native_prop:s0
+7f7238ce0000-7f7238d00000 rw-s 00000000 00:13 161                        /dev/__properties__/u:object_r:device_config_core_experiments_team_internal_prop:s0
+7f7238d00000-7f7238d20000 rw-s 00000000 00:13 160                        /dev/__properties__/u:object_r:device_config_connectivity_prop:s0
+7f7238d20000-7f7238d40000 rw-s 00000000 00:13 159                        /dev/__properties__/u:object_r:device_config_configuration_prop:s0
+7f7238d40000-7f7238d60000 rw-s 00000000 00:13 158                        /dev/__properties__/u:object_r:device_config_camera_native_prop:s0
+7f7238d60000-7f7238d80000 rw-s 00000000 00:13 157                        /dev/__properties__/u:object_r:device_config_boot_count_prop:s0
+7f7238d80000-7f7238da0000 rw-s 00000000 00:13 156                        /dev/__properties__/u:object_r:device_config_activity_manager_native_boot_prop:s0
+7f7238da0000-7f7238dc0000 rw-s 00000000 00:13 155                        /dev/__properties__/u:object_r:device_config_aconfig_flags_prop:s0
+7f7238dc0000-7f7238de0000 rw-s 00000000 00:13 154                        /dev/__properties__/u:object_r:default_prop:s0
+7f7238de0000-7f7238e00000 rw-s 00000000 00:13 153                        /dev/__properties__/u:object_r:debuggerd_prop:s0
+7f7238e00000-7f7238e20000 rw-s 00000000 00:13 152                        /dev/__properties__/u:object_r:debugfs_restriction_prop:s0
+7f7238e20000-7f7238e40000 rw-s 00000000 00:13 151                        /dev/__properties__/u:object_r:debug_tracing_desktop_mode_visible_tasks_prop:s0
+7f7238e40000-7f7238e60000 rw-s 00000000 00:13 150                        /dev/__properties__/u:object_r:debug_prop:s0
+7f7238e60000-7f7238e80000 rw-s 00000000 00:13 149                        /dev/__properties__/u:object_r:dck_prop:s0
+7f7238e80000-7f7238ea0000 rw-s 00000000 00:13 148                        /dev/__properties__/u:object_r:dalvik_runtime_prop:s0
+7f7238ea0000-7f7238ec0000 rw-s 00000000 00:13 147                        /dev/__properties__/u:object_r:dalvik_prop:s0
+7f7238ec0000-7f7238ee0000 rw-s 00000000 00:13 146                        /dev/__properties__/u:object_r:dalvik_dynamic_config_prop:s0
+7f7238ee0000-7f7238f00000 rw-s 00000000 00:13 145                        /dev/__properties__/u:object_r:dalvik_config_prop:s0
+7f7238f00000-7f7238f20000 rw-s 00000000 00:13 144                        /dev/__properties__/u:object_r:ctl_uprobestats_prop:s0
+7f7238f20000-7f7238f40000 rw-s 00000000 00:13 143                        /dev/__properties__/u:object_r:ctl_stop_prop:s0
+7f7238f40000-7f7238f60000 rw-s 00000000 00:13 142                        /dev/__properties__/u:object_r:ctl_start_prop:s0
+7f7238f60000-7f7238f80000 rw-s 00000000 00:13 141                        /dev/__properties__/u:object_r:ctl_snapuserd_prop:s0
+7f7238f80000-7f7238fa0000 rw-s 00000000 00:13 140                        /dev/__properties__/u:object_r:ctl_sigstop_prop:s0
+7f7238fa0000-7f7238fc0000 rw-s 00000000 00:13 139                        /dev/__properties__/u:object_r:ctl_rildaemon_prop:s0
+7f7238fc0000-7f7238fe0000 rw-s 00000000 00:13 138                        /dev/__properties__/u:object_r:ctl_restart_prop:s0
+7f7238fe0000-7f7239000000 rw-s 00000000 00:13 137                        /dev/__properties__/u:object_r:ctl_prefetch_prop:s0
+7f7239000000-7f7239020000 rw-s 00000000 00:13 136                        /dev/__properties__/u:object_r:ctl_odsign_prop:s0
+7f7239020000-7f7239040000 rw-s 00000000 00:13 135                        /dev/__properties__/u:object_r:ctl_mediatranscoding_prop:s0
+7f7239040000-7f7239060000 rw-s 00000000 00:13 134                        /dev/__properties__/u:object_r:ctl_mdnsd_prop:s0
+7f7239060000-7f7239080000 rw-s 00000000 00:13 133                        /dev/__properties__/u:object_r:ctl_interface_stop_prop:s0
+7f7239080000-7f72390a0000 rw-s 00000000 00:13 132                        /dev/__properties__/u:object_r:ctl_interface_start_prop:s0
+7f72390a0000-7f72390c0000 rw-s 00000000 00:13 131                        /dev/__properties__/u:object_r:ctl_interface_restart_prop:s0
+7f72390c0000-7f72390e0000 rw-s 00000000 00:13 130                        /dev/__properties__/u:object_r:ctl_gsid_prop:s0
+7f72390e0000-7f7239100000 rw-s 00000000 00:13 129                        /dev/__properties__/u:object_r:ctl_fuse_prop:s0
+7f7239100000-7f7239120000 rw-s 00000000 00:13 128                        /dev/__properties__/u:object_r:ctl_dumpstate_prop:s0
+7f7239120000-7f7239140000 rw-s 00000000 00:13 127                        /dev/__properties__/u:object_r:ctl_default_prop:s0
+7f7239140000-7f7239160000 rw-s 00000000 00:13 126                        /dev/__properties__/u:object_r:ctl_console_prop:s0
+7f7239160000-7f7239180000 rw-s 00000000 00:13 125                        /dev/__properties__/u:object_r:ctl_bugreport_prop:s0
+7f7239180000-7f72391a0000 rw-s 00000000 00:13 124                        /dev/__properties__/u:object_r:ctl_bootanim_prop:s0
+7f72391a0000-7f72391c0000 rw-s 00000000 00:13 123                        /dev/__properties__/u:object_r:ctl_artd_pre_reboot_prop:s0
+7f72391c0000-7f72391e0000 rw-s 00000000 00:13 122                        /dev/__properties__/u:object_r:ctl_apexd_prop:s0
+7f72391e0000-7f7239200000 rw-s 00000000 00:13 121                        /dev/__properties__/u:object_r:ctl_apex_load_prop:s0
+7f7239200000-7f7239220000 rw-s 00000000 00:13 120                        /dev/__properties__/u:object_r:ctl_adbd_prop:s0
+7f7239220000-7f7239240000 rw-s 00000000 00:13 119                        /dev/__properties__/u:object_r:crashrecovery_prop:s0
+7f7239240000-7f7239260000 rw-s 00000000 00:13 118                        /dev/__properties__/u:object_r:cpu_variant_prop:s0
+7f7239260000-7f7239280000 rw-s 00000000 00:13 117                        /dev/__properties__/u:object_r:cppreopt_prop:s0
+7f7239280000-7f72392a0000 rw-s 00000000 00:13 116                        /dev/__properties__/u:object_r:config_prop:s0
+7f72392a0000-7f72392c0000 rw-s 00000000 00:13 115                        /dev/__properties__/u:object_r:composd_vm_vendor_prop:s0
+7f72392c0000-7f72392e0000 rw-s 00000000 00:13 114                        /dev/__properties__/u:object_r:composd_vm_art_prop:s0
+7f72392e0000-7f7239300000 rw-s 00000000 00:13 113                        /dev/__properties__/u:object_r:cold_boot_done_prop:s0
+7f7239300000-7f7239320000 rw-s 00000000 00:13 112                        /dev/__properties__/u:object_r:codec2_config_prop:s0
+7f7239320000-7f7239340000 rw-s 00000000 00:13 111                        /dev/__properties__/u:object_r:chengliang_logcollector_prop:s0
+7f7239340000-7f7239360000 rw-s 00000000 00:13 110                        /dev/__properties__/u:object_r:charger_status_prop:s0
+7f7239360000-7f7239380000 rw-s 00000000 00:13 109                        /dev/__properties__/u:object_r:charger_prop:s0
+7f7239380000-7f72393a0000 rw-s 00000000 00:13 108                        /dev/__properties__/u:object_r:charger_config_prop:s0
+7f72393a0000-7f72393c0000 rw-s 00000000 00:13 107                        /dev/__properties__/u:object_r:camerax_extensions_prop:s0
+7f72393c0000-7f72393e0000 rw-s 00000000 00:13 106                        /dev/__properties__/u:object_r:camera_config_prop:s0
+7f72393e0000-7f7239400000 rw-s 00000000 00:13 105                        /dev/__properties__/u:object_r:camera_calibration_prop:s0
+7f7239400000-7f7239420000 rw-s 00000000 00:13 104                        /dev/__properties__/u:object_r:camera2_extensions_prop:s0
+7f7239420000-7f7239440000 rw-s 00000000 00:13 103                        /dev/__properties__/u:object_r:build_vendor_prop:s0
+7f7239440000-7f7239460000 rw-s 00000000 00:13 102                        /dev/__properties__/u:object_r:build_prop:s0
+7f7239460000-7f7239480000 rw-s 00000000 00:13 101                        /dev/__properties__/u:object_r:build_odm_prop:s0
+7f7239480000-7f72394a0000 rw-s 00000000 00:13 100                        /dev/__properties__/u:object_r:build_config_prop:s0
+7f72394a0000-7f72394c0000 rw-s 00000000 00:13 99                         /dev/__properties__/u:object_r:build_bootimage_prop:s0
+7f72394c0000-7f72394e0000 rw-s 00000000 00:13 98                         /dev/__properties__/u:object_r:build_attestation_prop:s0
+7f72394e0000-7f7239500000 rw-s 00000000 00:13 97                         /dev/__properties__/u:object_r:bq_config_prop:s0
+7f7239500000-7f7239520000 rw-s 00000000 00:13 96                         /dev/__properties__/u:object_r:bpf_progs_loaded_prop:s0
+7f7239520000-7f7239540000 rw-s 00000000 00:13 95                         /dev/__properties__/u:object_r:boottime_public_prop:s0
+7f7239540000-7f7239560000 rw-s 00000000 00:13 94                         /dev/__properties__/u:object_r:boottime_prop:s0
+7f7239560000-7f7239580000 rw-s 00000000 00:13 93                         /dev/__properties__/u:object_r:bootloader_prop:s0
+7f7239580000-7f72395a0000 rw-s 00000000 00:13 92                         /dev/__properties__/u:object_r:bootloader_boot_reason_prop:s0
+7f72395a0000-7f72395c0000 rw-s 00000000 00:13 91                         /dev/__properties__/u:object_r:bootanim_system_prop:s0
+7f72395c0000-7f72395e0000 rw-s 00000000 00:13 90                         /dev/__properties__/u:object_r:bootanim_config_prop:s0
+7f72395e0000-7f7239600000 rw-s 00000000 00:13 89                         /dev/__properties__/u:object_r:boot_status_prop:s0
+7f7239600000-7f7264652000 ---p 00000000 00:00 0                          [anon:cfi shadow]
+7f7264652000-7f7264653000 r--p 00000000 00:00 0                          [anon:cfi shadow]
+7f7264653000-7f72791a6000 ---p 00000000 00:00 0                          [anon:cfi shadow]
+7f72791a6000-7f72791a7000 r--p 00000000 00:00 0                          [anon:cfi shadow]
+7f72791a7000-7f72b9600000 ---p 00000000 00:00 0                          [anon:cfi shadow]
+7f72b9600000-7f72c9609000 ---p 00000000 00:00 0                          [anon:scudo:primary_reserve]
+7f72c9609000-7f72c9649000 rw-p 00000000 00:00 0                          [anon:scudo:primary]
+7f72c9649000-7f72d9607000 ---p 00000000 00:00 0                          [anon:scudo:primary_reserve]
+7f72d9607000-7f72d9647000 rw-p 00000000 00:00 0                          [anon:scudo:primary]
+7f72d9647000-7f72e960c000 ---p 00000000 00:00 0                          [anon:scudo:primary_reserve]
+7f72e960c000-7f72e964c000 rw-p 00000000 00:00 0                          [anon:scudo:primary]
+7f72e964c000-7f72f9610000 ---p 00000000 00:00 0                          [anon:scudo:primary_reserve]
+7f72f9610000-7f72f9650000 rw-p 00000000 00:00 0                          [anon:scudo:primary]
+7f72f9650000-7f7309606000 ---p 00000000 00:00 0                          [anon:scudo:primary_reserve]
+7f7309606000-7f7309646000 rw-p 00000000 00:00 0                          [anon:scudo:primary]
+7f7309646000-7f7319605000 ---p 00000000 00:00 0                          [anon:scudo:primary_reserve]
+7f7319605000-7f7319645000 rw-p 00000000 00:00 0                          [anon:scudo:primary]
+7f7319645000-7f732960f000 ---p 00000000 00:00 0                          [anon:scudo:primary_reserve]
+7f732960f000-7f732964f000 rw-p 00000000 00:00 0                          [anon:scudo:primary]
+7f732964f000-7f733960b000 ---p 00000000 00:00 0                          [anon:scudo:primary_reserve]
+7f733960b000-7f733964b000 rw-p 00000000 00:00 0                          [anon:scudo:primary]
+7f733964b000-7f734960e000 ---p 00000000 00:00 0                          [anon:scudo:primary_reserve]
+7f734960e000-7f734964e000 rw-p 00000000 00:00 0                          [anon:scudo:primary]
+7f734964e000-7f7359602000 ---p 00000000 00:00 0                          [anon:scudo:primary_reserve]
+7f7359602000-7f7359642000 rw-p 00000000 00:00 0                          [anon:scudo:primary]
+7f7359642000-7f736960a000 ---p 00000000 00:00 0                          [anon:scudo:primary_reserve]
+7f736960a000-7f736964a000 rw-p 00000000 00:00 0                          [anon:scudo:primary]
+7f736964a000-7f7379607000 ---p 00000000 00:00 0                          [anon:scudo:primary_reserve]
+7f7379607000-7f7379647000 rw-p 00000000 00:00 0                          [anon:scudo:primary]
+7f7379647000-7f738960b000 ---p 00000000 00:00 0                          [anon:scudo:primary_reserve]
+7f738960b000-7f738964b000 rw-p 00000000 00:00 0                          [anon:scudo:primary]
+7f738964b000-7f739960d000 ---p 00000000 00:00 0                          [anon:scudo:primary_reserve]
+7f739960d000-7f739964d000 rw-p 00000000 00:00 0                          [anon:scudo:primary]
+7f739964d000-7f73a960f000 ---p 00000000 00:00 0                          [anon:scudo:primary_reserve]
+7f73a960f000-7f73a964f000 rw-p 00000000 00:00 0                          [anon:scudo:primary]
+7f73a964f000-7f73b960d000 ---p 00000000 00:00 0                          [anon:scudo:primary_reserve]
+7f73b960d000-7f73b964d000 rw-p 00000000 00:00 0                          [anon:scudo:primary]
+7f73b964d000-7f73c960a000 ---p 00000000 00:00 0                          [anon:scudo:primary_reserve]
+7f73c960a000-7f73c964a000 rw-p 00000000 00:00 0                          [anon:scudo:primary]
+7f73c964a000-7f73d9609000 ---p 00000000 00:00 0                          [anon:scudo:primary_reserve]
+7f73d9609000-7f73d9649000 rw-p 00000000 00:00 0                          [anon:scudo:primary]
+7f73d9649000-7f73e9601000 ---p 00000000 00:00 0                          [anon:scudo:primary_reserve]
+7f73e9601000-7f73e9641000 rw-p 00000000 00:00 0                          [anon:scudo:primary]
+7f73e9641000-7f73f960b000 ---p 00000000 00:00 0                          [anon:scudo:primary_reserve]
+7f73f960b000-7f73f964b000 rw-p 00000000 00:00 0                          [anon:scudo:primary]
+7f73f964b000-7f7409601000 ---p 00000000 00:00 0                          [anon:scudo:primary_reserve]
+7f7409601000-7f7409641000 rw-p 00000000 00:00 0                          [anon:scudo:primary]
+7f7409641000-7f741960e000 ---p 00000000 00:00 0                          [anon:scudo:primary_reserve]
+7f741960e000-7f741964e000 rw-p 00000000 00:00 0                          [anon:scudo:primary]
+7f741964e000-7f7429601000 ---p 00000000 00:00 0                          [anon:scudo:primary_reserve]
+7f7429601000-7f7429641000 rw-p 00000000 00:00 0                          [anon:scudo:primary]
+7f7429641000-7f743960f000 ---p 00000000 00:00 0                          [anon:scudo:primary_reserve]
+7f743960f000-7f743964f000 rw-p 00000000 00:00 0                          [anon:scudo:primary]
+7f743964f000-7f7449607000 ---p 00000000 00:00 0                          [anon:scudo:primary_reserve]
+7f7449607000-7f7449647000 rw-p 00000000 00:00 0                          [anon:scudo:primary]
+7f7449647000-7f7459609000 ---p 00000000 00:00 0                          [anon:scudo:primary_reserve]
+7f7459609000-7f7459649000 rw-p 00000000 00:00 0                          [anon:scudo:primary]
+7f7459649000-7f7469610000 ---p 00000000 00:00 0                          [anon:scudo:primary_reserve]
+7f7469610000-7f7469650000 rw-p 00000000 00:00 0                          [anon:scudo:primary]
+7f7469650000-7f747960c000 ---p 00000000 00:00 0                          [anon:scudo:primary_reserve]
+7f747960c000-7f747964c000 rw-p 00000000 00:00 0                          [anon:scudo:primary]
+7f747964c000-7f7489609000 ---p 00000000 00:00 0                          [anon:scudo:primary_reserve]
+7f7489609000-7f7489649000 rw-p 00000000 00:00 0                          [anon:scudo:primary]
+7f7489649000-7f7499605000 ---p 00000000 00:00 0                          [anon:scudo:primary_reserve]
+7f7499605000-7f7499645000 rw-p 00000000 00:00 0                          [anon:scudo:primary]
+7f7499645000-7f74a9608000 ---p 00000000 00:00 0                          [anon:scudo:primary_reserve]
+7f74a9608000-7f74a9648000 rw-p 00000000 00:00 0                          [anon:scudo:primary]
+7f74a9648000-7f74b960d000 ---p 00000000 00:00 0                          [anon:scudo:primary_reserve]
+7f74b960d000-7f74b964d000 rw-p 00000000 00:00 0                          [anon:scudo:primary]
+7f74b964d000-7f74c9600000 ---p 00000000 00:00 0                          [anon:scudo:primary_reserve]
+7f74c9605000-7f74c9625000 rw-s 00000000 00:13 88                         /dev/__properties__/u:object_r:bluetooth_prop:s0
+7f74c9625000-7f74c9645000 rw-s 00000000 00:13 87                         /dev/__properties__/u:object_r:bluetooth_lea_prop:s0
+7f74c9645000-7f74c9665000 rw-s 00000000 00:13 86                         /dev/__properties__/u:object_r:bluetooth_finder_prop:s0
+7f74c9665000-7f74c9668000 r--p 00000000 00:1a 2060                       /system/lib64/libnetd_client.so
+7f74c9668000-7f74c9669000 ---p 00000000 00:00 0                          [page size compat]
+7f74c9669000-7f74c966d000 r-xp 00004000 00:1a 2060                       /system/lib64/libnetd_client.so
+7f74c966d000-7f74c966e000 r--p 00008000 00:1a 2060                       /system/lib64/libnetd_client.so
+7f74c966e000-7f74c9671000 ---p 00000000 00:00 0 
+7f74c9671000-7f74c9672000 rw-p 0000c000 00:1a 2060                       /system/lib64/libnetd_client.so
+7f74c9689000-7f74c96ff000 r--p 00000000 00:1a 1843                       /system/lib64/libc++.so
+7f74c96ff000-7f74c9702000 ---p 00000000 00:00 0 
+7f74c9702000-7f74c9789000 r-xp 00075000 00:1a 1843                       /system/lib64/libc++.so
+7f74c9789000-7f74c978c000 ---p 00000000 00:00 0 
+7f74c978c000-7f74c9794000 r--p 000fb000 00:1a 1843                       /system/lib64/libc++.so
+7f74c9794000-7f74c9797000 ---p 00000000 00:00 0 
+7f74c9797000-7f74c9798000 rw-p 00102000 00:1a 1843                       /system/lib64/libc++.so
+7f74c9798000-7f74c97a0000 rw-p 00000000 00:00 0                          [anon:.bss]
+7f74c97a2000-7f74c97c2000 rw-s 00000000 00:13 85                         /dev/__properties__/u:object_r:bluetooth_config_prop:s0
+7f74c97c2000-7f74c97ca000 r--p 00000000 00:1a 1884                       /system/lib64/libcutils.so
+7f74c97ca000-7f74c97d5000 r-xp 00008000 00:1a 1884                       /system/lib64/libcutils.so
+7f74c97d5000-7f74c97d6000 ---p 00000000 00:00 0                          [page size compat]
+7f74c97d6000-7f74c97d8000 r--p 00014000 00:1a 1884                       /system/lib64/libcutils.so
+7f74c97d8000-7f74c97da000 ---p 00000000 00:00 0 
+7f74c97da000-7f74c97db000 rw-p 00018000 00:1a 1884                       /system/lib64/libcutils.so
+7f74c97e6000-7f74c9806000 rw-s 00000000 00:13 84                         /dev/__properties__/u:object_r:bluetooth_audio_hal_prop:s0
+7f74c9806000-7f74c9826000 rw-s 00000000 00:13 83                         /dev/__properties__/u:object_r:bluetooth_a2dp_offload_prop:s0
+7f74c9826000-7f74c9827000 r--p 00000000 00:1a 1701                       /system/lib64/bootstrap/libdl.so
+7f74c9827000-7f74c982a000 ---p 00000000 00:00 0                          [page size compat]
+7f74c982a000-7f74c982b000 r-xp 00004000 00:1a 1701                       /system/lib64/bootstrap/libdl.so
+7f74c982b000-7f74c982e000 ---p 00000000 00:00 0                          [page size compat]
+7f74c982e000-7f74c982f000 r--p 00008000 00:1a 1701                       /system/lib64/bootstrap/libdl.so
+7f74c982f000-7f74c9832000 ---p 00000000 00:00 0 
+7f74c9832000-7f74c9833000 r--p 00000000 00:00 0                          [anon:.bss]
+7f74c9833000-7f74c9836000 rw-p 00000000 00:00 0                          [anon:.bss]
+7f74c9850000-7f74c987c000 r--p 00000000 00:1a 2073                       /system/lib64/libpcre2.so
+7f74c987c000-7f74c98b5000 r-xp 0002c000 00:1a 2073                       /system/lib64/libpcre2.so
+7f74c98b5000-7f74c98b8000 ---p 00000000 00:00 0                          [page size compat]
+7f74c98b8000-7f74c98b9000 r--p 00068000 00:1a 2073                       /system/lib64/libpcre2.so
+7f74c98b9000-7f74c98bc000 ---p 00000000 00:00 0 
+7f74c98bc000-7f74c98bd000 rw-p 0006c000 00:1a 2073                       /system/lib64/libpcre2.so
+7f74c98c2000-7f74c98e2000 rw-s 00000000 00:13 82                         /dev/__properties__/u:object_r:bionic_linker_16kb_app_compat_prop:s0
+7f74c98e2000-7f74c990f000 r--p 00000000 00:1a 2190                       /system/lib64/libunwindstack.so
+7f74c990f000-7f74c9912000 ---p 00000000 00:00 0                          [page size compat]
+7f74c9912000-7f74c999b000 r-xp 00030000 00:1a 2190                       /system/lib64/libunwindstack.so
+7f74c999b000-7f74c999e000 ---p 00000000 00:00 0                          [page size compat]
+7f74c999e000-7f74c99a6000 r--p 000bc000 00:1a 2190                       /system/lib64/libunwindstack.so
+7f74c99a6000-7f74c99a7000 rw-p 000c4000 00:1a 2190                       /system/lib64/libunwindstack.so
+7f74c99c0000-7f74c99e0000 rw-s 00000000 00:13 81                         /dev/__properties__/u:object_r:binder_cache_telephony_server_prop:s0
+7f74c99e0000-7f74c9a00000 rw-s 00000000 00:13 80                         /dev/__properties__/u:object_r:binder_cache_system_server_prop:s0
+7f74c9a00000-7f74cb400000 ---p 00000000 00:00 0 
+7f74cb40d000-7f74cb46d000 rw-p 00000000 00:00 0                          [anon:linker_alloc]
+7f74cb46d000-7f74cb46e000 r--p 00000000 00:1a 1880                       /system/lib64/libcrypto_utils.so
+7f74cb46e000-7f74cb471000 ---p 00000000 00:00 0                          [page size compat]
+7f74cb471000-7f74cb472000 r-xp 00004000 00:1a 1880                       /system/lib64/libcrypto_utils.so
+7f74cb472000-7f74cb475000 ---p 00000000 00:00 0                          [page size compat]
+7f74cb475000-7f74cb476000 r--p 00008000 00:1a 1880                       /system/lib64/libcrypto_utils.so
+7f74cb488000-7f74cb4af000 r--p 00000000 00:1a 1929                       /system/lib64/libfs_mgr.so
+7f74cb4af000-7f74cb4b0000 ---p 00000000 00:00 0                          [page size compat]
+7f74cb4b0000-7f74cb528000 r-xp 00028000 00:1a 1929                       /system/lib64/libfs_mgr.so
+7f74cb528000-7f74cb52a000 r--p 000a0000 00:1a 1929                       /system/lib64/libfs_mgr.so
+7f74cb52a000-7f74cb52c000 ---p 00000000 00:00 0 
+7f74cb52c000-7f74cb52d000 rw-p 000a4000 00:1a 1929                       /system/lib64/libfs_mgr.so
+7f74cb52e000-7f74cb54e000 rw-s 00000000 00:13 79                         /dev/__properties__/u:object_r:binder_cache_bluetooth_server_prop:s0
+7f74cb54e000-7f74cb56e000 rw-s 00000000 00:13 78                         /dev/__properties__/u:object_r:binder_cache_adservices_server_prop:s0
+7f74cb56e000-7f74cb56f000 r--p 00000000 00:1a 2199                       /system/lib64/libvendorsupport.so
+7f74cb56f000-7f74cb572000 ---p 00000000 00:00 0                          [page size compat]
+7f74cb572000-7f74cb573000 r-xp 00004000 00:1a 2199                       /system/lib64/libvendorsupport.so
+7f74cb573000-7f74cb576000 ---p 00000000 00:00 0                          [page size compat]
+7f74cb576000-7f74cb577000 r--p 00008000 00:1a 2199                       /system/lib64/libvendorsupport.so
+7f74cb57c000-7f74cb59c000 rw-s 00000000 00:13 77                         /dev/__properties__/u:object_r:avf_vm_traced_relay_enabled_prop:s0
+7f74cb59c000-7f74cb59e000 r--p 00000000 00:1a 1940                       /system/lib64/libgsi.so
+7f74cb59e000-7f74cb5a0000 ---p 00000000 00:00 0                          [page size compat]
+7f74cb5a0000-7f74cb5a1000 r-xp 00004000 00:1a 1940                       /system/lib64/libgsi.so
+7f74cb5a1000-7f74cb5a4000 ---p 00000000 00:00 0                          [page size compat]
+7f74cb5a4000-7f74cb5a5000 r--p 00008000 00:1a 1940                       /system/lib64/libgsi.so
+7f74cb5aa000-7f74cb5ca000 rw-s 00000000 00:13 76                         /dev/__properties__/u:object_r:avf_virtualizationservice_prop:s0
+7f74cb5ca000-7f74cb5d2000 r--p 00000000 00:1a 2215                       /system/lib64/libz.so
+7f74cb5d2000-7f74cb5e3000 r-xp 00008000 00:1a 2215                       /system/lib64/libz.so
+7f74cb5e3000-7f74cb5e6000 ---p 00000000 00:00 0                          [page size compat]
+7f74cb5e6000-7f74cb5e7000 r--p 0001c000 00:1a 2215                       /system/lib64/libz.so
+7f74cb5e7000-7f74cb5ea000 ---p 00000000 00:00 0 
+7f74cb5ea000-7f74cb5eb000 rw-p 00000000 00:00 0                          [anon:.bss]
+7f74cb5ec000-7f74cb60c000 rw-s 00000000 00:13 75                         /dev/__properties__/u:object_r:audio_prop:s0
+7f74cb60c000-7f74cb62c000 rw-s 00000000 00:13 74                         /dev/__properties__/u:object_r:audio_config_prop:s0
+7f74cb62c000-7f74cb69f000 r--p 00000000 00:1a 1879                       /system/lib64/libcrypto.so
+7f74cb69f000-7f74cb6a0000 ---p 00000000 00:00 0                          [page size compat]
+7f74cb6a0000-7f74cb7d4000 r-xp 00074000 00:1a 1879                       /system/lib64/libcrypto.so
+7f74cb7d4000-7f74cb7e3000 r--p 001a8000 00:1a 1879                       /system/lib64/libcrypto.so
+7f74cb7e3000-7f74cb7e4000 ---p 00000000 00:00 0 
+7f74cb7e4000-7f74cb7e5000 rw-p 001b8000 00:1a 1879                       /system/lib64/libcrypto.so
+7f74cb7e5000-7f74cb7ed000 rw-p 00000000 00:00 0                          [anon:.bss]
+7f74cb800000-7f74cc800000 ---p 00000000 00:00 0 
+7f74cc811000-7f74cc831000 rw-s 00000000 00:13 73                         /dev/__properties__/u:object_r:arm64_memtag_prop:s0
+7f74cc831000-7f74cc851000 rw-s 00000000 00:13 72                         /dev/__properties__/u:object_r:arm64_memtag_bootctl_prop:s0
+7f74cc851000-7f74cc852000 r--p 00000000 00:1a 1702                       /system/lib64/bootstrap/libdl_android.so
+7f74cc852000-7f74cc855000 ---p 00000000 00:00 0                          [page size compat]
+7f74cc855000-7f74cc856000 r-xp 00004000 00:1a 1702                       /system/lib64/bootstrap/libdl_android.so
+7f74cc856000-7f74cc859000 ---p 00000000 00:00 0                          [page size compat]
+7f74cc859000-7f74cc85a000 r--p 00008000 00:1a 1702                       /system/lib64/bootstrap/libdl_android.so
+7f74cc863000-7f74cc883000 rw-s 00000000 00:13 71                         /dev/__properties__/u:object_r:appsearch_vm_prop:s0
+7f74cc883000-7f74cc8a3000 rw-s 00000000 00:13 70                         /dev/__properties__/u:object_r:apexd_select_prop:s0
+7f74cc8a3000-7f74cc8be000 r--p 00000000 00:1a 2088                       /system/lib64/libprocessgroup.so
+7f74cc8be000-7f74cc8bf000 ---p 00000000 00:00 0                          [page size compat]
+7f74cc8bf000-7f74cc8fb000 r-xp 0001c000 00:1a 2088                       /system/lib64/libprocessgroup.so
+7f74cc8fb000-7f74cc8fd000 r--p 00058000 00:1a 2088                       /system/lib64/libprocessgroup.so
+7f74cc8fd000-7f74cc8ff000 ---p 00000000 00:00 0 
+7f74cc8ff000-7f74cc900000 rw-p 00000000 00:00 0                          [anon:.bss]
+7f74cc906000-7f74cc90a000 r--p 00000000 00:1a 2137                       /system/lib64/libsparse.so
+7f74cc90a000-7f74cc90e000 r-xp 00004000 00:1a 2137                       /system/lib64/libsparse.so
+7f74cc90e000-7f74cc90f000 r--p 00008000 00:1a 2137                       /system/lib64/libsparse.so
+7f74cc90f000-7f74cc912000 ---p 00000000 00:00 0 
+7f74cc912000-7f74cc913000 rw-p 0000c000 00:1a 2137                       /system/lib64/libsparse.so
+7f74cc930000-7f74cc950000 rw-s 00000000 00:13 69                         /dev/__properties__/u:object_r:apexd_prop:s0
+7f74cc950000-7f74cc952000 r--p 00000000 00:1a 2007                       /system/lib64/liblogwrap.so
+7f74cc952000-7f74cc954000 ---p 00000000 00:00 0                          [page size compat]
+7f74cc954000-7f74cc956000 r-xp 00004000 00:1a 2007                       /system/lib64/liblogwrap.so
+7f74cc956000-7f74cc958000 ---p 00000000 00:00 0                          [page size compat]
+7f74cc958000-7f74cc959000 r--p 00008000 00:1a 2007                       /system/lib64/liblogwrap.so
+7f74cc959000-7f74cc95c000 ---p 00000000 00:00 0 
+7f74cc95c000-7f74cc95d000 rw-p 00000000 00:00 0                          [anon:.bss]
+7f74cc961000-7f74cc981000 rw-s 00000000 00:13 68                         /dev/__properties__/u:object_r:apexd_private_prop:s0
+7f74cc981000-7f74cc991000 r--p 00000000 00:1a 1980                       /system/lib64/libjsoncpp.so
+7f74cc991000-7f74cc9ae000 r-xp 00010000 00:1a 1980                       /system/lib64/libjsoncpp.so
+7f74cc9ae000-7f74cc9b1000 ---p 00000000 00:00 0                          [page size compat]
+7f74cc9b1000-7f74cc9b2000 r--p 00030000 00:1a 1980                       /system/lib64/libjsoncpp.so
+7f74cc9b2000-7f74cc9b5000 ---p 00000000 00:00 0 
+7f74cc9b5000-7f74cc9b6000 rw-p 00000000 00:00 0                          [anon:.bss]
+7f74cc9cb000-7f74cc9cc000 r--p 00000000 00:1a 2204                       /system/lib64/libvndksupport.so
+7f74cc9cc000-7f74cc9cf000 ---p 00000000 00:00 0                          [page size compat]
+7f74cc9cf000-7f74cc9d0000 r-xp 00004000 00:1a 2204                       /system/lib64/libvndksupport.so
+7f74cc9d0000-7f74cc9d3000 ---p 00000000 00:00 0                          [page size compat]
+7f74cc9d3000-7f74cc9d4000 r--p 00008000 00:1a 2204                       /system/lib64/libvndksupport.so
+7f74cc9d4000-7f74cc9d7000 ---p 00000000 00:00 0 
+7f74cc9d7000-7f74cc9d8000 rw-p 00000000 00:00 0                          [anon:.bss]
+7f74cc9e0000-7f74cca00000 rw-s 00000000 00:13 67                         /dev/__properties__/u:object_r:apexd_payload_metadata_prop:s0
+7f74cca00000-7f74cca01000 r--p 00000000 00:1a 2070                       /system/lib64/libpackagelistparser.so
+7f74cca01000-7f74cca04000 ---p 00000000 00:00 0                          [page size compat]
+7f74cca04000-7f74cca05000 r-xp 00004000 00:1a 2070                       /system/lib64/libpackagelistparser.so
+7f74cca05000-7f74cca08000 ---p 00000000 00:00 0                          [page size compat]
+7f74cca08000-7f74cca09000 r--p 00008000 00:1a 2070                       /system/lib64/libpackagelistparser.so
+7f74cca09000-7f74cca0c000 ---p 00000000 00:00 0 
+7f74cca0c000-7f74cca0d000 rw-p 00000000 00:00 0                          [anon:.bss]
+7f74cca26000-7f74cca46000 rw-s 00000000 00:13 66                         /dev/__properties__/u:object_r:apexd_config_prop:s0
+7f74cca46000-7f74cca66000 rw-s 00000000 00:13 65                         /dev/__properties__/u:object_r:apex_ready_prop:s0
+7f74cca66000-7f74cca68000 r--p 00000000 00:1a 1917                       /system/lib64/libext2_uuid.so
+7f74cca68000-7f74cca6a000 ---p 00000000 00:00 0                          [page size compat]
+7f74cca6a000-7f74cca6c000 r-xp 00004000 00:1a 1917                       /system/lib64/libext2_uuid.so
+7f74cca6c000-7f74cca6e000 ---p 00000000 00:00 0                          [page size compat]
+7f74cca6e000-7f74cca6f000 r--p 00008000 00:1a 1917                       /system/lib64/libext2_uuid.so
+7f74cca6f000-7f74cca72000 ---p 00000000 00:00 0 
+7f74cca72000-7f74cca73000 rw-p 0000c000 00:1a 1917                       /system/lib64/libext2_uuid.so
+7f74cca80000-7f74cca88000 r--p 00000000 00:1a 2012                       /system/lib64/liblzma.so
+7f74cca88000-7f74ccaaa000 r-xp 00008000 00:1a 2012                       /system/lib64/liblzma.so
+7f74ccaaa000-7f74ccaac000 ---p 00000000 00:00 0                          [page size compat]
+7f74ccaac000-7f74ccaad000 r--p 0002c000 00:1a 2012                       /system/lib64/liblzma.so
+7f74ccaad000-7f74ccab0000 ---p 00000000 00:00 0 
+7f74ccab0000-7f74ccab1000 rw-p 00030000 00:1a 2012                       /system/lib64/liblzma.so
+7f74ccab1000-7f74ccabc000 rw-p 00000000 00:00 0                          [anon:.bss]
+7f74ccac3000-7f74ccae3000 rw-s 00000000 00:13 64                         /dev/__properties__/u:object_r:adbd_tradeinmode_prop:s0
+7f74ccae3000-7f74ccb37000 r--p 00000000 00:1a 1700                       /system/lib64/bootstrap/libc.so
+7f74ccb37000-7f74ccbd5000 r-xp 00054000 00:1a 1700                       /system/lib64/bootstrap/libc.so
+7f74ccbd5000-7f74ccbd7000 ---p 00000000 00:00 0                          [page size compat]
+7f74ccbd7000-7f74ccbdb000 r--p 000f4000 00:1a 1700                       /system/lib64/bootstrap/libc.so
+7f74ccbdb000-7f74ccbdc000 rw-p 000f8000 00:1a 1700                       /system/lib64/bootstrap/libc.so
+7f74ccbdc000-7f74ccbf3000 rw-p 00000000 00:00 0                          [anon:.bss]
+7f74ccbf3000-7f74ccbf7000 r--p 00000000 00:00 0                          [anon:.bss]
+7f74ccbf7000-7f74ccbff000 rw-p 00000000 00:00 0                          [anon:.bss]
+7f74ccc19000-7f74ccc21000 r--p 00000000 00:1a 1922                       /system/lib64/libfec.so
+7f74ccc21000-7f74ccc2e000 r-xp 00008000 00:1a 1922                       /system/lib64/libfec.so
+7f74ccc2e000-7f74ccc31000 ---p 00000000 00:00 0                          [page size compat]
+7f74ccc31000-7f74ccc32000 r--p 00018000 00:1a 1922                       /system/lib64/libfec.so
+7f74ccc32000-7f74ccc35000 ---p 00000000 00:00 0 
+7f74ccc35000-7f74ccc36000 rw-p 00000000 00:00 0                          [anon:.bss]
+7f74ccc3b000-7f74ccc55000 r--s 00000000 00:13 55                         /dev/__properties__/property_info
+7f74ccc55000-7f74ccc62000 r--p 00000000 00:1a 2196                       /system/lib64/libutils.so
+7f74ccc62000-7f74ccc65000 ---p 00000000 00:00 0                          [page size compat]
+7f74ccc65000-7f74ccc76000 r-xp 00010000 00:1a 2196                       /system/lib64/libutils.so
+7f74ccc76000-7f74ccc79000 ---p 00000000 00:00 0                          [page size compat]
+7f74ccc79000-7f74ccc7a000 r--p 00024000 00:1a 2196                       /system/lib64/libutils.so
+7f74ccc7a000-7f74ccc7d000 ---p 00000000 00:00 0 
+7f74ccc7d000-7f74ccc7e000 rw-p 00028000 00:1a 2196                       /system/lib64/libutils.so
+7f74ccc94000-7f74ccc96000 r--p 00000000 00:1a 1919                       /system/lib64/libext4_utils.so
+7f74ccc96000-7f74ccc98000 ---p 00000000 00:00 0                          [page size compat]
+7f74ccc98000-7f74ccc99000 r-xp 00004000 00:1a 1919                       /system/lib64/libext4_utils.so
+7f74ccc99000-7f74ccc9c000 ---p 00000000 00:00 0                          [page size compat]
+7f74ccc9c000-7f74ccc9d000 r--p 00008000 00:1a 1919                       /system/lib64/libext4_utils.so
+7f74ccc9d000-7f74ccca0000 ---p 00000000 00:00 0 
+7f74ccca0000-7f74ccca1000 rw-p 00000000 00:00 0                          [anon:.bss]
+7f74cccab000-7f74ccccb000 rw-s 00000000 00:13 63                         /dev/__properties__/u:object_r:adbd_prop:s0
+7f74ccccb000-7f74ccceb000 rw-s 00000000 00:13 62                         /dev/__properties__/u:object_r:adbd_config_prop:s0
+7f74ccceb000-7f74cccee000 r--p 00000000 00:1a 2089                       /system/lib64/libprocessgroup_setup.so
+7f74cccee000-7f74cccef000 ---p 00000000 00:00 0                          [page size compat]
+7f74cccef000-7f74cccf5000 r-xp 00004000 00:1a 2089                       /system/lib64/libprocessgroup_setup.so
+7f74cccf5000-7f74cccf7000 ---p 00000000 00:00 0                          [page size compat]
+7f74cccf7000-7f74cccf8000 r--p 0000c000 00:1a 2089                       /system/lib64/libprocessgroup_setup.so
+7f74ccd03000-7f74ccd11000 r--p 00000000 00:1a 1815                       /system/lib64/libbase.so
+7f74ccd11000-7f74ccd13000 ---p 00000000 00:00 0                          [page size compat]
+7f74ccd13000-7f74ccd34000 r-xp 00010000 00:1a 1815                       /system/lib64/libbase.so
+7f74ccd34000-7f74ccd37000 ---p 00000000 00:00 0                          [page size compat]
+7f74ccd37000-7f74ccd38000 r--p 00034000 00:1a 1815                       /system/lib64/libbase.so
+7f74ccd38000-7f74ccd3b000 ---p 00000000 00:00 0 
+7f74ccd3b000-7f74ccd3c000 rw-p 00038000 00:1a 1815                       /system/lib64/libbase.so
+7f74ccd45000-7f74ccd52000 r--p 00000000 00:1a 2008                       /system/lib64/liblp.so
+7f74ccd52000-7f74ccd55000 ---p 00000000 00:00 0                          [page size compat]
+7f74ccd55000-7f74ccd75000 r-xp 00010000 00:1a 2008                       /system/lib64/liblp.so
+7f74ccd75000-7f74ccd76000 r--p 00030000 00:1a 2008                       /system/lib64/liblp.so
+7f74ccd76000-7f74ccd79000 ---p 00000000 00:00 0 
+7f74ccd79000-7f74ccd7a000 rw-p 00000000 00:00 0                          [anon:.bss]
+7f74ccd89000-7f74ccd9c000 r--p 00000000 00:1a 1703                       /system/lib64/bootstrap/libm.so
+7f74ccd9c000-7f74ccd9d000 ---p 00000000 00:00 0                          [page size compat]
+7f74ccd9d000-7f74ccdc6000 r-xp 00014000 00:1a 1703                       /system/lib64/bootstrap/libm.so
+7f74ccdc6000-7f74ccdc9000 ---p 00000000 00:00 0                          [page size compat]
+7f74ccdc9000-7f74ccdca000 r--p 00040000 00:1a 1703                       /system/lib64/bootstrap/libm.so
+7f74ccdca000-7f74ccdcd000 ---p 00000000 00:00 0 
+7f74ccdcd000-7f74ccdce000 rw-p 00044000 00:1a 1703                       /system/lib64/bootstrap/libm.so
+7f74ccdd2000-7f74ccdf2000 rw-s 00000000 00:13 61                         /dev/__properties__/u:object_r:adaptive_haptics_prop:s0
+7f74ccdf2000-7f74cce12000 rw-s 00000000 00:13 60                         /dev/__properties__/u:object_r:ab_update_gki_prop:s0
+7f74cce12000-7f74cce17000 r--p 00000000 00:1a 2004                       /system/lib64/liblog.so
+7f74cce17000-7f74cce1a000 ---p 00000000 00:00 0                          [page size compat]
+7f74cce1a000-7f74cce23000 r-xp 00008000 00:1a 2004                       /system/lib64/liblog.so
+7f74cce23000-7f74cce26000 ---p 00000000 00:00 0                          [page size compat]
+7f74cce26000-7f74cce27000 r--p 00014000 00:1a 2004                       /system/lib64/liblog.so
+7f74cce27000-7f74cce2a000 ---p 00000000 00:00 0 
+7f74cce2a000-7f74cce2b000 rw-p 00018000 00:1a 2004                       /system/lib64/liblog.so
+7f74cce44000-7f74cce45000 r--p 00000000 00:1a 2140                       /system/lib64/libsquashfs_utils.so
+7f74cce45000-7f74cce48000 ---p 00000000 00:00 0                          [page size compat]
+7f74cce48000-7f74cce49000 r-xp 00004000 00:1a 2140                       /system/lib64/libsquashfs_utils.so
+7f74cce49000-7f74cce4c000 ---p 00000000 00:00 0                          [page size compat]
+7f74cce4c000-7f74cce4d000 r--p 00008000 00:1a 2140                       /system/lib64/libsquashfs_utils.so
+7f74cce4f000-7f74cce50000 ---p 00000000 00:00 0 
+7f74cce50000-7f74cce8c000 rw-p 00000000 00:00 0                          [anon:scudo:secondary]
+7f74cce8c000-7f74cce8d000 ---p 00000000 00:00 0 
+7f74cce8d000-7f74cce95000 r--p 00000000 00:1a 2113                       /system/lib64/libselinux.so
+7f74cce95000-7f74ccea7000 r-xp 00008000 00:1a 2113                       /system/lib64/libselinux.so
+7f74ccea7000-7f74ccea9000 ---p 00000000 00:00 0                          [page size compat]
+7f74ccea9000-7f74cceaa000 r--p 0001c000 00:1a 2113                       /system/lib64/libselinux.so
+7f74cceaa000-7f74ccead000 ---p 00000000 00:00 0 
+7f74ccead000-7f74cceae000 rw-p 00020000 00:1a 2113                       /system/lib64/libselinux.so
+7f74cceae000-7f74cceaf000 rw-p 00000000 00:00 0                          [anon:.bss]
+7f74cceb1000-7f74ccecb000 r--s 00000000 00:13 57                         /dev/__properties__/appcompat_override/property_info
+7f74ccecb000-7f74cceeb000 rw-s 00000000 00:13 59                         /dev/__properties__/u:object_r:aaudio_config_prop:s0
+7f74cceeb000-7f74cceec000 rw-p 00000000 00:00 0                          [anon:bionic_alloc_small_objects]
+7f74ccefe000-7f74cceff000 rw-p 00000000 00:00 0                          [anon:bionic_alloc_small_objects]
+7f74ccf14000-7f74ccf15000 ---p 00000000 00:00 0 
+7f74ccf15000-7f74ccf46000 rw-p 00000000 00:00 0                          [anon:scudo:secondary]
+7f74ccf46000-7f74ccf48000 ---p 00000000 00:00 0 
+7f74ccf48000-7f74ccf79000 rw-p 00000000 00:00 0                          [anon:scudo:secondary]
+7f74ccf79000-7f74ccf7a000 ---p 00000000 00:00 0 
+7f74ccf7a000-7f74ccf7b000 rw-p 00000000 00:00 0                          [anon:bionic_alloc_small_objects]
+7f74ccf7c000-7f74ccf80000 ---p 00000000 00:00 0 
+7f74ccf80000-7f74ccf88000 rw-p 00000000 00:00 0                          [anon:thread signal stack]
+7f74ccf88000-7f74ccf8c000 ---p 00000000 00:00 0 
+7f74ccf8c000-7f74ccf94000 rw-p 00000000 00:00 0                          [anon:thread signal stack]
+7f74ccf94000-7f74ccf95000 ---p 00000000 00:00 0 
+7f74ccf95000-7f74ccfbe000 rw-p 00000000 00:00 0                          [anon:scudo:secondary]
+7f74ccfbe000-7f74ccfbf000 ---p 00000000 00:00 0 
+7f74ccfbf000-7f74ccfc0000 rw-p 00000000 00:00 0                          [anon:bionic_alloc_small_objects]
+7f74ccfc5000-7f74ccfc6000 rw-p 00000000 00:00 0                          [anon:bionic_alloc_small_objects]
+7f74ccfd0000-7f74ccff0000 rw-s 00000000 00:13 58                         /dev/__properties__/u:object_r:aac_drc_prop:s0
+7f74ccff0000-7f74ccff4000 ---p 00000000 00:00 0 
+7f74ccff4000-7f74ccff8000 rw-p 00000000 00:00 0                          [anon:stack_and_tls:main]
+7f74ccff8000-7f74ccffc000 ---p 00000000 00:00 0 
+7f74cd001000-7f74cd002000 r--s 00000000 00:11 19                         /sys/fs/selinux/status
+7f74cd002000-7f74cd00a000 rw-p 00000000 00:00 0                          [anon:System property context nodes]
+7f74cd00a000-7f74cd024000 r--s 00000000 00:13 55                         /dev/__properties__/property_info
+7f74cd024000-7f74cd025000 ---p 00000000 00:00 0 
+7f74cd025000-7f74cd03a000 rw-p 00000000 00:00 0                          [anon:scudo:secondary]
+7f74cd03a000-7f74cd03c000 ---p 00000000 00:00 0 
+7f74cd03c000-7f74cd05b000 rw-p 00000000 00:00 0                          [anon:scudo:secondary]
+7f74cd05b000-7f74cd05c000 ---p 00000000 00:00 0 
+7f74cd05c000-7f74cd05e000 rw-p 00000000 00:00 0                          [anon:bionic_alloc_small_objects]
+7f74cd05e000-7f74cd0be000 r--p 00000000 00:00 0                          [anon:linker_alloc]
+7f74cd0be000-7f74cd0bf000 ---p 00000000 00:00 0 
+7f74cd0bf000-7f74cd0c7000 rw-p 00000000 00:00 0 
+7f74cd0c7000-7f74cd0c8000 ---p 00000000 00:00 0 
+7f74cd0c8000-7f74cd128000 r--p 00000000 00:00 0                          [anon:linker_alloc]
+7f74cd128000-7f74cd12c000 ---p 00000000 00:00 0 
+7f74cd12c000-7f74cd134000 rw-p 00000000 00:00 0                          [anon:thread signal stack]
+7f74cd134000-7f74cd135000 rw-p 00000000 00:00 0                          [anon:bionic_alloc_small_objects]
+7f74cd135000-7f74cd136000 r--p 00000000 00:00 0                          [anon:atexit handlers]
+7f74cd136000-7f74cd137000 rw-p 00000000 00:00 0                          [anon:arc4random data]
+7f74cd137000-7f74cd147000 r--p 00000000 00:00 0                          [vvar]
+7f74cd147000-7f74cd14b000 r-xp 00000000 00:00 0                          [vdso]
+7f74cd14b000-7f74cd192000 r--p 00000000 00:1a 261                        /system/bin/bootstrap/linker64
+7f74cd192000-7f74cd193000 rw-p 00000000 00:00 0                          [anon:bionic_alloc_small_objects]
+7f74cd193000-7f74cd2e9000 r-xp 00048000 00:1a 261                        /system/bin/bootstrap/linker64
+7f74cd2e9000-7f74cd2ea000 r--p 00000000 00:00 0                          [anon:atexit handlers]
+7f74cd2ea000-7f74cd2eb000 rw-p 00000000 00:00 0                          [anon:bionic_alloc_small_objects]
+7f74cd2eb000-7f74cd2f5000 r--p 001a0000 00:1a 261                        /system/bin/bootstrap/linker64
+7f74cd2f5000-7f74cd2f6000 rw-p 00000000 00:00 0                          [anon:bionic_alloc_small_objects]
+7f74cd2f6000-7f74cd2f7000 rw-p 00000000 00:00 0                          [anon:arc4random data]
+7f74cd2f7000-7f74cd2fa000 rw-p 001ac000 00:1a 261                        /system/bin/bootstrap/linker64
+7f74cd2fa000-7f74cd303000 rw-p 00000000 00:00 0                          [anon:.bss]
+7f74cd303000-7f74cd307000 r--p 00000000 00:00 0                          [anon:.bss]
+7f74cd307000-7f74cd313000 rw-p 00000000 00:00 0                          [anon:.bss]
+7ffdd7801000-7ffdd7822000 rw-p 00000000 00:00 0                          [stack]
+ffffffffff600000-ffffffffff604000 --xp 00000000 00:00 0                  [vsyscall]

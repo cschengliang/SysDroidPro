@@ -1,0 +1,5 @@
+--------- beginning of kernel
+10-18 15:31:06.092     0     0 E logd    : HexToBytes: Invalid characters: ", /
+--------- beginning of main
+10-18 15:31:06.284  2407  2407 W libbinder.BackendUnifiedServiceManager: Thread Pool max thread count is 0. Cannot cache binder as linkToDeath cannot be implemented. serviceName: dropbox
+10-18 15:31:06.354     0     0 I logd    : logdr: UID=2000 GID=2000 PID=2412 n tail=30 logMask=1 pid=0 start=0ns deadline=0ns

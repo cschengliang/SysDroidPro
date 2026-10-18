@@ -1,0 +1,17 @@
+Drop box contents: 50 entries
+Max entries: 1000
+Low priority rate limit period: 2000 ms
+Low priority tags: {data_app_wtf, keymaster, system_server_wtf, system_app_strictmode, system_app_wtf, system_server_strictmode, data_app_strictmode, netstats}
+Searching for: SYSTEM_BOOT
+
+========================================
+2026-10-18 15:18:43 SYSTEM_BOOT (text, 510 bytes)
+isPrevious: true
+Build: Android/sdk_tablet_x86_64/emu64x:Baklava/BP4A.251205.006/eng.cschen:userdebug/test-keys
+Hardware: goldfish_x86_64
+Revision: 0
+Bootloader: unknown
+Radio: null
+Kernel: Linux version 6.12.38-android16-5-gbb9513914902-ab13996879 (kleaf@build-host) (Android (12833971, +pgo, +bolt, +lto, +mlgo, based on r536225) clang version 19.0.1 (https://android.googlesource.com/toolchain/llvm-project b3a530ec6537146650e42be89f1089e9a3588460), LLD 19.0.1) #1 SMP PREEMPT Mon Aug 25 21:58:46 UTC 2025
+
+

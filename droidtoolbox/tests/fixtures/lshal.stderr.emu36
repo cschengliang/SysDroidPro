@@ -1,0 +1,11 @@
+Warning: Skipping "android.frameworks.sensorservice@1.0::ISensorManager/default": cannot be fetched from service manager (null)
+Warning: Skipping "android.hardware.audio.effect@7.0::IEffectsFactory/default": cannot be fetched from service manager (null)
+Warning: Skipping "android.hardware.audio@7.0::IDevicesFactory/default": cannot be fetched from service manager (null)
+Warning: Skipping "android.hardware.audio@7.1::IDevicesFactory/default": cannot be fetched from service manager (null)
+Warning: Skipping "android.hardware.media.c2@1.0::IComponentStore/default": no information for PID 536, are you root?
+Warning: Skipping "android.hardware.media.c2@1.0::IComponentStore/software": no information for PID 650, are you root?
+Warning: Skipping "android.hidl.allocator@1.0::IAllocator/ashmem": no information for PID 527, are you root?
+Warning: Skipping "android.hidl.base@1.0::IBase/ashmem": cannot be fetched from service manager (null)
+Warning: Skipping "android.hidl.base@1.0::IBase/default": cannot be fetched from service manager (null)
+Warning: Skipping "android.hidl.base@1.0::IBase/software": cannot be fetched from service manager (null)
+Warning: Skipping "android.hidl.manager@1.0::IServiceManager/default": no information for PID 275, are you root?

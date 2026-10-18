@@ -1,0 +1,382 @@
+{
+  "devices_l": {
+    "command": [
+      "-s",
+      "emulator-5554",
+      "devices",
+      "-l"
+    ],
+    "exit_code": 0
+  },
+  "adb_version": {
+    "command": [
+      "-s",
+      "emulator-5554",
+      "version"
+    ],
+    "exit_code": 0
+  },
+  "getprop": {
+    "command": [
+      "-s",
+      "emulator-5554",
+      "shell",
+      "getprop"
+    ],
+    "exit_code": 0
+  },
+  "getprop_Z": {
+    "command": [
+      "-s",
+      "emulator-5554",
+      "shell",
+      "getprop -Z"
+    ],
+    "exit_code": 0
+  },
+  "battery": {
+    "command": [
+      "-s",
+      "emulator-5554",
+      "shell",
+      "dumpsys battery"
+    ],
+    "exit_code": 0
+  },
+  "detail": {
+    "command": [
+      "-s",
+      "emulator-5554",
+      "shell",
+      "echo ==PROPS; getprop\necho ==UNAME; uname -r\necho ==KERNEL; cat /proc/version\necho ==SELINUX; getenforce\necho ==MEM; head -n 3 /proc/meminfo\necho ==WM; wm size; wm density\necho ==UPTIME; cat /proc/uptime\necho ==BATTERY; dumpsys battery\necho ==CURRENT; cat /sys/class/power_supply/battery/current_now\necho ==DF; df -k /data /system 2>/dev/null"
+    ],
+    "exit_code": 0
+  },
+  "root_state_nonroot": {
+    "command": [
+      "-s",
+      "emulator-5554",
+      "shell",
+      "id -u; getprop ro.build.type; getprop ro.boot.veritymode; getprop partition.system.verified; mount | grep -E ' / | /system '"
+    ],
+    "exit_code": 0
+  },
+  "id_u": {
+    "command": [
+      "-s",
+      "emulator-5554",
+      "shell",
+      "id -u"
+    ],
+    "exit_code": 0
+  },
+  "service_list": {
+    "command": [
+      "-s",
+      "emulator-5554",
+      "shell",
+      "service list"
+    ],
+    "exit_code": 0
+  },
+  "lshal": {
+    "command": [
+      "-s",
+      "emulator-5554",
+      "shell",
+      "lshal --neat -itp"
+    ],
+    "exit_code": 200
+  },
+  "lshal_fallback": {
+    "command": [
+      "-s",
+      "emulator-5554",
+      "shell",
+      "lshal -itp"
+    ],
+    "exit_code": 200
+  },
+  "lshal_help": {
+    "command": [
+      "-s",
+      "emulator-5554",
+      "shell",
+      "lshal --help"
+    ],
+    "exit_code": 1
+  },
+  "ps_A": {
+    "command": [
+      "-s",
+      "emulator-5554",
+      "shell",
+      "ps -A -o PID,PPID,USER,RSS,S,NAME"
+    ],
+    "exit_code": 0
+  },
+  "proc_status": {
+    "command": [
+      "-s",
+      "emulator-5554",
+      "shell",
+      "cat /proc/1/status"
+    ],
+    "exit_code": 0
+  },
+  "proc_maps": {
+    "command": [
+      "-s",
+      "emulator-5554",
+      "shell",
+      "cat /proc/1/maps"
+    ],
+    "exit_code": 1
+  },
+  "cmd_user_list_v": {
+    "command": [
+      "-s",
+      "emulator-5554",
+      "shell",
+      "cmd user list -v"
+    ],
+    "exit_code": 0
+  },
+  "pm_list_users": {
+    "command": [
+      "-s",
+      "emulator-5554",
+      "shell",
+      "pm list users"
+    ],
+    "exit_code": 0
+  },
+  "pm_list_packages_user0": {
+    "command": [
+      "-s",
+      "emulator-5554",
+      "shell",
+      "pm list packages -f -U --show-versioncode --user 0"
+    ],
+    "exit_code": 0
+  },
+  "pm_list_packages_system": {
+    "command": [
+      "-s",
+      "emulator-5554",
+      "shell",
+      "pm list packages -s --user 0"
+    ],
+    "exit_code": 0
+  },
+  "pm_list_packages_disabled": {
+    "command": [
+      "-s",
+      "emulator-5554",
+      "shell",
+      "pm list packages -d --user 0"
+    ],
+    "exit_code": 0
+  },
+  "pm_list_packages_thirdparty": {
+    "command": [
+      "-s",
+      "emulator-5554",
+      "shell",
+      "pm list packages -3 --user 0"
+    ],
+    "exit_code": 0
+  },
+  "apex_list": {
+    "command": [
+      "-s",
+      "emulator-5554",
+      "shell",
+      "pm list packages --apex-only --show-versioncode -f"
+    ],
+    "exit_code": 0
+  },
+  "dumpsys_package_android": {
+    "command": [
+      "-s",
+      "emulator-5554",
+      "shell",
+      "dumpsys package android"
+    ],
+    "exit_code": 0
+  },
+  "dumpsys_package_com.android.settings": {
+    "command": [
+      "-s",
+      "emulator-5554",
+      "shell",
+      "dumpsys package com.android.settings"
+    ],
+    "exit_code": 0
+  },
+  "dumpsys_package_packages": {
+    "command": [
+      "-s",
+      "emulator-5554",
+      "shell",
+      "dumpsys package packages"
+    ],
+    "exit_code": 0
+  },
+  "dumpsys_package_missing": {
+    "command": [
+      "-s",
+      "emulator-5554",
+      "shell",
+      "dumpsys package no.such.package.dtb"
+    ],
+    "exit_code": 0
+  },
+  "ls_la_sdcard": {
+    "command": [
+      "-s",
+      "emulator-5554",
+      "shell",
+      "ls -la /sdcard/"
+    ],
+    "exit_code": 0
+  },
+  "ls_la_root": {
+    "command": [
+      "-s",
+      "emulator-5554",
+      "shell",
+      "ls -la /"
+    ],
+    "exit_code": 0
+  },
+  "ls_la_dev": {
+    "command": [
+      "-s",
+      "emulator-5554",
+      "shell",
+      "ls -la /dev/"
+    ],
+    "exit_code": 0
+  },
+  "ls_la_data": {
+    "command": [
+      "-s",
+      "emulator-5554",
+      "shell",
+      "ls -la /data/"
+    ],
+    "exit_code": 1
+  },
+  "tombstones": {
+    "command": [
+      "-s",
+      "emulator-5554",
+      "shell",
+      "ls -l /data/tombstones/"
+    ],
+    "exit_code": 0
+  },
+  "anr": {
+    "command": [
+      "-s",
+      "emulator-5554",
+      "shell",
+      "ls -l /data/anr/"
+    ],
+    "exit_code": 0
+  },
+  "dropbox": {
+    "command": [
+      "-s",
+      "emulator-5554",
+      "shell",
+      "dumpsys dropbox"
+    ],
+    "exit_code": 0
+  },
+  "date_offset": {
+    "command": [
+      "-s",
+      "emulator-5554",
+      "shell",
+      "date +%z"
+    ],
+    "exit_code": 0
+  },
+  "logcat": {
+    "command": [
+      "-s",
+      "emulator-5554",
+      "logcat",
+      "-d",
+      "-v",
+      "threadtime",
+      "-b",
+      "main",
+      "-t",
+      "30"
+    ],
+    "exit_code": 0
+  },
+  "kernel_logcat": {
+    "command": [
+      "-s",
+      "emulator-5554",
+      "logcat",
+      "-d",
+      "-b",
+      "main",
+      "-b",
+      "kernel",
+      "-t",
+      "3"
+    ],
+    "exit_code": 0
+  },
+  "dmesg_nonroot": {
+    "command": [
+      "-s",
+      "emulator-5554",
+      "shell",
+      "dmesg"
+    ],
+    "exit_code": 1
+  },
+  "aidl_pid": {
+    "command": [
+      "-s",
+      "emulator-5554",
+      "shell",
+      "dumpsys --pid android.hardware.power.IPower/default"
+    ],
+    "exit_code": 0
+  },
+  "settings_list_system": {
+    "command": [
+      "-s",
+      "emulator-5554",
+      "shell",
+      "settings list system"
+    ],
+    "exit_code": 0
+  },
+  "settings_list_secure": {
+    "command": [
+      "-s",
+      "emulator-5554",
+      "shell",
+      "settings list secure"
+    ],
+    "exit_code": 0
+  },
+  "settings_list_global": {
+    "command": [
+      "-s",
+      "emulator-5554",
+      "shell",
+      "settings list global"
+    ],
+    "exit_code": 0
+  }
+}

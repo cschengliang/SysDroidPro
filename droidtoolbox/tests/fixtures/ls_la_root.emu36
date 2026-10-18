@@ -1,0 +1,38 @@
+total 72
+drwxr-xr-x  29 root   root       4096 2026-08-15 13:38 .
+drwxr-xr-x  29 root   root       4096 2026-08-15 13:38 ..
+lrw-r--r--   1 root   root         30 2026-07-25 15:48 adb_keys -> /product/etc/security/adb_keys
+drwxr-xr-x  98 root   root       1980 2026-10-18 15:18 apex
+lrw-r--r--   1 root   root         11 2026-07-25 15:48 bin -> /system/bin
+drwxr-xr-x  12 root   root        260 2026-10-18 15:18 bootstrap-apex
+lrw-r--r--   1 root   root         50 2026-07-25 15:48 bugreports -> /data/user_de/0/com.android.shell/files/bugreports
+drwxrwx---   2 system cache      4096 2026-07-25 15:48 cache
+drwxr-xr-x   3 root   root          0 2026-10-18 15:18 config
+lrw-r--r--   1 root   root         17 2026-07-25 15:48 d -> /sys/kernel/debug
+drwxrwx--x  51 system system     4096 2026-10-18 15:18 data
+d?????????   ? ?      ?             ?                ? data_mirror
+drwxr-xr-x   2 root   root       4096 2026-07-25 15:48 debug_ramdisk
+drwxr-xr-x  19 root   root       3040 2026-10-18 15:18 dev
+lrw-r--r--   1 root   root         11 2026-07-25 15:48 etc -> /system/etc
+l?????????   ? ?      ?             ?                ? init -> ?
+-?????????   ? ?      ?             ?                ? init.environ.rc
+d?????????   ? ?      ?             ?                ? linkerconfig
+drwx------   2 root   root      16384 2026-08-15 13:38 lost+found
+d?????????   ? ?      ?             ?                ? metadata
+drwxr-xr-x  18 root   system      380 2026-10-18 15:18 mnt
+drwxr-xr-x   2 root   root       4096 2026-07-25 15:48 odm
+drwxr-xr-x   2 root   root       4096 2026-07-25 15:48 odm_dlkm
+drwxr-xr-x   2 root   root       4096 2026-07-25 15:48 oem
+d?????????   ? ?      ?             ?                ? postinstall
+dr-xr-xr-x 410 root   root          0 2026-10-18 15:18 proc
+drwxr-xr-x   1 root   root       3452 2026-09-05 01:28 product
+lrw-r--r--   1 root   root         21 2026-07-25 15:48 sdcard -> /storage/self/primary
+drwxr-xr-x   2 root   root       4096 2026-07-25 15:48 second_stage_resources
+drwx--x---   4 shell  everybody    80 2026-10-18 15:18 storage
+dr-xr-xr-x  13 root   root          0 2026-10-18 15:18 sys
+drwxr-xr-x   1 root   root       3452 2026-09-05 01:28 system
+d?????????   ? ?      ?             ?                ? system_dlkm
+drwxr-xr-x   1 root   root       3452 2026-09-05 01:28 system_ext
+drwxrwx--x   2 shell  shell        40 2026-10-18 15:18 tmp
+drwxr-xr-x   1 root   root       3452 2026-09-05 01:28 vendor
+drwxr-xr-x   2 root   root       4096 2026-07-25 15:48 vendor_dlkm

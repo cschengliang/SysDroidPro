@@ -1,0 +1,6 @@
+2000
+userdebug
+enforcing
+
+/dev/block/dm-0 on / type ext4 (ro,seclabel,relatime)
+overlay on /system type overlay (ro,seclabel,noatime,lowerdir=/system,upperdir=/mnt/scratch/overlay/system/upper,workdir=/mnt/scratch/overlay/system/work,redirect_dir=nofollow,userxattr)

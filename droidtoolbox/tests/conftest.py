@@ -7,6 +7,15 @@ import time
 import pytest
 
 os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
+# Windows 受限令牌无法重开 Python 3.14 用 0700 创建的目录。
+# 仅显式开启的本地测试进程使用继承 ACL；生产进程不受影响。
+if os.name == "nt" and os.environ.get("DTB_TEST_INHERIT_ACL") == "1":
+    _original_mkdir = os.mkdir
+
+    def _test_mkdir(path, mode=0o777, *, dir_fd=None):
+        return _original_mkdir(path, 0o777 if mode == 0o700 else mode, dir_fd=dir_fd)
+
+    os.mkdir = _test_mkdir
 if os.name == "nt":  # offscreen 平台没有字体回退，截图里的中文需要系统字体目录
     os.environ.setdefault("QT_QPA_FONTDIR", os.path.join(os.environ.get("WINDIR", r"C:\Windows"), "Fonts"))
 

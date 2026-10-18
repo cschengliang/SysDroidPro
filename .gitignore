@@ -16,3 +16,10 @@ __pycache__/
 .idea/
 Thumbs.db
 desktop.ini
+
+# 受限环境内的独立 Git 元数据与测试临时文件
+.backend-adb-git/
+.backend-adb-work/
+backend-adb-checkout/
+.test-tmp/
+pytest-cache-files-*/

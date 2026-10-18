@@ -1,0 +1,31 @@
+--------- beginning of main
+10-18 15:31:05.214   275   275 E SELinux : avc:  denied  { find } for interface=android.hardware.audio::IDevicesFactory sid=u:r:shell:s0 pid=2287 scontext=u:r:shell:s0 tcontext=u:object_r:hal_audio_hwservice:s0 tclass=hwservice_manager permissive=0
+10-18 15:31:05.224   275   275 E SELinux : avc:  denied  { find } for interface=android.hidl.base::IBase sid=u:r:shell:s0 pid=2287 scontext=u:r:shell:s0 tcontext=u:object_r:hidl_base_hwservice:s0 tclass=hwservice_manager permissive=0
+10-18 15:31:05.225   275   275 E SELinux : avc:  denied  { find } for interface=android.hidl.base::IBase sid=u:r:shell:s0 pid=2287 scontext=u:r:shell:s0 tcontext=u:object_r:hidl_base_hwservice:s0 tclass=hwservice_manager permissive=0
+10-18 15:31:05.226   275   275 E SELinux : avc:  denied  { find } for interface=android.hidl.base::IBase sid=u:r:shell:s0 pid=2287 scontext=u:r:shell:s0 tcontext=u:object_r:hidl_base_hwservice:s0 tclass=hwservice_manager permissive=0
+10-18 15:31:05.237  2287  2287 I lshal   : getDeviceHalManifest: Reading VINTF information.
+10-18 15:31:05.238  2287  2287 I lshal   : Loaded APEX Infos from /apex/apex-info-list.xml
+10-18 15:31:05.239  2287  2287 I lshal   : Loaded APEX Infos from /apex/apex-info-list.xml
+10-18 15:31:05.239  2287  2287 I lshal   : getDeviceHalManifest: Successfully processed VINTF information
+10-18 15:31:05.239  2287  2287 I lshal   : getFrameworkHalManifest: Reading VINTF information.
+10-18 15:31:05.239  2287  2287 I lshal   : Loaded APEX Infos from /apex/apex-info-list.xml
+10-18 15:31:05.239  2287  2287 I lshal   : getFrameworkHalManifest: Successfully processed VINTF information
+10-18 15:31:05.239  2287  2287 I lshal   : getDeviceCompatibilityMatrix: Reading VINTF information.
+10-18 15:31:05.239  2287  2287 I lshal   : getDeviceCompatibilityMatrix: Successfully processed VINTF information
+10-18 15:31:05.240  2287  2287 W lshal   : uname() reports kernel level 202504 but device manifest sets kernel level 8. Using kernel level 202504
+10-18 15:31:05.240  2287  2287 I lshal   : getFrameworkCompatibilityMatrix: Reading VINTF information.
+10-18 15:31:05.247  2287  2287 I lshal   : getFrameworkCompatibilityMatrix: Successfully processed VINTF information
+10-18 15:31:05.768  2377  2377 W libbinder.BackendUnifiedServiceManager: Thread Pool max thread count is 0. Cannot cache binder as linkToDeath cannot be implemented. serviceName: package
+10-18 15:31:05.820  2381  2381 W libbinder.BackendUnifiedServiceManager: Thread Pool max thread count is 0. Cannot cache binder as linkToDeath cannot be implemented. serviceName: package
+10-18 15:31:05.881  2385  2385 I artd    : Starting artd
+10-18 15:31:05.882  2385  2385 I libbinder.AidlLazyServiceRegistrar: Registering service artd
+10-18 15:31:05.884  2385  2385 I libbinder.AidlLazyServiceRegistrar: Process has 1 (of 1 available) client(s) in use after notification artd has clients: 1
+10-18 15:31:05.900  2385  2385 I artd    : GetBestInfo: odex next to the dex file (/system_ext/priv-app/Settings/oat/x86_64/Settings.odex) is kOatUpToDate with filter 'verify' executable 'false'
+10-18 15:31:05.942  2389  2389 W libbinder.BackendUnifiedServiceManager: Thread Pool max thread count is 0. Cannot cache binder as linkToDeath cannot be implemented. serviceName: package
+10-18 15:31:06.006  2392  2392 W libbinder.BackendUnifiedServiceManager: Thread Pool max thread count is 0. Cannot cache binder as linkToDeath cannot be implemented. serviceName: package
+10-18 15:31:06.077  2397  2397 W ls      : type=1400 audit(0.0:86): avc:  denied  { getattr } for  path="/data_mirror" dev="tmpfs" ino=1 scontext=u:r:shell:s0 tcontext=u:object_r:mirror_data_file:s0 tclass=dir permissive=0
+10-18 15:31:06.081  2397  2397 W ls      : type=1400 audit(0.0:87): avc:  denied  { getattr } for  path="/init.environ.rc" dev="dm-0" ino=26 scontext=u:r:shell:s0 tcontext=u:object_r:rootfs:s0 tclass=file permissive=0
+10-18 15:31:06.081  2397  2397 W ls      : type=1400 audit(0.0:88): avc:  denied  { getattr } for  path="/init" dev="dm-0" ino=25 scontext=u:r:shell:s0 tcontext=u:object_r:init_exec:s0 tclass=lnk_file permissive=0
+10-18 15:31:06.081  2397  2397 W ls      : type=1400 audit(0.0:89): avc:  denied  { getattr } for  path="/postinstall" dev="dm-0" ino=44 scontext=u:r:shell:s0 tcontext=u:object_r:postinstall_mnt_dir:s0 tclass=dir permissive=0
+10-18 15:31:06.081  2397  2397 W ls      : type=1400 audit(0.0:90): avc:  denied  { getattr } for  path="/system_dlkm" dev="overlay" ino=2 scontext=u:r:shell:s0 tcontext=u:object_r:system_dlkm_file:s0 tclass=dir permissive=0
+10-18 15:31:06.284  2407  2407 W libbinder.BackendUnifiedServiceManager: Thread Pool max thread count is 0. Cannot cache binder as linkToDeath cannot be implemented. serviceName: dropbox
