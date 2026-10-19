@@ -244,6 +244,9 @@ class MainWindow(W.QMainWindow):
 
     def closeEvent(self, e):
         for p in self.pages.values():
+            if hasattr(p, "shutdown"):   # 功能启动页：停止本机服务进程
+                p.shutdown()
+        for p in self.pages.values():
             if p.device is not None:
                 p.unload()
         super().closeEvent(e)

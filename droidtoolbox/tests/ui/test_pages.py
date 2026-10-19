@@ -69,7 +69,7 @@ def test_default_theme_is_light(win):
 
 def test_every_page_opens(win, qapp):
     assert list(win.pages) == ["devices", "commands", "shell", "logcat", "bugreport", "props", "settings_db", "services",
-                               "apps", "files", "mirror", "prefs"]
+                               "apps", "files", "mirror", "launcher", "prefs"]
     for pid in win.pages:
         win.open_page(pid)
         pump(qapp, 0.7)

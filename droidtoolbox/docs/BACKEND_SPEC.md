@@ -50,6 +50,21 @@ scrcpy 自带一个 adb，启动 scrcpy 时必须设置环境变量 `ADB=<我们
 | `start_scrcpy` 新选项 | `--window-title=<title>`、`--window-x=`、`--window-y=`、`--window-width=`、`--window-height=`（None 不加） | scrcpy 4.x 参数名以 `scrcpy --help` 为准；其余见 2.9 节 |
 | `device_detail` 新字段 | 在 2.1 节的分段脚本里补 `cat /proc/version` 与 getprop | `build_date`=`ro.build.date`；`vendor_security_patch`=`ro.vendor.build.security_patch`；`baseband`=`gsm.version.baseband`；`bootloader`=`ro.bootloader`；`verified_boot`=`ro.boot.verifiedbootstate`；`kernel_full`=`/proc/version`；`partition_fingerprints`：`ro.<part>.build.fingerprint`（part ∈ system / system_ext / product / vendor / odm），缺的不放 |
 
+### 0.3.1 运行时权限分类（v3.1 补充）
+
+问题：`package_detail` 里，已申请但未授予的运行时权限（如 CAMERA）在 `dumpsys package` 中只出现在 `requested permissions:`，
+不出现在 `runtime permissions:` 段，当前被归为 `runtime=False`，界面因此不显示授予开关。
+
+要求：对 `requested permissions` 中既不在 install 段、也不在所选用户 runtime 段的权限，**查询设备上的权限定义**确定保护级别：
+保护级别包含 `dangerous`（运行时权限）→ `Permission(name, granted=False, runtime=True)`；其余（normal / signature / 查不到定义）→ `runtime=False`。
+
+- 实测注意：Android 16 模拟器上 `pm list permissions -d -u` 的 “Dangerous Permissions:” 段为空，CAMERA 不在其中，**不能依赖它**。
+  先在模拟器上比较候选来源并选用可靠的一种：`dumpsys package permission <perm1> <perm2> ...`（看 `prot=` / `protectionLevel`）、
+  `pm list permissions -f -g`（看 `protectionLevel:`）等；把采用的命令和输出样本记录到 fixtures 与 BACKEND_REPORT。
+- 一次调用批量查询该包所有待分类权限，不要逐个权限起进程；结果按设备缓存（权限定义在设备运行期间不变，设备重新上线后失效）。
+- 查询失败时退回原行为（`runtime=False`），不让整个 `package_detail` 失败。
+- 已授予的运行时权限、install 权限的判定方式保持不变。
+
 ### 0.4 测试设备
 
 本机有一台 Android 16（API 36）userdebug 模拟器 `emulator-5554`（x86_64，SELinux Enforcing，只有 user 0，adbd 默认非 root）。真机测试用它：`DTB_DEVICE=emulator-5554`。

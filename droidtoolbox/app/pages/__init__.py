@@ -4,6 +4,7 @@ from .apps import AppsPage
 from .bugreport import BugreportPage
 from .devices import DevicesPage
 from .files import FilesPage
+from .launcher import LauncherPage
 from .logcat import LogcatPage
 from .mirror import MirrorPage
 from .prefs import PrefsPage
@@ -17,5 +18,5 @@ GROUPS = [
     ("调试", [AdbCommandsPage, ShellPage, LogcatPage, BugreportPage]),
     ("系统", [PropsPage, SettingsDbPage, ServicesPage]),
     ("管理", [AppsPage, FilesPage, MirrorPage]),
-    ("工具箱", [PrefsPage]),
+    ("工具箱", [LauncherPage, PrefsPage]),
 ]

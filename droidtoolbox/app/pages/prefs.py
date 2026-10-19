@@ -5,7 +5,7 @@ import platform
 import sys
 
 import tbui as ui
-from tbui._qt import BINDING, QtWidgets, Qt
+from tbui._qt import BINDING, QtGui, QtWidgets, Qt
 
 from .. import __version__
 from ..backend.models import ToolInfo
@@ -84,6 +84,8 @@ class PrefsPage(Page):
                   "超过上限丢弃最早的行；重新打开 Logcat 生效")
         self._row(form, "Logcat 启动时回溯", self._select("logcat_tail", [(0, "0"), (500, "500"), (2000, "2000"),
                                                                          (10000, "10k")]), "启动时回溯的行数（logcat -T）")
+        ports = hbox(self._port("winscope_web_port", "web"), self._port("winscope_proxy_port", "proxy"), spacing=6)
+        self._row(form, "Winscope 端口", ports, "Web 界面 / ADB 代理；修改后下次启动生效")
         v.addWidget(ui.card("外观与行为", beh))
 
         # 导出目录 ------------------------------------------------------
@@ -123,6 +125,16 @@ class PrefsPage(Page):
         c = narrow_select([(str(v), t) for v, t in options], str(self.ctx.settings.get(key)), 88)
         c.currentIndexChanged.connect(lambda *_: self.ctx.settings.set(key, int(c.currentData())))
         return c
+
+    def _port(self, key, tip):
+        e = W.QLineEdit(str(self.ctx.settings.get(key)))
+        e.setFixedWidth(64)
+        e.setFont(ui.theme().mono_font(12))
+        e.setToolTip(f"{tip} 端口（1024–65535）")
+        e.setValidator(QtGui.QIntValidator(1024, 65535, e))
+        ui.repolish(e, size="sm")
+        e.editingFinished.connect(lambda: e.hasAcceptableInput() and self.ctx.settings.set(key, int(e.text())))
+        return e
 
     def _theme(self, name):
         if name != ui.theme().name:

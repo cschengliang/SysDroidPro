@@ -25,6 +25,10 @@ DEFAULTS = {
     "mirror_window_y": "",
     "mirror_window_width": "",
     "mirror_window_height": "",
+    # Winscope：网页目录（空串为附带的 tool/tools/winscope-android17）与端口
+    "winscope_dir": "",
+    "winscope_web_port": 8080,
+    "winscope_proxy_port": 5544,
 }
 
 
