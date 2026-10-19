@@ -91,4 +91,6 @@ droidtoolbox/
 - `SegmentedControl`：固定尺寸策略（放进工具栏时不再被拉高），新增 `set_value()`。
 - `LogFilterProxy`：Qt 6.10+ 使用 `beginFilterChange/endFilterChange`；新增按 PID 过滤（`set_filter(pids=...)`）。
 - `Switch`、`DeviceStatus`、`Sidebar`、`DeviceList`、`LogView`：主题监听改为绑定方法，修复控件销毁后切换主题报错。
+- `Switch`：最小尺寸等于文字宽度，放进工具栏时文字不被截断。
+- `PropertyList`：键名列宽改为 35% 并限定在 110–170px（原为固定 40%）。
 - `icons/`：新增 Lucide 图标 chevron-up、arrow-up、arrow-left、house、folder-plus、save、lock、lock-open、layers、server、list、volume-1、volume-2、video、circle、image、pencil、shield、sliders、sun。

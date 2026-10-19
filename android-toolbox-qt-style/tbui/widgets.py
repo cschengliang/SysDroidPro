@@ -292,6 +292,10 @@ class Switch(W.QAbstractButton):
         fm = self.fontMetrics()
         return QtCore.QSize(32 + (8 + fm.horizontalAdvance(self.text()) if self.text() else 0), 20)
 
+    def minimumSizeHint(self):
+        """放进工具栏时不被压到比文字还窄（否则文字被截断）。"""
+        return self.sizeHint()
+
     def hitButton(self, pos):
         return self.rect().contains(pos)
 
@@ -655,7 +659,8 @@ class PropertyList(W.QTableWidget):
             self.item(r, 0).setForeground(theme().color("ink-muted"))
 
     def resizeEvent(self, e):
-        self.setColumnWidth(0, int(self.viewport().width() * 0.4))
+        # 键名列：35%，限定在 110–170px（宽时不浪费、窄时键名不被截断，值列拿到更多空间）
+        self.setColumnWidth(0, max(110, min(170, int(self.viewport().width() * 0.35))))
         super().resizeEvent(e)
 
     def _copy(self, item):

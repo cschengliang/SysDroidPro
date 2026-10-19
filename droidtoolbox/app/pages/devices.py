@@ -48,7 +48,7 @@ class DevicesPage(Page):
 
         left = W.QWidget()
         left.setProperty("surface", "panel")
-        left.setFixedWidth(300)
+        left.setFixedWidth(260)
         ll = W.QVBoxLayout(left)
         ll.setContentsMargins(0, 0, 0, 0)
         ll.setSpacing(0)
@@ -72,9 +72,11 @@ class DevicesPage(Page):
         lay.addWidget(left)
         lay.addWidget(vline())
 
+        self._grid = None
         self.scroll = W.QScrollArea()
         self.scroll.setWidgetResizable(True)
         self.scroll.setFrameShape(W.QFrame.Shape.NoFrame)
+        self.scroll.viewport().installEventFilter(self)
         lay.addWidget(self.scroll, 1)
 
         self.detail: DeviceDetail | None = None
@@ -135,6 +137,20 @@ class DevicesPage(Page):
         self.ctx.state.refresh_devices()
         self._render(self.ctx.state.current)
 
+    def eventFilter(self, obj, ev):
+        if obj is self.scroll.viewport() and ev.type() == ev.Type.Resize:
+            self._relayout()
+        return False
+
+    def _relayout(self):
+        """版本信息与状态卡片：宽时并排，窄时上下排列，避免出现横向滚动。"""
+        try:
+            if self._grid is not None:
+                narrow = self.scroll.viewport().width() < 820
+                self._grid.setDirection(W.QBoxLayout.Direction.TopToBottom if narrow else W.QBoxLayout.Direction.LeftToRight)
+        except RuntimeError:   # 详情已重绘，旧布局已销毁
+            self._grid = None
+
     def _restart_server(self):
         self.ctx.run(self.ctx.backend.restart_server,
                      done=lambda _: (self.ctx.notify("ok", "adb 服务已重启"), self.ctx.state.refresh_devices()))
@@ -143,14 +159,15 @@ class DevicesPage(Page):
     def _render(self, d: Device | None):
         self.detail = None
         self.root = None
+        self._grid = None
         self._detail_serial = d.serial if d else None
         self._log.setParent(None)                  # 输出区跨设备保留，重绘前先摘下
         page = W.QWidget()
         page.setProperty("page", True)
         self.scroll.setWidget(page)
         v = W.QVBoxLayout(page)
-        v.setContentsMargins(24, 24, 24, 24)
-        v.setSpacing(16)
+        v.setContentsMargins(16, 16, 16, 16)
+        v.setSpacing(12)
         self._v = v
         if d is None:
             v.addWidget(ui.EmptyState("smartphone", "选择或连接一台设备",
@@ -158,6 +175,9 @@ class DevicesPage(Page):
             return
 
         name = W.QLabel(d.display_name)
+        name.setToolTip(d.display_name)
+        name.setMinimumWidth(0)                      # 名字过长时截断，不把右侧快捷按钮挤出去
+        name.setSizePolicy(W.QSizePolicy.Policy.Ignored, W.QSizePolicy.Policy.Preferred)
         name.setFont(ui.theme().display_font(24))
         sub = [ui.DeviceStatus("fastboot" if d.state == "bootloader" else d.state), label(d.serial, "muted", mono=True)]
         if d.android:
@@ -240,21 +260,19 @@ class DevicesPage(Page):
         """一行：按钮 + 状态，紧凑排列。"""
         box = W.QWidget()
         h = W.QHBoxLayout(box)
-        h.setContentsMargins(12, 8, 12, 8)
+        h.setContentsMargins(10, 8, 10, 8)
         h.setSpacing(6)
-        self.root_btn = tbtn("Root", "adb root / unroot", "primary", icon="shield", width=84)
+        self.root_btn = tbtn("Root", "adb root / unroot", "primary", icon="shield")
         self.root_state_lbl = label("adbd: —", "muted", mono=True)
         self.remount_btn = tbtn("Remount", "adb remount：未 root 时自动先 root；需要关闭 verity 时询问一次，重启后自动继续",
-                                "primary", icon="hard-drive", width=96)
-        self.rw_state_lbl = label("/system: —", "muted", mono=True)
-        self.reboot_btn = tbtn("Reboot", "重启系统", icon="rotate-ccw", width=84)
+                                "primary", icon="hard-drive")
+        self.rw_state_lbl = label("/system: — · verity: —", "muted", mono=True)
+        self.reboot_btn = tbtn("Reboot", "重启系统", icon="rotate-ccw")
         self.reboot_btn.clicked.connect(lambda: self._reboot("system"))
         more = ui.icon_button("chevron-down", "更多重启方式：Recovery / Bootloader / Fastbootd / Sideload / 关机")
         more.setMenu(self._reboot_menu())
         more.setPopupMode(W.QToolButton.ToolButtonPopupMode.InstantPopup)
-        self.verity_lbl = label("verity: —", "faint", mono=True)
-        for w in (self.root_btn, self.root_state_lbl, 12, self.remount_btn, self.rw_state_lbl, 12,
-                  self.reboot_btn, more, 12, self.verity_lbl):
+        for w in (self.root_btn, self.root_state_lbl, 10, self.remount_btn, self.rw_state_lbl, 10, self.reboot_btn, more):
             h.addSpacing(w) if isinstance(w, int) else h.addWidget(w)
         h.addStretch(1)
         self.root_btn.clicked.connect(self._toggle_root)
@@ -301,10 +319,11 @@ class DevicesPage(Page):
             ui.repolish(self.root_state_lbl, tone="ok" if rs.adbd_root else None)
             self.root_btn.setText("Unroot" if rs.adbd_root else "Root")
             self._variant(self.root_btn, "shield", primary=not rs.adbd_root)
-            self.rw_state_lbl.setText("/system: rw" if rs.system_writable else "/system: ro" if rs.system_writable is False else "/system: —")
+            rw = "rw" if rs.system_writable else "ro" if rs.system_writable is False else "—"
+            verity = "on" if rs.verity_enabled else "off" if rs.verity_enabled is False else "—"
+            self.rw_state_lbl.setText(f"/system: {rw} · verity: {verity}")
             ui.repolish(self.rw_state_lbl, tone="ok" if rs.system_writable else None)
             self._variant(self.remount_btn, "hard-drive", primary=not rs.system_writable)
-            self.verity_lbl.setText("verity: " + ("on" if rs.verity_enabled else "off" if rs.verity_enabled is False else "—"))
             if user_build:
                 for b in (self.root_btn, self.remount_btn):
                     b.setEnabled(False)
@@ -461,11 +480,12 @@ class DevicesPage(Page):
         sl.addWidget(label(f"开机时长 {fmt_duration(dd.uptime_s)}", "faint", mono=True, px=11))
         sl.addStretch(1)
 
-        grid = W.QHBoxLayout()
+        grid = self._grid = W.QBoxLayout(W.QBoxLayout.Direction.LeftToRight)
         grid.setSpacing(16)
         grid.addWidget(version_card, 8, Qt.AlignmentFlag.AlignTop)
         grid.addWidget(ui.card("状态", status), 4, Qt.AlignmentFlag.AlignTop)
         self._info.addLayout(grid)
+        self._relayout()
         self._info.addWidget(self._apex_card())
 
     def _copy_versions(self):

@@ -81,7 +81,7 @@ class SettingsDbPage(Page):
         self.ns = tb.add(ui.SegmentedControl(TABS, "global", mono=True, label="命名空间"))
         self.ns.setToolTip("settings 命名空间；presets 为常用键（带备注）")
         self.user = tb.add(narrow_select([("0", "u0", "用户 0")], "0", 64, "Android 用户：system / secure 按用户区分，global 对所有用户生效"))
-        self.filter = tb.add(grow(ui.FilterField("Filter: key / value / note", width=240), 240))
+        self.filter = tb.add(grow(ui.FilterField("Filter: key / value / note", width=240), 160))
         self.snap = tb.add(SnapshotBar(self.ctx, "settings", self._fetch_all, noun="设置项"))
         self.copy = tb.add(ui.icon_button("copy", "复制所选（key=value）"))
         self.export = tb.add(ui.icon_button("download", "导出当前命名空间"))

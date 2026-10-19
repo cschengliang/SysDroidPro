@@ -7,7 +7,7 @@ from pathlib import Path
 import tbui as ui
 from tbui._qt import QtCore, QtWidgets, Qt
 
-from ..ui.common import BusyBar, Column, DataTable, Dialog, grow, narrow_select, tbtn
+from ..ui.common import BusyBar, Column, DataTable, Dialog, grow, narrow_select
 from ..ui.snapshot import SnapshotBar
 from .base import Page
 
@@ -16,6 +16,7 @@ PREFIXES = [("all", "all", "全部属性"), ("ro.", "ro.", "只读属性（build
             ("sys.", "sys.", "系统运行时属性"), ("vendor.", "vendor.", "vendor 属性"), ("init.svc.", "init.svc.", "init 服务状态"),
             ("debug.", "debug.", "调试开关")]
 HIGHLIGHT_S = 4          # 监视时变化高亮持续秒数
+WATCH_TIP = "监视所选属性：每秒刷新，值变化时高亮（适合观察 init.svc.*、sys.* 状态切换）"
 
 
 class PropsPage(Page):
@@ -30,18 +31,17 @@ class PropsPage(Page):
         tb = ui.Toolbar()
         refresh = tb.add(ui.icon_button("refresh-cw", "重新读取（F5）"))
         tb.separator()
-        self.filter = tb.add(grow(ui.FilterField("Filter: name / value", width=260), 260))
+        self.filter = tb.add(grow(ui.FilterField("Filter: name / value", width=260), 180))
         self.prefix = tb.add(narrow_select(PREFIXES, "all", 96, "按前缀筛选"))
         tb.separator()
-        self.ctx_btn = tb.add(tbtn("Context", "显示每个属性的 SELinux 上下文（getprop -Z）", icon="shield", checkable=True))
-        self.watch_btn = tb.add(tbtn("Watch", "每秒刷新所选属性，值变化时高亮（适合观察 init.svc.*、sys.* 状态切换）",
-                                     icon="gauge", checkable=True))
+        self.ctx_btn = tb.add(ui.icon_button("shield", "显示 SELinux 上下文列（getprop -Z）", checkable=True))
+        self.watch_btn = tb.add(ui.icon_button("gauge", WATCH_TIP, checkable=True))
         tb.separator()
         self.snap = tb.add(SnapshotBar(self.ctx, "props", lambda s: self.ctx.backend.get_props(s), noun="属性"))
         tb.separator()
         copy = tb.add(ui.icon_button("copy", "复制所选（name=value）"))
         export = tb.add(ui.icon_button("download", "导出为 build.prop 格式"))
-        setp = tb.add(tbtn("setprop", "设置属性（双击一行也可以修改）", icon="pencil"))
+        setp = tb.add(ui.icon_button("pencil", "setprop：设置属性（双击一行也可以修改）"))
         lay.addWidget(tb)
         self.busy = BusyBar()
         lay.addWidget(self.busy)
@@ -143,12 +143,12 @@ class PropsPage(Page):
                 self.ctx.notify("info", "先在表格中选中要监视的属性", "可以按住 Ctrl 多选。")
                 return
             self._watched = {r[0] for r in rows}
-            self.watch_btn.setText(f"Watch {len(self._watched)}")
+            self.watch_btn.setToolTip(f"正在监视 {len(self._watched)} 个属性，点击停止")
             self._timer.start()
         else:
             self._timer.stop()
             self._watched = set()
-            self.watch_btn.setText("Watch")
+            self.watch_btn.setToolTip(WATCH_TIP)
         self.table.viewport().update()
         self.ctx.window.update_status(self)
 

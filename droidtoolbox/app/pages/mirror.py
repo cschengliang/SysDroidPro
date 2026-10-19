@@ -50,7 +50,7 @@ class MirrorPage(Page):
         lay.addWidget(tb)
         # 第二行：开关与窗口位置
         tb2 = ui.Toolbar()
-        tb2.layout().setSpacing(14)             # 开关之间留出间距，文字不贴下一个开关
+        tb2.layout().setSpacing(12)             # 开关之间留出间距，文字不贴下一个开关
         self.sw_awake = tb2.add(ui.Switch("Awake", True))
         self.sw_off = tb2.add(ui.Switch("Screen off", False))
         self.sw_touch = tb2.add(ui.Switch("Touches", False))
@@ -68,7 +68,7 @@ class MirrorPage(Page):
             e = tb2.add(W.QLineEdit(str(self.ctx.settings.get(key))))
             e.setPlaceholderText(ph)
             e.setToolTip(f"{tip}；留空由 scrcpy 决定，修改后自动记住")
-            e.setFixedWidth(56)
+            e.setFixedWidth(48)
             e.setFont(ui.theme().mono_font(12))
             ui.repolish(e, size="sm")
             e.setValidator(QtGui.QIntValidator(-10000, 10000, e))

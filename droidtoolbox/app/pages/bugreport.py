@@ -48,8 +48,9 @@ class BugreportPage(Page):
         ll.addWidget(self.head)
         self.table = DataTable([
             Column("类型", lambda c: KIND_TEXT[c.kind][0], 100, tone=lambda c: KIND_TEXT[c.kind][1]),
-            Column("进程", lambda c: c.process, 170, mono=True, tip=lambda c: c.path),
-            Column("时间", lambda c: fmt_ago(c.mtime), 84, sort=lambda c: c.mtime or 0,
+            Column("进程 / 名称", lambda c: c.process or c.name.split("@")[0], 190, mono=True, tip=lambda c: c.path,
+                   tone=lambda c: None if c.process else "ink-muted"),
+            Column("时间", lambda c: fmt_ago(c.mtime), 100, sort=lambda c: c.mtime or 0,
                    tip=lambda c: time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(c.mtime)) if c.mtime else ""),
             Column("大小", lambda c: fmt_size(c.size), 84, mono=True, align="right", sort=lambda c: c.size or 0),
             Column("摘要", lambda c: c.summary, None, tip=lambda c: c.summary or ""),
