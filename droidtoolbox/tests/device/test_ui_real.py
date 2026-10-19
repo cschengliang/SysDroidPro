@@ -8,7 +8,7 @@ from tests.conftest import pump, wait_until
 pytestmark = [pytest.mark.device, pytest.mark.ui]
 
 
-def test_twelve_pages_real_backend(qapp, device_backend, serial, tmp_path, monkeypatch):
+def test_all_pages_real_backend(qapp, device_backend, serial, tmp_path, monkeypatch):
     from app.core.commands import CommandStore
     from app.core.settings import Settings
     from app.core.state import AppState
@@ -30,7 +30,7 @@ def test_twelve_pages_real_backend(qapp, device_backend, serial, tmp_path, monke
         state.start()
         assert wait_until(qapp, lambda: state.current is not None, 5)
         state.select(serial)
-        assert len(window.pages) == 12 and state.backend.name == "adb"
+        assert len(window.pages) == 13 and state.backend.name == "adb"
         assert not any(label.text() == "MOCK" for label in window.findChildren(QtWidgets.QLabel))
         for pid in window.pages:
             window.open_page(pid)

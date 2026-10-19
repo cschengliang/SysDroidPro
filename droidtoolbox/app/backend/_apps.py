@@ -1,13 +1,38 @@
 """按 Android 用户查询应用、权限、组件并执行包操作。"""
 from pathlib import Path
 import re
+import threading
 
 from . import api, parsers as P
 from ._base import detail, quote_args
 from ._system import user_args
 
 
+class _PermissionCache:
+    def __init__(self):
+        self.lock = threading.Lock()
+        self.definitions = None
+
+
 class AppMethods:
+    def _permission_definitions(self, serial):
+        with self._permission_cache_lock:
+            entry = self._permission_cache.setdefault(serial, _PermissionCache())
+        # Only callers for the same device wait for this query. Inventory invalidation
+        # never takes entry.lock, so a slow query cannot delay device polling.
+        with entry.lock:
+            if entry.definitions is None:
+                try:
+                    definitions = P.permission_definitions(self._shell(serial, "pm list permissions -f -g", timeout=10))
+                except api.BackendError:
+                    return {}
+                if not definitions:
+                    return {}  # Retry on the next detail request after a transient failure.
+                entry.definitions = definitions
+            with self._permission_cache_lock:
+                # A disconnect/configure during the query must not publish stale data.
+                return entry.definitions if self._permission_cache.get(serial) is entry else {}
+
     def list_packages(self, serial, user=0):
         suffix = user_args(user)
         listing = self._shell(serial, quote_args("pm", "list", "packages", "-f", "-U", "--show-versioncode", *suffix))
@@ -26,7 +51,8 @@ class AppMethods:
         disabled = f"package:{package}" if not parsed.info.enabled else ""
         info = next((item for item in P.packages(listing, system, disabled, raw) if item.name == package), parsed.info)
         resolved = self._resolve(serial, package, user)
-        return P.package_detail(raw, package, user, info, bool(resolved))
+        definitions = self._permission_definitions(serial) if P.pending_permissions(raw, package, user) else {}
+        return P.package_detail(raw, package, user, info, bool(resolved), definitions)
 
     def package_components(self, serial, package, user=0):
         raw = self.dump_package(serial, package)

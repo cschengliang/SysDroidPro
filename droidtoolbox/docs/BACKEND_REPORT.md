@@ -110,3 +110,52 @@ $env:DTB_DESTRUCTIVE = '1'
 最后一次设备审计结果：adbd UID **2000**（非 root），build_type=userdebug，**/system 只读**，**verity=enforcing**，traced_probes **running**；无 debug.dtb.* 新键，无 dtb_test* 设置键，无 com.droidtoolbox.backendtest 安装包，无运行中的 dumpstate，无 dtb_probe_* / dtb_sample_* / dtb_test 临时目录。主机无残留 scrcpy 或本次创建的 adb 子进程，仅保留原有 SDK adb server。完整 Bugreport 测试临时 root 后也已恢复。
 
 所有可恢复写用例均使用 finally；没有执行 reboot、remount、disable-verity、刷写/擦除、停用系统组件或清除系统应用数据。独立测试 APK 的组件和数据操作均限定在该测试包内。受保护文件与基线比较没有差异。
+
+## 2026-10-19 后续：运行时权限分类（v3.1）
+
+已按 `BACKEND_SPEC.md` 第 0.3.1 节实现。本节取代上文“需要前端配合的问题”第 3 项关于未授予运行时权限的旧结论：独立测试 APK 的 CAMERA 在只出现在 requested permissions 时，现在返回 `granted=False, runtime=True`，前端可按现有契约显示授予开关，无需修改接口或界面。
+
+### 命令选择与真实样本
+
+先在 `emulator-5554`（Android 16 / API 36）保存原始输出，再实现解析器。命令均带 `adb -s emulator-5554 shell` 前缀，以下四次采样退出码均为 0、stderr 为空；命令及字节数见 `tests/fixtures/permission_definitions_commands.json`。
+
+| shell 命令 | 样本 | 实测结果 |
+| --- | --- | --- |
+| `dumpsys package permission android.permission.CAMERA android.permission.RECORD_AUDIO android.permission.INTERNET android.permission.WRITE_SECURE_SETTINGS no.such.permission` | `permission_definitions_dumpsys.emu36` | 161,955 字节；能返回已知权限的 `prot=`，但还附带大量包信息，未知权限没有定义。 |
+| **`pm list permissions -f -g`** | `permission_definitions_pm.emu36` | **采用此来源**。231,198 字节，解析出 1,281 个定义，其中 143 个含 `dangerous`。CAMERA / RECORD_AUDIO 为 `dangerous|instant`，INTERNET 为 `normal|instant`，WRITE_SECURE_SETTINGS 为 `signature|privileged|development|installer|role`。 |
+| `pm list permissions -d -u` | `permission_definitions_pm_d_u.emu36` | 6,078 字节；Dangerous Permissions 段为空，没有 CAMERA / RECORD_AUDIO，不可用于此功能。 |
+| `su 2000 sh -c 'pm list permissions -f -g'` | `permission_definitions_pm_shell.emu36` | 本轮核对时 adbd 已是 UID 0；先用 `su 2000 id -u` 确认降到 shell UID，再采样同一查询。定义数量、分类结果与上面完全相同，证明查询不需要 root，未为采样切换 adbd。 |
+
+选择完整定义列表，单次查询同时覆盖该包所有待分类权限及后续包，避免逐个权限启动进程。解析仅使用权限记录的 `protectionLevel:` 和按 `|` 分开的完整 `dangerous` 标志，不依赖权限组、翻译后的标签、描述或内置权限名单。
+
+### 实现与缓存决定
+
+- `app/backend/parsers.py`：新增定义解析和待分类权限提取；仅为 requested 中既无 install 记录、也无所选用户 runtime 记录的权限补全分类。未知定义仍为 `runtime=False`，未授予状态保持 `granted=False`。显式 install 和所选用户 runtime 记录继续覆盖补全值，其他用户的授予状态不会串入。
+- `app/backend/_apps.py`：只有存在待分类权限时才请求定义。同一设备首次成功查询整张表，此后跨包、跨用户复用；每台设备单独加锁，并发详情请求只发一次成功查询，慢设备不会阻塞其他设备。
+- `app/backend/_base.py`、`_devices.py`：设备消失、离线、未授权、状态变化、ADB `transport_id` 变化、显式 connect/disconnect、root/unroot、重启 adb server 或重新配置工具时使相应缓存失效。即使设备在两轮枚举之间断开又重连、序列号和在线状态相同，也可通过新的 transport ID 失效缓存。失效时不等待正在查询的线程，旧会话返回的结果不会重新写回有效缓存。
+- 定义查询超时、非零退出、工具/连接/权限错误或完全无法解析时，详情退回原有分类；不缓存失败，下次详情请求可以重试。包自身查询、包不存在等既有错误处理保持原样。
+
+本次只修改上述后端实现、`tests/fakes.py`、新增的 `tests/backend/test_permissions.py` / `tests/device/test_permissions.py`、四个 `.emu36` 样本及其命令记录/README，并追加本报告。未修改 `api.py`、`models.py`、界面、core、契约测试或 `tool/`。工作留在原工作区；本轮没有 Git 提交、push 或新建独立 Git 目录。并行工程师的界面/core 文件改动保留原状。
+
+### 本轮测试结果
+
+使用嵌入式 Python 3.14.8、既有 `DTB_TEST_INHERIT_ACL=1`，先创建工作区 `.test-tmp/`，并将 TEMP/TMP 指向它。新增权限测试共 **25 项离线测试 + 1 项设备测试**。覆盖真实样本、危险/普通/签名/未知权限、显式 install 和多用户 runtime 优先级、一次批量查询、跨包复用、设备隔离、失败回退及重试、离线/重新上线/transport 更换失效、并发请求和查询中途断开。
+
+| 命令 | 结果 |
+| --- | --- |
+| `python -m pytest --tb=short`，未设置 DTB_DEVICE | **179 passed, 14 skipped, 2 failed**，133.53 秒；两项失败均在并行新增的 `tests/ui/test_launcher.py`。 |
+| `DTB_DEVICE=emulator-5554 python -m pytest -m device --tb=short` | **25 passed, 10 skipped, 1 failed, 181 deselected**，17.71 秒；唯一失败是界面页数断言。 |
+| 同上并设置 `DTB_DESTRUCTIVE=1` | **33 passed, 2 skipped, 1 failed, 181 deselected**，28.47 秒；唯一失败同上。新增 CAMERA 设备用例通过。 |
+| `python -m pytest -m 'not ui' --tb=short`，未设置 DTB_DEVICE | **159 passed, 13 skipped, 23 deselected**，22.90 秒，全部后端及离线契约通过。 |
+| `DTB_DEVICE=emulator-5554 DTB_DESTRUCTIVE=1 python -m pytest tests/device/test_permissions.py -q` | **1 passed**，2.38 秒；独立权限设备用例另行执行通过。 |
+| `python -m pyflakes app tests` | **退出码 0，无输出**。 |
+
+按本次任务要求忽略并记录并行界面失败，没有修改相关文件：
+
+1. `tests/ui/test_launcher.py::test_winscope_start_serve_and_stop`：Winscope proxy 进程以退出码 1 结束，服务未进入 running。
+2. `tests/ui/test_launcher.py::test_close_window_stops_service`：同样未进入 running。
+3. `tests/device/test_ui_real.py::test_twelve_pages_real_backend`：仍要求 12 页，但并行修改已增加到 13 页，默认和 destructive 两次设备运行都在该断言失败。
+
+两个 destructive 跳过项沿用此前条件：禁止在模拟器执行的 root/remount 状态机仅用 FakeRunner 验证，以及设备没有可精确恢复的预存 `debug.dtb.*` 属性。本轮权限功能没有未实现项或规格偏差。
+
+设备权限用例使用已有 `tests/fixtures/apk/backend-test.apk`，拒绝覆盖预装同名包；安装时不带 `-g`，确认 CAMERA 在待分类权限中，再验证 `(runtime, granted)` 依次为 **`(True, False)` → grant → `(True, True)` → revoke → `(True, False)`**。finally 卸载并确认包消失，同时检查 root、挂载和 verity 状态与用例开始时相同。本轮复核实际环境为 adbd UID **0**、`/` ro、`/system` overlay **rw**、verity **enforcing**，与上一轮报告中的设备状态不同；本轮未调用 remount、disable-verity、reboot 或刷写，也未自行改变该环境状态。最终无测试 APK、无 dumpstate、无 `debug.dtb.*` 或 `dtb_test*` 设置残留，traced_probes 为 running。

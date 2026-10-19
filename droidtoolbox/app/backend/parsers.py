@@ -281,7 +281,42 @@ def packages(output, system="", disabled="", metadata=""):
     return sorted(result, key=lambda row: row.name)
 
 
-def package_detail(output, package, user=0, info=None, launchable=False):
+def permission_definitions(output):
+    """Read protection levels from `pm list permissions -f -g`, not group labels."""
+    result, current = {}, None
+    for line in output.splitlines():
+        stripped = line.strip()
+        if stripped.startswith("+ "):
+            match = re.fullmatch(r"\+ permission:([^\s:]+)", stripped)
+            current = match[1] if match else None
+        elif current:
+            match = re.fullmatch(r"protectionLevel:([^\s]+)", stripped)
+            if match:
+                result[current] = "dangerous" in match[1].split("|")
+                current = None
+    return result
+
+
+def _permission_states(block, selected):
+    permissions = {}
+    for runtime, lines in ((False, indented(block, "install permissions")), (True, indented(selected, "runtime permissions"))):
+        for line in lines:
+            match = re.match(r"([^:\s]+): granted=(true|false)", line)
+            if match:
+                permissions[match[1]] = M.Permission(match[1], match[2] == "true", runtime)
+    return permissions
+
+
+def pending_permissions(output, package, user=0):
+    """Requested permissions without an install or selected-user runtime entry."""
+    block = package_blocks(output).get(package, "")
+    selected = user_blocks(block).get(user, "")
+    known = _permission_states(block, selected)
+    return sorted(name for name in indented(block, "requested permissions")
+                  if name and ":" not in name and name not in known)
+
+
+def package_detail(output, package, user=0, info=None, launchable=False, permission_definitions=None):
     block = package_blocks(output).get(package)
     if block is None:
         return None
@@ -296,12 +331,10 @@ def package_detail(output, package, user=0, info=None, launchable=False):
         info = M.PackageInfo(package, field(block, "versionName"), integer(token(block, "versionCode")),
             bool(re.search(r"flags=\[\s*SYSTEM\b", block)), enabled, None,
             user * 100000 + app_id % 100000 if app_id is not None else None, integer(token(block, "targetSdk")))
-    permissions = {name: M.Permission(name, False, False) for name in indented(block, "requested permissions") if name and ":" not in name}
-    for runtime, lines in ((False, indented(block, "install permissions")), (True, indented(selected, "runtime permissions"))):
-        for line in lines:
-            match = re.match(r"([^:\s]+): granted=(true|false)", line)
-            if match:
-                permissions[match[1]] = M.Permission(match[1], match[2] == "true", runtime)
+    definitions = permission_definitions or {}
+    permissions = {name: M.Permission(name, False, definitions.get(name, False))
+                   for name in indented(block, "requested permissions") if name and ":" not in name}
+    permissions.update(_permission_states(block, selected))
     directory = field(selected, "dataDir") or field(block, "dataDir")
     if directory and user != 0:
         directory = re.sub(r"^/data/(?:data/|user/0/)", f"/data/user/{user}/", directory)

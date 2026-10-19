@@ -190,6 +190,7 @@ class FakeRunner:
                 values.pop(rest[0], None)
             return 0, b"", b""
         mappings = {
+            "pm list permissions -f -g": "permission_definitions_pm",
             "service list": "service_list", "lshal --neat -itp": "lshal", "lshal -itp": "lshal_fallback",
             "ps -A -o PID,PPID,USER,RSS,S,NAME": "ps_A", "cmd user list -v": "cmd_user_list_v",
             "pm list users": "pm_list_users", "pm list packages --apex-only --show-versioncode -f": "apex_list",

@@ -25,6 +25,7 @@ class DeviceMethods:
             with self._inventory_lock:
                 self._device_cache.clear()
                 self._device_states.clear()
+                self._device_sessions.clear()
                 self._pending.clear()
                 self._enumerations.clear()
 
@@ -34,18 +35,22 @@ class DeviceMethods:
         self._pool = ThreadPoolExecutor(max_workers=8, thread_name_prefix="dtb-devices")
         self._device_cache = {}
         self._device_states = {}
+        self._device_sessions = {}
         self._pending = {}
         self._enumerations = {}
 
     def _enumerate(self, name):
         path = self._paths.get(name)
         if not path:
-            return []
+            return [], {}
         code, out, err = self._run([path, "devices", *(["-l"] if name == "adb" else [])], 0.6 if name == "adb" else 3)
         error = error_for(code, text(out), text(err))
         if error:
             raise error
-        return P.devices(text(out), fastboot=name == "fastboot")
+        output = text(out)
+        # A new transport can replace the same serial between two inventory polls.
+        sessions = dict(re.findall(r"(?m)^(\S+)\s+\S+[^\r\n]*\btransport_id:(\d+)", output)) if name == "adb" else {}
+        return P.devices(output, fastboot=name == "fastboot"), sessions
 
     def _enrich(self, device):
         if device.is_fastboot:
@@ -69,24 +74,31 @@ class DeviceMethods:
                     self._enumerations[name] = self._pool.submit(self._enumerate, name)
             futures = dict(self._enumerations)
         wait(futures.values(), timeout=0.55)
-        merged = {}
+        merged, sessions = {}, {}
         for name in ("adb", "fastboot"):
             future = futures[name]
             if future.done():
                 try:
-                    for dev in future.result():
-                        merged.setdefault(dev.serial, dev)
+                    devices, transports = future.result()
+                    for dev in devices:
+                        if dev.serial not in merged:
+                            merged[dev.serial] = dev
+                            sessions[dev.serial] = transports.get(dev.serial)
                 except api.BackendError:
                     if name == "adb":
                         raise
         now = time.monotonic()
         with self._inventory_lock:
             states = {s: d.state for s, d in merged.items()}
+            for serial in set(states) | set(self._device_states):
+                if (states.get(serial), sessions.get(serial)) != (self._device_states.get(serial), self._device_sessions.get(serial)):
+                    self._invalidate_permission_cache(serial)
             for serial in set(self._device_cache) | set(self._pending):
                 if states.get(serial) != self._device_states.get(serial):
                     self._device_cache.pop(serial, None)
                     self._pending.pop(serial, None)
             self._device_states = states
+            self._device_sessions = sessions
             for serial, dev in merged.items():
                 if not (dev.is_adb or dev.is_fastboot):
                     continue
@@ -120,6 +132,7 @@ class DeviceMethods:
 
     def root(self, serial, enable=True):
         result = self._adb(serial, "root" if enable else "unroot", checked=False)
+        self._invalidate_permission_cache(serial)
         output = result.stdout + result.stderr
         if "cannot run as root in production builds" in output:
             raise api.CommandFailed("user 版本固件不支持 adb root", detail(output))
@@ -151,6 +164,7 @@ class DeviceMethods:
         match = re.search(r"(?:already )?connected to (\S+)", result.stdout + result.stderr)
         if not match:
             raise api.CommandFailed(f"无法连接到 {address}：请检查地址与无线调试状态", detail(result.stdout + result.stderr))
+        self._invalidate_permission_cache(match[1])
         return match[1]
 
     def pair(self, address, code):
@@ -160,6 +174,7 @@ class DeviceMethods:
 
     def disconnect(self, serial):
         self._adb(serial, "disconnect", serial)
+        self._invalidate_permission_cache(serial)
 
     def reboot(self, serial, mode="system"):
         if mode not in ("system", "recovery", "bootloader", "fastboot", "sideload", "poweroff"):

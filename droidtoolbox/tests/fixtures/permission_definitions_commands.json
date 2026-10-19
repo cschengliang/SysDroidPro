@@ -1,0 +1,27 @@
+{
+  "permission_definitions_dumpsys": {
+    "command": "dumpsys package permission android.permission.CAMERA android.permission.RECORD_AUDIO android.permission.INTERNET android.permission.WRITE_SECURE_SETTINGS no.such.permission",
+    "exit_code": 0,
+    "bytes": 161955,
+    "stderr": ""
+  },
+  "permission_definitions_pm": {
+    "command": "pm list permissions -f -g",
+    "exit_code": 0,
+    "bytes": 231198,
+    "stderr": ""
+  },
+  "permission_definitions_pm_d_u": {
+    "command": "pm list permissions -d -u",
+    "exit_code": 0,
+    "bytes": 6078,
+    "stderr": ""
+  },
+  "permission_definitions_pm_shell": {
+    "command": "su 2000 sh -c 'pm list permissions -f -g'",
+    "exit_code": 0,
+    "bytes": 231198,
+    "stderr": "",
+    "uid": 2000
+  }
+}

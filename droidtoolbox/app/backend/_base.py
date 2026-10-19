@@ -48,6 +48,8 @@ class BackendBase:
         self._paths = {}
         self._versions = {}
         self._bugreport_locks = {}
+        self._permission_cache_lock = threading.RLock()
+        self._permission_cache = {}
         self.configure(None, None, None)
 
     def configure(self, adb_path, fastboot_path, scrcpy_path):
@@ -56,6 +58,14 @@ class BackendBase:
             self._paths = {"adb": adb, "fastboot": find_tool("fastboot", fastboot_path, adb),
                            "scrcpy": find_tool("scrcpy", scrcpy_path)}
             self._versions.clear()
+        self._invalidate_permission_cache()
+
+    def _invalidate_permission_cache(self, serial=None):
+        with self._permission_cache_lock:
+            if serial is None:
+                self._permission_cache.clear()
+            else:
+                self._permission_cache.pop(serial, None)
 
     def _tool(self, name):
         with self._config_lock:
@@ -90,6 +100,8 @@ class BackendBase:
         out, err = text(out), text(err)
         error = error_for(code, out, err, serial, checked=checked)
         if error:
+            if isinstance(error, (api.DeviceNotFound, api.DeviceUnauthorized)):
+                self._invalidate_permission_cache(serial)
             raise error
         return ShellResult(out, err, code)
 
@@ -122,6 +134,7 @@ class BackendBase:
                         paths["scrcpy"], versions["scrcpy"], running)
 
     def restart_server(self):
+        self._invalidate_permission_cache()
         for cmd in ("kill-server", "start-server"):
             code, out, err = self._run([self._tool("adb"), cmd])
             error = error_for(code, text(out), text(err))

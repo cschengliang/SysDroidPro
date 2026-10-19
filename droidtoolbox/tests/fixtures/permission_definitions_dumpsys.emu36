@@ -1,0 +1,3228 @@
+Permissions:
+  Permission [android.permission.INTERNET] (2b7b41c):
+    sourcePackage=android
+    uid=1000 gids=[3003] type=0 prot=normal|instant
+    perm=PermissionInfo{3f41f5 android.permission.INTERNET}
+    flags=0x0
+
+Permissions:
+  Permission [android.permission.WRITE_SECURE_SETTINGS] (ac06825):
+    sourcePackage=android
+    uid=1000 gids=[] type=0 prot=signature|privileged|development|installer|role
+    perm=PermissionInfo{1d8c359 android.permission.WRITE_SECURE_SETTINGS}
+    flags=0x0
+
+Permissions:
+  Permission [android.permission.CAMERA] (545cdfa):
+    sourcePackage=android
+    uid=1000 gids=[] type=0 prot=dangerous|instant
+    perm=PermissionInfo{3b0a0c1 android.permission.CAMERA}
+    flags=0x0
+
+Permissions:
+  Permission [android.permission.RECORD_AUDIO] (cd70fab):
+    sourcePackage=android
+    uid=1000 gids=[] type=0 prot=dangerous|instant
+    perm=PermissionInfo{3e2591b android.permission.RECORD_AUDIO}
+    flags=0x0
+
+Packages:
+  Package [com.android.adservices.api] (c875a12):
+    appId=10102
+    pkg=Package{e93e6ae com.android.adservices.api}
+    codePath=/apex/com.android.adservices/priv-app/AdServicesApk@BP4A.251205.006
+    versionCode=36 minSdk=33 targetSdk=10000
+    minExtensionVersions=[]
+    versionName=Baklava
+    hiddenApiEnforcementPolicy=0
+    usesNonSdkApi=true
+    splits=[base]
+    apkSigningVersion=3
+    flags=[ SYSTEM HAS_CODE ALLOW_CLEAR_USER_DATA ]
+    privateFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE PARTIALLY_DIRECT_BOOT_AWARE PRIVILEGED PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    forceQueryable=true
+    pageSizeCompat=0
+    scannedAsStoppedSystemApp=false
+    supportsScreens=[small, medium, large, xlarge, resizeable, anyDensity]
+    usesOptionalLibraries:
+      androidx.window.extensions
+      androidx.window.sidecar
+    usesLibraryFiles:
+      /system_ext/framework/androidx.window.extensions.jar
+      /system_ext/framework/androidx.window.sidecar.jar
+    timeStamp=1970-01-01 00:00:00
+    lastUpdateTime=2026-08-29 08:59:27
+    installerPackageName=null
+    installerPackageUid=-1
+    initiatingPackageName=null
+    originatingPackageName=null
+    packageSource=0
+    appMetadataFilePath=null
+    appMetadataSource=0
+    signatures=PackageSignatures{dd66c4f version:3, signatures:[609fed57], past signatures:[]}
+    installPermissionsFixed=false
+    pkgFlags=[ SYSTEM HAS_CODE ALLOW_CLEAR_USER_DATA ]
+    privatePkgFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE PARTIALLY_DIRECT_BOOT_AWARE PRIVILEGED PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    apexModuleName=com.android.adservices
+    declared permissions:
+    requested permissions:
+      android.permission.INTERNET
+    install permissions:
+      android.permission.INTERNET: granted=true
+    User 0: ceDataInode=548875 deDataInode=393306 installed=true hidden=false suspended=false distractionFlags=0 stopped=false notLaunched=false enabled=0 instant=false virtual=false quarantined=false
+      installReason=0
+      dataDir=/data/user/0/com.android.adservices.api
+      firstInstallTime=2026-08-29 08:59:27
+      uninstallReason=0
+      overlay paths:
+        /data/resource-cache/com.android.systemui-neutral-u6zL.frro
+        /data/resource-cache/com.android.systemui-accent-X5Kn.frro
+        /data/resource-cache/com.android.systemui-dynamic-fDr8.frro
+      gids=[3003]
+      runtime permissions:
+  Package [com.android.providers.telephony] (1be968e):
+    appId=1001
+    sharedUser=SharedUserSetting{eff05e3 android.uid.phone/1001}
+    pkg=Package{ae79dc8 com.android.providers.telephony}
+    codePath=/system/priv-app/TelephonyProvider
+    versionCode=36 minSdk=10000 targetSdk=10000
+    minExtensionVersions=[]
+    versionName=Baklava
+    hiddenApiEnforcementPolicy=0
+    usesNonSdkApi=true
+    splits=[base]
+    apkSigningVersion=3
+    flags=[ SYSTEM HAS_CODE ALLOW_BACKUP KILL_AFTER_RESTORE RESTORE_ANY_VERSION ]
+    privateFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE BACKUP_IN_FOREGROUND DEFAULT_TO_DEVICE_PROTECTED_STORAGE DIRECT_BOOT_AWARE PRIVILEGED PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    forceQueryable=true
+    pageSizeCompat=0
+    scannedAsStoppedSystemApp=false
+    supportsScreens=[small, medium, large, xlarge, resizeable, anyDensity]
+    timeStamp=2026-07-25 15:48:25
+    lastUpdateTime=2026-08-29 08:59:26
+    installerPackageName=null
+    installerPackageUid=-1
+    initiatingPackageName=null
+    originatingPackageName=null
+    packageSource=0
+    appMetadataFilePath=null
+    appMetadataSource=0
+    signatures=PackageSignatures{7614e61 version:3, signatures:[b4addb29], past signatures:[]}
+    installPermissionsFixed=false
+    pkgFlags=[ SYSTEM HAS_CODE ALLOW_BACKUP KILL_AFTER_RESTORE RESTORE_ANY_VERSION ]
+    privatePkgFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE BACKUP_IN_FOREGROUND DEFAULT_TO_DEVICE_PROTECTED_STORAGE DIRECT_BOOT_AWARE PRIVILEGED PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    apexModuleName=null
+    declared permissions:
+    requested permissions:
+    install permissions:
+      android.permission.INTERNET: granted=true
+      android.permission.WRITE_SECURE_SETTINGS: granted=true
+    User 0: ceDataInode=548881 deDataInode=393222 installed=true hidden=false suspended=false distractionFlags=0 stopped=false notLaunched=false enabled=0 instant=false virtual=false quarantined=false
+      installReason=0
+      dataDir=/data/user_de/0/com.android.providers.telephony
+      firstInstallTime=2026-08-29 08:59:26
+      uninstallReason=0
+      overlay paths:
+        /data/resource-cache/com.android.systemui-neutral-u6zL.frro
+        /data/resource-cache/com.android.systemui-accent-X5Kn.frro
+        /data/resource-cache/com.android.systemui-dynamic-fDr8.frro
+  Package [com.android.dynsystem] (ed45fb7):
+    appId=1000
+    sharedUser=SharedUserSetting{6f2dbe0 android.uid.system/1000}
+    pkg=Package{a561d86 com.android.dynsystem}
+    codePath=/system/priv-app/DynamicSystemInstallationService
+    versionCode=36 minSdk=10000 targetSdk=10000
+    minExtensionVersions=[]
+    versionName=Baklava
+    hiddenApiEnforcementPolicy=0
+    usesNonSdkApi=true
+    splits=[base]
+    apkSigningVersion=3
+    flags=[ SYSTEM HAS_CODE ALLOW_CLEAR_USER_DATA ]
+    privateFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE PRIVILEGED PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    forceQueryable=false
+    pageSizeCompat=0
+    scannedAsStoppedSystemApp=false
+    supportsScreens=[small, medium, large, xlarge, resizeable, anyDensity]
+    timeStamp=2026-07-25 15:48:24
+    lastUpdateTime=2026-08-29 08:59:26
+    installerPackageName=null
+    installerPackageUid=-1
+    initiatingPackageName=null
+    originatingPackageName=null
+    packageSource=0
+    appMetadataFilePath=null
+    appMetadataSource=0
+    signatures=PackageSignatures{f4d9647 version:3, signatures:[b4addb29], past signatures:[]}
+    installPermissionsFixed=false
+    pkgFlags=[ SYSTEM HAS_CODE ALLOW_CLEAR_USER_DATA ]
+    privatePkgFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE PRIVILEGED PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    apexModuleName=null
+    requested permissions:
+      android.permission.INTERNET
+    install permissions:
+      android.permission.INTERNET: granted=true
+      android.permission.WRITE_SECURE_SETTINGS: granted=true
+    User 0: ceDataInode=548884 deDataInode=393312 installed=true hidden=false suspended=false distractionFlags=0 stopped=false notLaunched=false enabled=0 instant=false virtual=false quarantined=false
+      installReason=0
+      dataDir=/data/user/0/com.android.dynsystem
+      firstInstallTime=2026-08-29 08:59:26
+      uninstallReason=0
+      overlay paths:
+        /data/resource-cache/com.android.systemui-neutral-u6zL.frro
+        /data/resource-cache/com.android.systemui-accent-X5Kn.frro
+        /data/resource-cache/com.android.systemui-dynamic-fDr8.frro
+  Package [com.android.providers.calendar] (caae245):
+    appId=10038
+    sharedUser=SharedUserSetting{97d055e android.uid.calendar/10038}
+    pkg=Package{5125de0 com.android.providers.calendar}
+    codePath=/system/priv-app/CalendarProvider
+    versionCode=36 minSdk=10000 targetSdk=10000
+    minExtensionVersions=[]
+    versionName=Baklava
+    hiddenApiEnforcementPolicy=0
+    usesNonSdkApi=true
+    splits=[base]
+    apkSigningVersion=3
+    flags=[ SYSTEM HAS_CODE ALLOW_CLEAR_USER_DATA ]
+    privateFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE PRIVILEGED PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    forceQueryable=true
+    pageSizeCompat=0
+    scannedAsStoppedSystemApp=false
+    supportsScreens=[small, medium, large, xlarge, resizeable, anyDensity]
+    timeStamp=2026-07-25 15:48:24
+    lastUpdateTime=2026-08-29 08:59:26
+    installerPackageName=null
+    installerPackageUid=-1
+    initiatingPackageName=null
+    originatingPackageName=null
+    packageSource=0
+    appMetadataFilePath=null
+    appMetadataSource=0
+    signatures=PackageSignatures{cac6899 version:3, signatures:[d7f1f224], past signatures:[]}
+    installPermissionsFixed=false
+    pkgFlags=[ SYSTEM HAS_CODE ALLOW_CLEAR_USER_DATA ]
+    privatePkgFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE PRIVILEGED PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    apexModuleName=null
+    requested permissions:
+      android.permission.INTERNET
+    install permissions:
+      android.permission.INTERNET: granted=true
+    User 0: ceDataInode=548890 deDataInode=393318 installed=true hidden=false suspended=false distractionFlags=0 stopped=false notLaunched=false enabled=0 instant=false virtual=false quarantined=false
+      installReason=0
+      dataDir=/data/user/0/com.android.providers.calendar
+      firstInstallTime=2026-08-29 08:59:26
+      uninstallReason=0
+      overlay paths:
+        /data/resource-cache/com.android.systemui-neutral-u6zL.frro
+        /data/resource-cache/com.android.systemui-accent-X5Kn.frro
+        /data/resource-cache/com.android.systemui-dynamic-fDr8.frro
+  Package [com.android.providers.media] (cfd7ccf):
+    appId=10023
+    sharedUser=SharedUserSetting{6921d3f android.media/10023}
+    pkg=Package{51073f com.android.providers.media}
+    codePath=/system/priv-app/MediaProviderLegacy
+    versionCode=1024 minSdk=10000 targetSdk=10000
+    minExtensionVersions=[]
+    versionName=Baklava
+    hiddenApiEnforcementPolicy=0
+    usesNonSdkApi=true
+    splits=[base]
+    apkSigningVersion=3
+    flags=[ SYSTEM HAS_CODE ALLOW_CLEAR_USER_DATA ]
+    privateFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE PRIVILEGED PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    forceQueryable=true
+    pageSizeCompat=0
+    scannedAsStoppedSystemApp=false
+    supportsScreens=[small, medium, large, xlarge, resizeable, anyDensity]
+    timeStamp=2026-07-25 15:48:25
+    lastUpdateTime=2026-08-29 08:59:26
+    installerPackageName=null
+    installerPackageUid=-1
+    initiatingPackageName=null
+    originatingPackageName=null
+    packageSource=0
+    appMetadataFilePath=null
+    appMetadataSource=0
+    signatures=PackageSignatures{c6f780c version:3, signatures:[aa7e44b2], past signatures:[]}
+    installPermissionsFixed=false
+    pkgFlags=[ SYSTEM HAS_CODE ALLOW_CLEAR_USER_DATA ]
+    privatePkgFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE PRIVILEGED PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    apexModuleName=null
+    declared permissions:
+    requested permissions:
+    install permissions:
+      android.permission.INTERNET: granted=true
+    User 0: ceDataInode=548893 deDataInode=393321 installed=true hidden=false suspended=false distractionFlags=0 stopped=false notLaunched=false enabled=0 instant=false virtual=false quarantined=false
+      installReason=0
+      dataDir=/data/user/0/com.android.providers.media
+      firstInstallTime=2026-08-29 08:59:26
+      uninstallReason=0
+      overlay paths:
+        /data/resource-cache/com.android.systemui-neutral-u6zL.frro
+        /data/resource-cache/com.android.systemui-accent-X5Kn.frro
+        /data/resource-cache/com.android.systemui-dynamic-fDr8.frro
+  Package [com.android.quicksearchbox] (d566bc2):
+    appId=10070
+    pkg=Package{6b1a03b com.android.quicksearchbox}
+    codePath=/product/app/QuickSearchBox
+    versionCode=36 minSdk=10000 targetSdk=30
+    minExtensionVersions=[]
+    versionName=Baklava
+    hiddenApiEnforcementPolicy=2
+    usesNonSdkApi=false
+    splits=[base]
+    apkSigningVersion=3
+    flags=[ SYSTEM HAS_CODE ALLOW_CLEAR_USER_DATA ALLOW_BACKUP KILL_AFTER_RESTORE ]
+    privateFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE PRODUCT PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    forceQueryable=false
+    pageSizeCompat=0
+    scannedAsStoppedSystemApp=false
+    supportsScreens=[small, medium, large, xlarge, resizeable, anyDensity]
+    timeStamp=2026-07-25 15:48:42
+    lastUpdateTime=2026-08-29 08:59:27
+    installerPackageName=null
+    installerPackageUid=-1
+    initiatingPackageName=null
+    originatingPackageName=null
+    packageSource=0
+    appMetadataFilePath=null
+    appMetadataSource=0
+    signatures=PackageSignatures{1156358 version:3, signatures:[9542d9b9], past signatures:[]}
+    installPermissionsFixed=false
+    pkgFlags=[ SYSTEM HAS_CODE ALLOW_CLEAR_USER_DATA ALLOW_BACKUP KILL_AFTER_RESTORE ]
+    privatePkgFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE PRODUCT PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    apexModuleName=null
+    declared permissions:
+    requested permissions:
+      android.permission.INTERNET
+    install permissions:
+      android.permission.INTERNET: granted=true
+    User 0: ceDataInode=548929 deDataInode=393351 installed=true hidden=false suspended=false distractionFlags=0 stopped=false notLaunched=false enabled=0 instant=false virtual=false quarantined=false
+      installReason=0
+      dataDir=/data/user/0/com.android.quicksearchbox
+      firstInstallTime=2026-08-29 08:59:27
+      uninstallReason=0
+      overlay paths:
+        /data/resource-cache/com.android.systemui-neutral-u6zL.frro
+        /data/resource-cache/com.android.systemui-accent-X5Kn.frro
+        /data/resource-cache/com.android.systemui-dynamic-fDr8.frro
+      gids=[3003]
+      runtime permissions:
+  Package [com.android.mms.service] (fd98eaf):
+    appId=1001
+    sharedUser=SharedUserSetting{eff05e3 android.uid.phone/1001}
+    pkg=Package{8704cb1 com.android.mms.service}
+    codePath=/system/priv-app/MmsService
+    versionCode=36 minSdk=10000 targetSdk=10000
+    minExtensionVersions=[]
+    versionName=Baklava
+    hiddenApiEnforcementPolicy=0
+    usesNonSdkApi=true
+    splits=[base]
+    apkSigningVersion=3
+    flags=[ SYSTEM HAS_CODE ALLOW_CLEAR_USER_DATA ALLOW_BACKUP KILL_AFTER_RESTORE ]
+    privateFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE PRIVILEGED PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    forceQueryable=false
+    pageSizeCompat=0
+    scannedAsStoppedSystemApp=false
+    supportsScreens=[small, medium, large, xlarge, resizeable, anyDensity]
+    timeStamp=2026-07-25 15:48:25
+    lastUpdateTime=2026-08-29 08:59:26
+    installerPackageName=null
+    installerPackageUid=-1
+    initiatingPackageName=null
+    originatingPackageName=null
+    packageSource=0
+    appMetadataFilePath=null
+    appMetadataSource=0
+    signatures=PackageSignatures{114c596 version:3, signatures:[b4addb29], past signatures:[]}
+    installPermissionsFixed=false
+    pkgFlags=[ SYSTEM HAS_CODE ALLOW_CLEAR_USER_DATA ALLOW_BACKUP KILL_AFTER_RESTORE ]
+    privatePkgFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE PRIVILEGED PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    apexModuleName=null
+    requested permissions:
+    install permissions:
+      android.permission.INTERNET: granted=true
+      android.permission.WRITE_SECURE_SETTINGS: granted=true
+    User 0: ceDataInode=548932 deDataInode=393231 installed=true hidden=false suspended=false distractionFlags=0 stopped=false notLaunched=false enabled=0 instant=false virtual=false quarantined=false
+      installReason=0
+      dataDir=/data/user/0/com.android.mms.service
+      firstInstallTime=2026-08-29 08:59:26
+      uninstallReason=0
+      overlay paths:
+        /data/resource-cache/com.android.systemui-neutral-u6zL.frro
+        /data/resource-cache/com.android.systemui-accent-X5Kn.frro
+        /data/resource-cache/com.android.systemui-dynamic-fDr8.frro
+  Package [com.android.providers.downloads] (de6cd65):
+    appId=10023
+    sharedUser=SharedUserSetting{6921d3f android.media/10023}
+    pkg=Package{2100517 com.android.providers.downloads}
+    codePath=/system/priv-app/DownloadProvider
+    versionCode=36 minSdk=10000 targetSdk=10000
+    minExtensionVersions=[]
+    versionName=Baklava
+    hiddenApiEnforcementPolicy=0
+    usesNonSdkApi=true
+    splits=[base]
+    apkSigningVersion=3
+    flags=[ SYSTEM HAS_CODE ALLOW_CLEAR_USER_DATA ]
+    privateFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE PRIVILEGED PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    forceQueryable=true
+    pageSizeCompat=0
+    scannedAsStoppedSystemApp=false
+    supportsScreens=[small, medium, large, xlarge, resizeable, anyDensity]
+    timeStamp=2026-07-25 15:48:24
+    lastUpdateTime=2026-08-29 08:59:26
+    installerPackageName=null
+    installerPackageUid=-1
+    initiatingPackageName=null
+    originatingPackageName=null
+    packageSource=0
+    appMetadataFilePath=null
+    appMetadataSource=0
+    signatures=PackageSignatures{9295d04 version:3, signatures:[aa7e44b2], past signatures:[]}
+    installPermissionsFixed=false
+    pkgFlags=[ SYSTEM HAS_CODE ALLOW_CLEAR_USER_DATA ]
+    privatePkgFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE PRIVILEGED PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    apexModuleName=null
+    declared permissions:
+    requested permissions:
+      android.permission.INTERNET
+    install permissions:
+      android.permission.INTERNET: granted=true
+    User 0: ceDataInode=548935 deDataInode=393354 installed=true hidden=false suspended=false distractionFlags=0 stopped=false notLaunched=false enabled=0 instant=false virtual=false quarantined=false
+      installReason=0
+      dataDir=/data/user/0/com.android.providers.downloads
+      firstInstallTime=2026-08-29 08:59:26
+      uninstallReason=0
+      overlay paths:
+        /data/resource-cache/com.android.systemui-neutral-u6zL.frro
+        /data/resource-cache/com.android.systemui-accent-X5Kn.frro
+        /data/resource-cache/com.android.systemui-dynamic-fDr8.frro
+  Package [com.android.messaging] (cad2dd3):
+    appId=10076
+    pkg=Package{c4fa522 com.android.messaging}
+    codePath=/product/app/messaging
+    versionCode=10001040 minSdk=10000 targetSdk=24
+    minExtensionVersions=[]
+    versionName=1.0.001
+    hiddenApiEnforcementPolicy=0
+    usesNonSdkApi=false
+    splits=[base]
+    apkSigningVersion=3
+    flags=[ SYSTEM HAS_CODE ALLOW_CLEAR_USER_DATA ]
+    privateFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION PRIVATE_FLAG_REQUEST_LEGACY_EXTERNAL_STORAGE PRODUCT PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    forceQueryable=false
+    pageSizeCompat=0
+    scannedAsStoppedSystemApp=false
+    supportsScreens=[small, medium, large, xlarge, resizeable, anyDensity]
+    usesLibraries:
+      android.test.base
+      android.hidl.manager-V1.0-java
+      android.hidl.base-V1.0-java
+      org.apache.http.legacy
+    usesLibraryFiles:
+      /system/framework/android.test.base.jar
+      /system/framework/android.hidl.manager-V1.0-java.jar
+      /system/framework/android.hidl.base-V1.0-java.jar
+      /system/framework/org.apache.http.legacy.jar
+    timeStamp=2026-07-25 15:48:42
+    lastUpdateTime=2026-08-29 08:59:27
+    installerPackageName=null
+    installerPackageUid=-1
+    initiatingPackageName=null
+    originatingPackageName=null
+    packageSource=0
+    appMetadataFilePath=null
+    appMetadataSource=0
+    signatures=PackageSignatures{c85dbb3 version:3, signatures:[b4addb29], past signatures:[]}
+    installPermissionsFixed=false
+    pkgFlags=[ SYSTEM HAS_CODE ALLOW_CLEAR_USER_DATA ]
+    privatePkgFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION PRIVATE_FLAG_REQUEST_LEGACY_EXTERNAL_STORAGE PRODUCT PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    apexModuleName=null
+    declared permissions:
+    requested permissions:
+      android.permission.INTERNET
+      android.permission.CAMERA
+      android.permission.RECORD_AUDIO
+    install permissions:
+      android.permission.INTERNET: granted=true
+    User 0: ceDataInode=548938 deDataInode=393357 installed=true hidden=false suspended=false distractionFlags=0 stopped=false notLaunched=false enabled=0 instant=false virtual=false quarantined=false
+      installReason=0
+      dataDir=/data/user/0/com.android.messaging
+      firstInstallTime=2026-08-29 08:59:27
+      uninstallReason=0
+      overlay paths:
+        /data/resource-cache/com.android.systemui-neutral-u6zL.frro
+        /data/resource-cache/com.android.systemui-accent-X5Kn.frro
+        /data/resource-cache/com.android.systemui-dynamic-fDr8.frro
+      gids=[3003]
+      runtime permissions:
+        android.permission.CAMERA: granted=true, flags=[ GRANTED_BY_DEFAULT|USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]
+        android.permission.RECORD_AUDIO: granted=true, flags=[ GRANTED_BY_DEFAULT|USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]
+  Package [com.android.federatedcompute.services] (de4fd10):
+    appId=10094
+    pkg=Package{a32e0e9 com.android.federatedcompute.services}
+    codePath=/apex/com.android.ondevicepersonalization/app/FederatedCompute@BP4A.251205.006
+    versionCode=370499999 minSdk=33 targetSdk=10000
+    minExtensionVersions=[]
+    versionName=Baklava
+    hiddenApiEnforcementPolicy=0
+    usesNonSdkApi=true
+    splits=[base]
+    apkSigningVersion=3
+    flags=[ SYSTEM HAS_CODE ALLOW_CLEAR_USER_DATA ALLOW_BACKUP KILL_AFTER_RESTORE ]
+    privateFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    forceQueryable=true
+    pageSizeCompat=0
+    scannedAsStoppedSystemApp=false
+    supportsScreens=[small, medium, large, xlarge, resizeable, anyDensity]
+    timeStamp=1970-01-01 00:00:00
+    lastUpdateTime=2026-08-29 08:59:27
+    installerPackageName=null
+    installerPackageUid=-1
+    initiatingPackageName=null
+    originatingPackageName=null
+    packageSource=0
+    appMetadataFilePath=null
+    appMetadataSource=0
+    signatures=PackageSignatures{566f16e version:3, signatures:[12502c0d], past signatures:[]}
+    installPermissionsFixed=false
+    pkgFlags=[ SYSTEM HAS_CODE ALLOW_CLEAR_USER_DATA ALLOW_BACKUP KILL_AFTER_RESTORE ]
+    privatePkgFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    apexModuleName=com.android.ondevicepersonalization
+    declared permissions:
+    requested permissions:
+      android.permission.INTERNET
+    install permissions:
+      android.permission.INTERNET: granted=true
+    User 0: ceDataInode=548941 deDataInode=393360 installed=true hidden=false suspended=false distractionFlags=0 stopped=false notLaunched=false enabled=0 instant=false virtual=false quarantined=false
+      installReason=0
+      dataDir=/data/user/0/com.android.federatedcompute.services
+      firstInstallTime=2026-08-29 08:59:27
+      uninstallReason=0
+      overlay paths:
+        /data/resource-cache/com.android.systemui-neutral-u6zL.frro
+        /data/resource-cache/com.android.systemui-accent-X5Kn.frro
+        /data/resource-cache/com.android.systemui-dynamic-fDr8.frro
+      gids=[3003]
+  Package [com.android.providers.downloads.ui] (2ff16eb):
+    appId=10023
+    sharedUser=SharedUserSetting{6921d3f android.media/10023}
+    pkg=Package{6bd17a3 com.android.providers.downloads.ui}
+    codePath=/system/priv-app/DownloadProviderUi
+    versionCode=36 minSdk=10000 targetSdk=10000
+    minExtensionVersions=[]
+    versionName=Baklava
+    hiddenApiEnforcementPolicy=0
+    usesNonSdkApi=true
+    splits=[base]
+    apkSigningVersion=3
+    flags=[ SYSTEM HAS_CODE ALLOW_CLEAR_USER_DATA ALLOW_BACKUP KILL_AFTER_RESTORE ]
+    privateFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE PRIVILEGED PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    forceQueryable=false
+    pageSizeCompat=0
+    scannedAsStoppedSystemApp=false
+    supportsScreens=[small, medium, large, xlarge, resizeable, anyDensity]
+    timeStamp=2026-07-25 15:48:24
+    lastUpdateTime=2026-08-29 08:59:26
+    installerPackageName=null
+    installerPackageUid=-1
+    initiatingPackageName=null
+    originatingPackageName=null
+    packageSource=0
+    appMetadataFilePath=null
+    appMetadataSource=0
+    signatures=PackageSignatures{6c8eaa0 version:3, signatures:[aa7e44b2], past signatures:[]}
+    installPermissionsFixed=false
+    pkgFlags=[ SYSTEM HAS_CODE ALLOW_CLEAR_USER_DATA ALLOW_BACKUP KILL_AFTER_RESTORE ]
+    privatePkgFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE PRIVILEGED PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    apexModuleName=null
+    requested permissions:
+    install permissions:
+      android.permission.INTERNET: granted=true
+    User 0: ceDataInode=548956 deDataInode=393372 installed=true hidden=false suspended=false distractionFlags=0 stopped=false notLaunched=false enabled=0 instant=false virtual=false quarantined=false
+      installReason=0
+      dataDir=/data/user/0/com.android.providers.downloads.ui
+      firstInstallTime=2026-08-29 08:59:26
+      uninstallReason=0
+      overlay paths:
+        /data/resource-cache/com.android.systemui-neutral-u6zL.frro
+        /data/resource-cache/com.android.systemui-accent-X5Kn.frro
+        /data/resource-cache/com.android.systemui-dynamic-fDr8.frro
+  Package [com.android.pacprocessor] (b7763c5):
+    appId=10050
+    pkg=Package{2a8921e com.android.pacprocessor}
+    codePath=/system/app/PacProcessor
+    versionCode=36 minSdk=10000 targetSdk=10000
+    minExtensionVersions=[]
+    versionName=Baklava
+    hiddenApiEnforcementPolicy=0
+    usesNonSdkApi=true
+    splits=[base]
+    apkSigningVersion=3
+    flags=[ SYSTEM HAS_CODE ALLOW_CLEAR_USER_DATA ALLOW_BACKUP KILL_AFTER_RESTORE ]
+    privateFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE DEFAULT_TO_DEVICE_PROTECTED_STORAGE DIRECT_BOOT_AWARE PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    forceQueryable=false
+    pageSizeCompat=0
+    scannedAsStoppedSystemApp=false
+    supportsScreens=[small, medium, large, xlarge, resizeable, anyDensity]
+    timeStamp=2026-07-25 15:48:24
+    lastUpdateTime=2026-08-29 08:59:26
+    installerPackageName=null
+    installerPackageUid=-1
+    initiatingPackageName=null
+    originatingPackageName=null
+    packageSource=0
+    appMetadataFilePath=null
+    appMetadataSource=0
+    signatures=PackageSignatures{f7f8aff version:3, signatures:[b4addb29], past signatures:[]}
+    installPermissionsFixed=false
+    pkgFlags=[ SYSTEM HAS_CODE ALLOW_CLEAR_USER_DATA ALLOW_BACKUP KILL_AFTER_RESTORE ]
+    privatePkgFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE DEFAULT_TO_DEVICE_PROTECTED_STORAGE DIRECT_BOOT_AWARE PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    apexModuleName=null
+    requested permissions:
+      android.permission.INTERNET
+    install permissions:
+      android.permission.INTERNET: granted=true
+    User 0: ceDataInode=548959 deDataInode=393375 installed=true hidden=false suspended=false distractionFlags=0 stopped=false notLaunched=false enabled=0 instant=false virtual=false quarantined=false
+      installReason=0
+      dataDir=/data/user_de/0/com.android.pacprocessor
+      firstInstallTime=2026-08-29 08:59:26
+      uninstallReason=0
+      overlay paths:
+        /data/resource-cache/com.android.systemui-neutral-u6zL.frro
+        /data/resource-cache/com.android.systemui-accent-X5Kn.frro
+        /data/resource-cache/com.android.systemui-dynamic-fDr8.frro
+      gids=[3003]
+  Package [com.android.networkstack] (45a8c48):
+    appId=1073
+    sharedUser=SharedUserSetting{311c4e6 android.uid.networkstack/1073}
+    pkg=Package{d856db8 com.android.networkstack}
+    codePath=/system/priv-app/NetworkStack
+    versionCode=370499999 minSdk=31 targetSdk=36
+    minExtensionVersions=[]
+    versionName=Baklava
+    hiddenApiEnforcementPolicy=0
+    usesNonSdkApi=true
+    splits=[base]
+    apkSigningVersion=3
+    flags=[ SYSTEM HAS_CODE PERSISTENT ALLOW_CLEAR_USER_DATA ALLOW_BACKUP KILL_AFTER_RESTORE ]
+    privateFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE DEFAULT_TO_DEVICE_PROTECTED_STORAGE DIRECT_BOOT_AWARE PRIVILEGED PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    forceQueryable=false
+    pageSizeCompat=0
+    scannedAsStoppedSystemApp=false
+    supportsScreens=[small, medium, large, xlarge, resizeable, anyDensity]
+    timeStamp=2026-07-25 15:48:25
+    lastUpdateTime=2026-08-29 08:59:26
+    installerPackageName=null
+    installerPackageUid=-1
+    initiatingPackageName=null
+    originatingPackageName=null
+    packageSource=0
+    appMetadataFilePath=null
+    appMetadataSource=0
+    signatures=PackageSignatures{d8df791 version:3, signatures:[e708811f], past signatures:[]}
+    installPermissionsFixed=false
+    pkgFlags=[ SYSTEM HAS_CODE PERSISTENT ALLOW_CLEAR_USER_DATA ALLOW_BACKUP KILL_AFTER_RESTORE ]
+    privatePkgFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE DEFAULT_TO_DEVICE_PROTECTED_STORAGE DIRECT_BOOT_AWARE PRIVILEGED PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    apexModuleName=null
+    declared permissions:
+    requested permissions:
+      android.permission.INTERNET
+    install permissions:
+      android.permission.INTERNET: granted=true
+    User 0: ceDataInode=548965 deDataInode=393237 installed=true hidden=false suspended=false distractionFlags=0 stopped=false notLaunched=false enabled=0 instant=false virtual=false quarantined=false
+      installReason=0
+      dataDir=/data/user_de/0/com.android.networkstack
+      firstInstallTime=2026-08-29 08:59:26
+      uninstallReason=0
+      overlay paths:
+        /data/resource-cache/com.android.systemui-neutral-u6zL.frro
+        /data/resource-cache/com.android.systemui-accent-X5Kn.frro
+        /data/resource-cache/com.android.systemui-dynamic-fDr8.frro
+  Package [android] (5fd5ea):
+    appId=1000
+    sharedUser=SharedUserSetting{6f2dbe0 android.uid.system/1000}
+    pkg=Package{23c2b95 android}
+    codePath=/system/framework/framework-res.apk
+    versionCode=36 minSdk=10000 targetSdk=10000
+    minExtensionVersions=[]
+    versionName=Baklava
+    hiddenApiEnforcementPolicy=0
+    usesNonSdkApi=false
+    splits=[base]
+    apkSigningVersion=3
+    flags=[ SYSTEM PERSISTENT ALLOW_BACKUP ]
+    privateFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE DEFAULT_TO_DEVICE_PROTECTED_STORAGE DIRECT_BOOT_AWARE PRIVILEGED PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    forceQueryable=true
+    pageSizeCompat=0
+    scannedAsStoppedSystemApp=false
+    supportsScreens=[small, medium, large, xlarge, resizeable, anyDensity]
+    timeStamp=2026-07-25 15:47:48
+    lastUpdateTime=2026-08-29 08:59:26
+    installerPackageName=null
+    installerPackageUid=-1
+    initiatingPackageName=null
+    originatingPackageName=null
+    packageSource=0
+    appMetadataFilePath=null
+    appMetadataSource=0
+    signatures=PackageSignatures{32424aa version:3, signatures:[b4addb29], past signatures:[]}
+    installPermissionsFixed=false
+    pkgFlags=[ SYSTEM PERSISTENT ALLOW_BACKUP ]
+    privatePkgFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE DEFAULT_TO_DEVICE_PROTECTED_STORAGE DIRECT_BOOT_AWARE PRIVILEGED PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    apexModuleName=null
+    declared permissions:
+      android.permission.RECORD_AUDIO: prot=dangerous|instant
+      android.permission.CAMERA: prot=dangerous|instant
+      android.permission.INTERNET: prot=normal|instant
+      android.permission.WRITE_SECURE_SETTINGS: prot=signature|privileged|development|installer|role
+    requested permissions:
+    install permissions:
+      android.permission.INTERNET: granted=true
+      android.permission.WRITE_SECURE_SETTINGS: granted=true
+    User 0: ceDataInode=548989 deDataInode=393243 installed=true hidden=false suspended=false distractionFlags=0 stopped=false notLaunched=false enabled=0 instant=false virtual=false quarantined=false
+      installReason=0
+      dataDir=/data/system
+      firstInstallTime=2026-08-29 08:59:26
+      uninstallReason=0
+      overlay paths:
+        /data/resource-cache/com.android.systemui-neutral-u6zL.frro
+        /data/resource-cache/com.android.systemui-accent-X5Kn.frro
+        /data/resource-cache/com.android.systemui-dynamic-fDr8.frro
+  Package [com.android.contacts] (ed094ca):
+    appId=10063
+    pkg=Package{a7e3900 com.android.contacts}
+    codePath=/product/priv-app/Contacts
+    versionCode=10734 minSdk=36 targetSdk=36
+    minExtensionVersions=[]
+    versionName=1.7.34
+    hiddenApiEnforcementPolicy=2
+    usesNonSdkApi=false
+    splits=[base]
+    apkSigningVersion=3
+    flags=[ SYSTEM HAS_CODE ALLOW_CLEAR_USER_DATA ALLOW_BACKUP KILL_AFTER_RESTORE ]
+    privateFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE PRIVILEGED PRODUCT PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    forceQueryable=false
+    pageSizeCompat=0
+    queriesPackages=[com.android.providers.contacts, com.android.dialer]
+    queriesIntents=[Intent { act=android.intent.action.SENDTO dat=imto:/... }, Intent { act=android.intent.action.SENDTO dat=xmpp:/... }, Intent { act=android.intent.action.SENDTO dat=mailto:xx }, Intent { act=android.intent.action.SENDTO dat=smsto:xx }, Intent { act=android.intent.action.VIEW dat=geo:/... }, Intent { act=android.intent.action.VIEW dat=content://com.android.calendar/... }, Intent { act=android.intent.action.VIEW dat=https:/... }, Intent { act=android.accounts.AccountAuthenticator }, Intent { act=android.intent.action.VIEW dat=content://com.android.contacts/... typ=vnd.android.cursor.item/* }, Intent { act=android.intent.action.CALL dat=tel:xx }, Intent { act=android.intent.action.DIAL dat=tel:xx }, Intent { act=android.intent.action.CALL dat=sip:xx }, Intent { act=android.intent.action.DIAL dat=sip:xx }, Intent { act=android.intent.action.CALL dat=voicemail:/... }, Intent { act=android.intent.action.DIAL dat=voicemail:/... }, Intent { act=android.intent.action.CREATE_DOCUMENT cat=[android.intent.category.OPENABLE] dat=content://*/... typ=text/x-vcard }, Intent { act=android.media.action.IMAGE_CAPTURE }, Intent { act=com.android.camera.action.CROP dat=content://*/... typ=image/* }]
+    scannedAsStoppedSystemApp=false
+    supportsScreens=[small, medium, large, xlarge, resizeable, anyDensity]
+    timeStamp=2026-07-25 15:48:42
+    lastUpdateTime=2026-08-29 08:59:27
+    installerPackageName=null
+    installerPackageUid=-1
+    initiatingPackageName=null
+    originatingPackageName=null
+    packageSource=0
+    appMetadataFilePath=null
+    appMetadataSource=0
+    signatures=PackageSignatures{31c7539 version:3, signatures:[9542d9b9], past signatures:[]}
+    installPermissionsFixed=false
+    pkgFlags=[ SYSTEM HAS_CODE ALLOW_CLEAR_USER_DATA ALLOW_BACKUP KILL_AFTER_RESTORE ]
+    privatePkgFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE PRIVILEGED PRODUCT PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    apexModuleName=null
+    declared permissions:
+    requested permissions:
+      android.permission.INTERNET
+    install permissions:
+      android.permission.INTERNET: granted=true
+    User 0: ceDataInode=548992 deDataInode=393399 installed=true hidden=false suspended=false distractionFlags=0 stopped=false notLaunched=false enabled=0 instant=false virtual=false quarantined=false
+      installReason=0
+      dataDir=/data/user/0/com.android.contacts
+      firstInstallTime=2026-08-29 08:59:27
+      uninstallReason=0
+      overlay paths:
+        /data/resource-cache/com.android.systemui-neutral-u6zL.frro
+        /data/resource-cache/com.android.systemui-accent-X5Kn.frro
+        /data/resource-cache/com.android.systemui-dynamic-fDr8.frro
+      gids=[3003]
+      runtime permissions:
+  Package [com.android.camera2] (4cfc8ed):
+    appId=10072
+    pkg=Package{91e74df com.android.camera2}
+    codePath=/product/app/Camera2
+    versionCode=20002000 minSdk=10000 targetSdk=1000
+    minExtensionVersions=[]
+    versionName=2.0.002
+    hiddenApiEnforcementPolicy=2
+    usesNonSdkApi=false
+    splits=[base]
+    apkSigningVersion=3
+    flags=[ SYSTEM HAS_CODE ALLOW_CLEAR_USER_DATA ALLOW_BACKUP KILL_AFTER_RESTORE RESTORE_ANY_VERSION LARGE_HEAP ]
+    privateFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_UNRESIZEABLE ALLOW_AUDIO_PLAYBACK_CAPTURE PRODUCT PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    forceQueryable=false
+    pageSizeCompat=0
+    scannedAsStoppedSystemApp=false
+    supportsScreens=[medium, large, xlarge, resizeable, anyDensity]
+    usesOptionalLibraries:
+      org.apache.http.legacy
+    usesLibraryFiles:
+      /system/framework/org.apache.http.legacy.jar
+    timeStamp=2026-07-25 15:48:42
+    lastUpdateTime=2026-08-29 08:59:27
+    installerPackageName=null
+    installerPackageUid=-1
+    initiatingPackageName=null
+    originatingPackageName=null
+    packageSource=0
+    appMetadataFilePath=null
+    appMetadataSource=0
+    signatures=PackageSignatures{d0de52c version:3, signatures:[d7f1f224], past signatures:[]}
+    installPermissionsFixed=false
+    pkgFlags=[ SYSTEM HAS_CODE ALLOW_CLEAR_USER_DATA ALLOW_BACKUP KILL_AFTER_RESTORE RESTORE_ANY_VERSION LARGE_HEAP ]
+    privatePkgFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_UNRESIZEABLE ALLOW_AUDIO_PLAYBACK_CAPTURE PRODUCT PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    apexModuleName=null
+    declared permissions:
+    requested permissions:
+      android.permission.INTERNET
+      android.permission.CAMERA
+      android.permission.RECORD_AUDIO
+    install permissions:
+      android.permission.INTERNET: granted=true
+    User 0: ceDataInode=548995 deDataInode=393402 installed=true hidden=false suspended=false distractionFlags=0 stopped=false notLaunched=false enabled=0 instant=false virtual=false quarantined=false
+      installReason=0
+      dataDir=/data/user/0/com.android.camera2
+      firstInstallTime=2026-08-29 08:59:27
+      uninstallReason=0
+      overlay paths:
+        /data/resource-cache/com.android.systemui-neutral-u6zL.frro
+        /data/resource-cache/com.android.systemui-accent-X5Kn.frro
+        /data/resource-cache/com.android.systemui-dynamic-fDr8.frro
+      gids=[3003]
+      runtime permissions:
+        android.permission.CAMERA: granted=true, flags=[ GRANTED_BY_DEFAULT|USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]
+        android.permission.RECORD_AUDIO: granted=true, flags=[ GRANTED_BY_DEFAULT|USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]
+  Package [com.android.mtp] (ef86a3a):
+    appId=10023
+    sharedUser=SharedUserSetting{6921d3f android.media/10023}
+    pkg=Package{75c20d7 com.android.mtp}
+    codePath=/system/priv-app/MtpService
+    versionCode=36 minSdk=10000 targetSdk=10000
+    minExtensionVersions=[]
+    versionName=Baklava
+    hiddenApiEnforcementPolicy=0
+    usesNonSdkApi=true
+    splits=[base]
+    apkSigningVersion=3
+    flags=[ SYSTEM HAS_CODE ALLOW_CLEAR_USER_DATA ]
+    privateFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE PRIVILEGED PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    forceQueryable=false
+    pageSizeCompat=0
+    scannedAsStoppedSystemApp=false
+    supportsScreens=[small, medium, large, xlarge, resizeable, anyDensity]
+    timeStamp=2026-07-25 15:48:25
+    lastUpdateTime=2026-08-29 08:59:26
+    installerPackageName=null
+    installerPackageUid=-1
+    initiatingPackageName=null
+    originatingPackageName=null
+    packageSource=0
+    appMetadataFilePath=null
+    appMetadataSource=0
+    signatures=PackageSignatures{185adc4 version:3, signatures:[aa7e44b2], past signatures:[]}
+    installPermissionsFixed=false
+    pkgFlags=[ SYSTEM HAS_CODE ALLOW_CLEAR_USER_DATA ]
+    privatePkgFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE PRIVILEGED PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    apexModuleName=null
+    declared permissions:
+    requested permissions:
+    install permissions:
+      android.permission.INTERNET: granted=true
+    User 0: ceDataInode=549004 deDataInode=393411 installed=true hidden=false suspended=false distractionFlags=0 stopped=false notLaunched=false enabled=0 instant=false virtual=false quarantined=false
+      installReason=0
+      dataDir=/data/user/0/com.android.mtp
+      firstInstallTime=2026-08-29 08:59:26
+      uninstallReason=0
+      overlay paths:
+        /data/resource-cache/com.android.systemui-neutral-u6zL.frro
+        /data/resource-cache/com.android.systemui-accent-X5Kn.frro
+        /data/resource-cache/com.android.systemui-dynamic-fDr8.frro
+  Package [com.android.nfc] (5b024f4):
+    appId=1027
+    sharedUser=SharedUserSetting{cc0042b android.uid.nfc/1027}
+    pkg=Package{c4043e2 com.android.nfc}
+    codePath=/apex/com.android.nfcservices/priv-app/NfcNciApex@BP4A.251205.006
+    versionCode=36 minSdk=36 targetSdk=10000
+    minExtensionVersions=[]
+    versionName=Baklava
+    hiddenApiEnforcementPolicy=0
+    usesNonSdkApi=true
+    splits=[base]
+    apkSigningVersion=3
+    flags=[ SYSTEM HAS_CODE ALLOW_CLEAR_USER_DATA ALLOW_BACKUP RESTORE_ANY_VERSION ]
+    privateFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE DEFAULT_TO_DEVICE_PROTECTED_STORAGE DIRECT_BOOT_AWARE PRIVILEGED PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    forceQueryable=false
+    pageSizeCompat=0
+    scannedAsStoppedSystemApp=false
+    supportsScreens=[small, medium, large, xlarge, resizeable, anyDensity]
+    timeStamp=1970-01-01 00:00:00
+    lastUpdateTime=2026-08-29 08:59:27
+    installerPackageName=null
+    installerPackageUid=-1
+    initiatingPackageName=null
+    originatingPackageName=null
+    packageSource=0
+    appMetadataFilePath=null
+    appMetadataSource=0
+    signatures=PackageSignatures{ed7f373 version:3, signatures:[27387c38], past signatures:[]}
+    installPermissionsFixed=false
+    pkgFlags=[ SYSTEM HAS_CODE ALLOW_CLEAR_USER_DATA ALLOW_BACKUP RESTORE_ANY_VERSION ]
+    privatePkgFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE DEFAULT_TO_DEVICE_PROTECTED_STORAGE DIRECT_BOOT_AWARE PRIVILEGED PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    apexModuleName=com.android.nfcservices
+    declared permissions:
+    requested permissions:
+      android.permission.INTERNET
+      android.permission.WRITE_SECURE_SETTINGS
+    install permissions:
+      android.permission.INTERNET: granted=true
+      android.permission.WRITE_SECURE_SETTINGS: granted=true
+    User 0: ceDataInode=549007 deDataInode=393414 installed=true hidden=false suspended=false distractionFlags=0 stopped=false notLaunched=false enabled=2 instant=false virtual=false quarantined=false
+      installReason=0
+      dataDir=/data/user_de/0/com.android.nfc
+      firstInstallTime=2026-08-29 08:59:27
+      uninstallReason=0
+      overlay paths:
+        /data/resource-cache/com.android.systemui-neutral-u6zL.frro
+        /data/resource-cache/com.android.systemui-accent-X5Kn.frro
+        /data/resource-cache/com.android.systemui-dynamic-fDr8.frro
+      lastDisabledCaller: com.android.nfc
+  Package [com.android.ons] (17b6689):
+    appId=1001
+    sharedUser=SharedUserSetting{eff05e3 android.uid.phone/1001}
+    pkg=Package{c11e230 com.android.ons}
+    codePath=/system/priv-app/ONS
+    versionCode=36 minSdk=10000 targetSdk=10000
+    minExtensionVersions=[]
+    versionName=Baklava
+    hiddenApiEnforcementPolicy=0
+    usesNonSdkApi=true
+    splits=[base]
+    apkSigningVersion=3
+    flags=[ SYSTEM HAS_CODE PERSISTENT ALLOW_CLEAR_USER_DATA ALLOW_BACKUP KILL_AFTER_RESTORE ]
+    privateFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE PARTIALLY_DIRECT_BOOT_AWARE PRIVILEGED PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    forceQueryable=false
+    pageSizeCompat=0
+    scannedAsStoppedSystemApp=false
+    supportsScreens=[small, medium, large, xlarge, resizeable, anyDensity]
+    timeStamp=2026-07-25 15:48:25
+    lastUpdateTime=2026-08-29 08:59:26
+    installerPackageName=null
+    installerPackageUid=-1
+    initiatingPackageName=null
+    originatingPackageName=null
+    packageSource=0
+    appMetadataFilePath=null
+    appMetadataSource=0
+    signatures=PackageSignatures{7a81ea9 version:3, signatures:[b4addb29], past signatures:[]}
+    installPermissionsFixed=false
+    pkgFlags=[ SYSTEM HAS_CODE PERSISTENT ALLOW_CLEAR_USER_DATA ALLOW_BACKUP KILL_AFTER_RESTORE ]
+    privatePkgFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE PARTIALLY_DIRECT_BOOT_AWARE PRIVILEGED PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    apexModuleName=null
+    requested permissions:
+    install permissions:
+      android.permission.INTERNET: granted=true
+      android.permission.WRITE_SECURE_SETTINGS: granted=true
+    User 0: ceDataInode=549010 deDataInode=393246 installed=true hidden=false suspended=false distractionFlags=0 stopped=false notLaunched=false enabled=0 instant=false virtual=false quarantined=false
+      installReason=0
+      dataDir=/data/user/0/com.android.ons
+      firstInstallTime=2026-08-29 08:59:26
+      uninstallReason=0
+      overlay paths:
+        /data/resource-cache/com.android.systemui-neutral-u6zL.frro
+        /data/resource-cache/com.android.systemui-accent-X5Kn.frro
+        /data/resource-cache/com.android.systemui-dynamic-fDr8.frro
+  Package [com.android.stk] (e454053):
+    appId=1001
+    sharedUser=SharedUserSetting{eff05e3 android.uid.phone/1001}
+    pkg=Package{ba2bc2e com.android.stk}
+    codePath=/system/app/Stk
+    versionCode=36 minSdk=10000 targetSdk=10000
+    minExtensionVersions=[]
+    versionName=Baklava
+    hiddenApiEnforcementPolicy=0
+    usesNonSdkApi=true
+    splits=[base]
+    apkSigningVersion=3
+    flags=[ SYSTEM HAS_CODE ALLOW_CLEAR_USER_DATA ALLOW_BACKUP KILL_AFTER_RESTORE ]
+    privateFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE DEFAULT_TO_DEVICE_PROTECTED_STORAGE DIRECT_BOOT_AWARE PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    forceQueryable=false
+    pageSizeCompat=0
+    scannedAsStoppedSystemApp=false
+    supportsScreens=[small, medium, large, xlarge, resizeable, anyDensity]
+    timeStamp=2026-07-25 15:48:25
+    lastUpdateTime=2026-08-29 08:59:26
+    installerPackageName=null
+    installerPackageUid=-1
+    initiatingPackageName=null
+    originatingPackageName=null
+    packageSource=0
+    appMetadataFilePath=null
+    appMetadataSource=0
+    signatures=PackageSignatures{33453cf version:3, signatures:[b4addb29], past signatures:[]}
+    installPermissionsFixed=false
+    pkgFlags=[ SYSTEM HAS_CODE ALLOW_CLEAR_USER_DATA ALLOW_BACKUP KILL_AFTER_RESTORE ]
+    privatePkgFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE DEFAULT_TO_DEVICE_PROTECTED_STORAGE DIRECT_BOOT_AWARE PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    apexModuleName=null
+    declared permissions:
+    requested permissions:
+    install permissions:
+      android.permission.INTERNET: granted=true
+      android.permission.WRITE_SECURE_SETTINGS: granted=true
+    User 0: ceDataInode=549013 deDataInode=393417 installed=true hidden=false suspended=false distractionFlags=0 stopped=false notLaunched=false enabled=0 instant=false virtual=false quarantined=false
+      installReason=0
+      dataDir=/data/user_de/0/com.android.stk
+      firstInstallTime=2026-08-29 08:59:26
+      uninstallReason=0
+      overlay paths:
+        /data/resource-cache/com.android.systemui-neutral-u6zL.frro
+        /data/resource-cache/com.android.systemui-accent-X5Kn.frro
+        /data/resource-cache/com.android.systemui-dynamic-fDr8.frro
+  Package [com.android.launcher3] (3491088):
+    appId=10084
+    pkg=Package{5bafc65 com.android.launcher3}
+    codePath=/system_ext/priv-app/Launcher3QuickStep
+    versionCode=36 minSdk=10000 targetSdk=10000
+    minExtensionVersions=[]
+    versionName=Baklava
+    hiddenApiEnforcementPolicy=0
+    usesNonSdkApi=true
+    splits=[base]
+    apkSigningVersion=3
+    flags=[ SYSTEM HAS_CODE ALLOW_CLEAR_USER_DATA ALLOW_BACKUP KILL_AFTER_RESTORE RESTORE_ANY_VERSION ]
+    privateFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE BACKUP_IN_FOREGROUND PARTIALLY_DIRECT_BOOT_AWARE PRIVILEGED SYSTEM_EXT PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    forceQueryable=false
+    pageSizeCompat=0
+    scannedAsStoppedSystemApp=false
+    supportsScreens=[small, medium, large, xlarge, resizeable, anyDensity]
+    usesOptionalLibraries:
+      androidx.window.extensions
+      androidx.window.sidecar
+    usesLibraryFiles:
+      /system_ext/framework/androidx.window.extensions.jar
+      /system_ext/framework/androidx.window.sidecar.jar
+    timeStamp=2026-07-25 15:49:09
+    lastUpdateTime=2026-08-29 08:59:27
+    installerPackageName=null
+    installerPackageUid=-1
+    initiatingPackageName=null
+    originatingPackageName=null
+    packageSource=0
+    appMetadataFilePath=null
+    appMetadataSource=0
+    signatures=PackageSignatures{4a26d3a version:3, signatures:[d7f1f224], past signatures:[]}
+    installPermissionsFixed=false
+    pkgFlags=[ SYSTEM HAS_CODE ALLOW_CLEAR_USER_DATA ALLOW_BACKUP KILL_AFTER_RESTORE RESTORE_ANY_VERSION ]
+    privatePkgFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE BACKUP_IN_FOREGROUND PARTIALLY_DIRECT_BOOT_AWARE PRIVILEGED SYSTEM_EXT PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    apexModuleName=null
+    declared permissions:
+    requested permissions:
+      android.permission.WRITE_SECURE_SETTINGS
+    install permissions:
+      android.permission.WRITE_SECURE_SETTINGS: granted=true
+    User 0: ceDataInode=549016 deDataInode=393420 installed=true hidden=false suspended=false distractionFlags=0 stopped=false notLaunched=false enabled=0 instant=false virtual=false quarantined=false
+      installReason=0
+      dataDir=/data/user/0/com.android.launcher3
+      firstInstallTime=2026-08-29 08:59:27
+      uninstallReason=0
+      overlay paths:
+        /data/resource-cache/com.android.systemui-neutral-u6zL.frro
+        /data/resource-cache/com.android.systemui-accent-X5Kn.frro
+        /data/resource-cache/com.android.systemui-dynamic-fDr8.frro
+      runtime permissions:
+  Package [com.android.statementservice] (6d5ae46):
+    appId=10066
+    pkg=Package{4456992 com.android.statementservice}
+    codePath=/product/priv-app/StatementService
+    versionCode=1 minSdk=10000 targetSdk=29
+    minExtensionVersions=[]
+    versionName=1.0
+    hiddenApiEnforcementPolicy=0
+    usesNonSdkApi=false
+    splits=[base]
+    apkSigningVersion=3
+    flags=[ SYSTEM HAS_CODE ALLOW_CLEAR_USER_DATA ]
+    privateFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE PARTIALLY_DIRECT_BOOT_AWARE PRIVILEGED PRODUCT PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    forceQueryable=false
+    pageSizeCompat=0
+    scannedAsStoppedSystemApp=false
+    supportsScreens=[small, medium, large, xlarge, resizeable, anyDensity]
+    usesLibraries:
+      android.test.base
+    usesLibraryFiles:
+      /system/framework/android.test.base.jar
+    timeStamp=2026-07-25 15:48:42
+    lastUpdateTime=2026-08-29 08:59:27
+    installerPackageName=null
+    installerPackageUid=-1
+    initiatingPackageName=null
+    originatingPackageName=null
+    packageSource=0
+    appMetadataFilePath=null
+    appMetadataSource=0
+    signatures=PackageSignatures{a49f63 version:3, signatures:[b4addb29], past signatures:[]}
+    installPermissionsFixed=false
+    pkgFlags=[ SYSTEM HAS_CODE ALLOW_CLEAR_USER_DATA ]
+    privatePkgFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE PARTIALLY_DIRECT_BOOT_AWARE PRIVILEGED PRODUCT PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    apexModuleName=null
+    declared permissions:
+    requested permissions:
+      android.permission.INTERNET
+    install permissions:
+      android.permission.INTERNET: granted=true
+    User 0: ceDataInode=549025 deDataInode=393429 installed=true hidden=false suspended=false distractionFlags=0 stopped=false notLaunched=false enabled=0 instant=false virtual=false quarantined=false
+      installReason=0
+      dataDir=/data/user/0/com.android.statementservice
+      firstInstallTime=2026-08-29 08:59:27
+      uninstallReason=0
+      overlay paths:
+        /data/resource-cache/com.android.systemui-neutral-u6zL.frro
+        /data/resource-cache/com.android.systemui-accent-X5Kn.frro
+        /data/resource-cache/com.android.systemui-dynamic-fDr8.frro
+      gids=[3003]
+      runtime permissions:
+  Package [com.android.calendar] (a2ad34):
+    appId=10078
+    pkg=Package{ea497db com.android.calendar}
+    codePath=/product/app/Calendar
+    versionCode=36 minSdk=10000 targetSdk=34
+    minExtensionVersions=[]
+    versionName=Baklava
+    hiddenApiEnforcementPolicy=2
+    usesNonSdkApi=false
+    splits=[base]
+    apkSigningVersion=3
+    flags=[ SYSTEM HAS_CODE ALLOW_CLEAR_USER_DATA ALLOW_BACKUP KILL_AFTER_RESTORE ]
+    privateFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE HAS_DOMAIN_URLS PRODUCT PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    forceQueryable=false
+    pageSizeCompat=0
+    scannedAsStoppedSystemApp=false
+    supportsScreens=[small, medium, large, xlarge, resizeable, anyDensity]
+    timeStamp=2026-07-25 15:48:42
+    lastUpdateTime=2026-08-29 08:59:27
+    installerPackageName=null
+    installerPackageUid=-1
+    initiatingPackageName=null
+    originatingPackageName=null
+    packageSource=0
+    appMetadataFilePath=null
+    appMetadataSource=0
+    signatures=PackageSignatures{bb9278 version:3, signatures:[d7f1f224], past signatures:[]}
+    installPermissionsFixed=false
+    pkgFlags=[ SYSTEM HAS_CODE ALLOW_CLEAR_USER_DATA ALLOW_BACKUP KILL_AFTER_RESTORE ]
+    privatePkgFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE HAS_DOMAIN_URLS PRODUCT PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    apexModuleName=null
+    declared permissions:
+    requested permissions:
+      android.permission.INTERNET
+    install permissions:
+      android.permission.INTERNET: granted=true
+    User 0: ceDataInode=549034 deDataInode=393438 installed=true hidden=false suspended=false distractionFlags=0 stopped=false notLaunched=false enabled=0 instant=false virtual=false quarantined=false
+      installReason=0
+      dataDir=/data/user/0/com.android.calendar
+      firstInstallTime=2026-08-29 08:59:27
+      uninstallReason=0
+      overlay paths:
+        /data/resource-cache/com.android.systemui-neutral-u6zL.frro
+        /data/resource-cache/com.android.systemui-accent-X5Kn.frro
+        /data/resource-cache/com.android.systemui-dynamic-fDr8.frro
+      gids=[3003]
+      runtime permissions:
+  Package [com.android.providers.settings] (3ed9778):
+    appId=1000
+    sharedUser=SharedUserSetting{6f2dbe0 android.uid.system/1000}
+    pkg=Package{f535e24 com.android.providers.settings}
+    codePath=/system/priv-app/SettingsProvider
+    versionCode=36 minSdk=10000 targetSdk=10000
+    minExtensionVersions=[]
+    versionName=Baklava
+    hiddenApiEnforcementPolicy=0
+    usesNonSdkApi=true
+    splits=[base]
+    apkSigningVersion=3
+    flags=[ SYSTEM HAS_CODE ALLOW_BACKUP RESTORE_ANY_VERSION ]
+    privateFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE DEFAULT_TO_DEVICE_PROTECTED_STORAGE DIRECT_BOOT_AWARE PRIVILEGED PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    forceQueryable=true
+    pageSizeCompat=0
+    scannedAsStoppedSystemApp=false
+    supportsScreens=[small, medium, large, xlarge, resizeable, anyDensity]
+    timeStamp=2026-07-25 15:48:24
+    lastUpdateTime=2026-08-29 08:59:26
+    installerPackageName=null
+    installerPackageUid=-1
+    initiatingPackageName=null
+    originatingPackageName=null
+    packageSource=0
+    appMetadataFilePath=null
+    appMetadataSource=0
+    signatures=PackageSignatures{1063d8d version:3, signatures:[b4addb29], past signatures:[]}
+    installPermissionsFixed=false
+    pkgFlags=[ SYSTEM HAS_CODE ALLOW_BACKUP RESTORE_ANY_VERSION ]
+    privatePkgFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE DEFAULT_TO_DEVICE_PROTECTED_STORAGE DIRECT_BOOT_AWARE PRIVILEGED PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    apexModuleName=null
+    requested permissions:
+    install permissions:
+      android.permission.INTERNET: granted=true
+      android.permission.WRITE_SECURE_SETTINGS: granted=true
+    User 0: ceDataInode=549040 deDataInode=393249 installed=true hidden=false suspended=false distractionFlags=0 stopped=false notLaunched=false enabled=0 instant=false virtual=false quarantined=false
+      installReason=0
+      dataDir=/data/user_de/0/com.android.providers.settings
+      firstInstallTime=2026-08-29 08:59:26
+      uninstallReason=0
+      overlay paths:
+        /data/resource-cache/com.android.systemui-neutral-u6zL.frro
+        /data/resource-cache/com.android.systemui-accent-X5Kn.frro
+        /data/resource-cache/com.android.systemui-dynamic-fDr8.frro
+        /vendor/overlay/SettingsProvider__sdk_tablet_x86_64__auto_generated_rro_vendor.apk
+      legacy overlay paths:
+        /vendor/overlay/SettingsProvider__sdk_tablet_x86_64__auto_generated_rro_vendor.apk
+  Package [com.android.webview] (de6401e):
+    appId=10075
+    pkg=Package{c88dba7 com.android.webview}
+    codePath=/product/app/webview
+    versionCode=733900407 minSdk=29 targetSdk=36
+    minExtensionVersions=[]
+    versionName=140.0.7339.4
+    hiddenApiEnforcementPolicy=2
+    usesNonSdkApi=false
+    splits=[base]
+    apkSigningVersion=3
+    flags=[ SYSTEM HAS_CODE ALLOW_CLEAR_USER_DATA ALLOW_BACKUP KILL_AFTER_RESTORE ]
+    privateFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE ISOLATED_SPLIT_LOADING PRODUCT PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    forceQueryable=false
+    pageSizeCompat=0
+    scannedAsStoppedSystemApp=false
+    supportsScreens=[small, medium, large, xlarge, resizeable, anyDensity]
+    usesOptionalLibraries:
+      androidx.window.extensions
+    usesLibraryFiles:
+      /system_ext/framework/androidx.window.extensions.jar
+    timeStamp=2026-07-25 15:48:42
+    lastUpdateTime=2026-08-29 08:59:27
+    installerPackageName=null
+    installerPackageUid=-1
+    initiatingPackageName=null
+    originatingPackageName=null
+    packageSource=0
+    appMetadataFilePath=null
+    appMetadataSource=0
+    signatures=PackageSignatures{35c9854 version:3, signatures:[d7f1f224], past signatures:[]}
+    installPermissionsFixed=false
+    pkgFlags=[ SYSTEM HAS_CODE ALLOW_CLEAR_USER_DATA ALLOW_BACKUP KILL_AFTER_RESTORE ]
+    privatePkgFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE ISOLATED_SPLIT_LOADING PRODUCT PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    apexModuleName=null
+    requested permissions:
+      android.permission.INTERNET
+    install permissions:
+      android.permission.INTERNET: granted=true
+    User 0: ceDataInode=549055 deDataInode=393456 installed=true hidden=false suspended=false distractionFlags=0 stopped=false notLaunched=false enabled=0 instant=false virtual=false quarantined=false
+      installReason=0
+      dataDir=/data/user/0/com.android.webview
+      firstInstallTime=2026-08-29 08:59:27
+      uninstallReason=0
+      overlay paths:
+        /data/resource-cache/com.android.systemui-neutral-u6zL.frro
+        /data/resource-cache/com.android.systemui-accent-X5Kn.frro
+        /data/resource-cache/com.android.systemui-dynamic-fDr8.frro
+      gids=[3003]
+      runtime permissions:
+  Package [com.android.inputdevices] (ba71e8c):
+    appId=1000
+    sharedUser=SharedUserSetting{6f2dbe0 android.uid.system/1000}
+    pkg=Package{914e5c0 com.android.inputdevices}
+    codePath=/system/priv-app/InputDevices
+    versionCode=36 minSdk=10000 targetSdk=10000
+    minExtensionVersions=[]
+    versionName=Baklava
+    hiddenApiEnforcementPolicy=0
+    usesNonSdkApi=false
+    splits=[base]
+    apkSigningVersion=3
+    flags=[ SYSTEM HAS_CODE ALLOW_BACKUP KILL_AFTER_RESTORE ]
+    privateFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE DEFAULT_TO_DEVICE_PROTECTED_STORAGE DIRECT_BOOT_AWARE PRIVILEGED PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    forceQueryable=false
+    pageSizeCompat=0
+    scannedAsStoppedSystemApp=false
+    supportsScreens=[small, medium, large, xlarge, resizeable, anyDensity]
+    timeStamp=2026-07-25 15:48:24
+    lastUpdateTime=2026-08-29 08:59:26
+    installerPackageName=null
+    installerPackageUid=-1
+    initiatingPackageName=null
+    originatingPackageName=null
+    packageSource=0
+    appMetadataFilePath=null
+    appMetadataSource=0
+    signatures=PackageSignatures{e6682f9 version:3, signatures:[b4addb29], past signatures:[]}
+    installPermissionsFixed=false
+    pkgFlags=[ SYSTEM HAS_CODE ALLOW_BACKUP KILL_AFTER_RESTORE ]
+    privatePkgFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE DEFAULT_TO_DEVICE_PROTECTED_STORAGE DIRECT_BOOT_AWARE PRIVILEGED PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    apexModuleName=null
+    install permissions:
+      android.permission.INTERNET: granted=true
+      android.permission.WRITE_SECURE_SETTINGS: granted=true
+    User 0: ceDataInode=549061 deDataInode=393252 installed=true hidden=false suspended=false distractionFlags=0 stopped=false notLaunched=false enabled=0 instant=false virtual=false quarantined=false
+      installReason=0
+      dataDir=/data/user_de/0/com.android.inputdevices
+      firstInstallTime=2026-08-29 08:59:26
+      uninstallReason=0
+      overlay paths:
+        /data/resource-cache/com.android.systemui-neutral-u6zL.frro
+        /data/resource-cache/com.android.systemui-accent-X5Kn.frro
+        /data/resource-cache/com.android.systemui-dynamic-fDr8.frro
+  Package [com.android.rkpdapp] (8da6ecc):
+    appId=10101
+    pkg=Package{a43989f com.android.rkpdapp}
+    codePath=/apex/com.android.rkpd/priv-app/rkpdapp@BP4A.251205.006
+    versionCode=36 minSdk=33 targetSdk=36
+    minExtensionVersions=[]
+    versionName=Baklava
+    hiddenApiEnforcementPolicy=0
+    usesNonSdkApi=true
+    splits=[base]
+    apkSigningVersion=3
+    flags=[ SYSTEM HAS_CODE ALLOW_CLEAR_USER_DATA ALLOW_BACKUP KILL_AFTER_RESTORE ]
+    privateFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE PARTIALLY_DIRECT_BOOT_AWARE PRIVILEGED PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    forceQueryable=false
+    pageSizeCompat=0
+    queriesPackages=[com.google.android.gms]
+    scannedAsStoppedSystemApp=false
+    supportsScreens=[small, medium, large, xlarge, resizeable, anyDensity]
+    timeStamp=1970-01-01 00:00:00
+    lastUpdateTime=2026-08-29 08:59:27
+    installerPackageName=null
+    installerPackageUid=-1
+    initiatingPackageName=null
+    originatingPackageName=null
+    packageSource=0
+    appMetadataFilePath=null
+    appMetadataSource=0
+    signatures=PackageSignatures{1429dec version:3, signatures:[d7f1f224], past signatures:[]}
+    installPermissionsFixed=false
+    pkgFlags=[ SYSTEM HAS_CODE ALLOW_CLEAR_USER_DATA ALLOW_BACKUP KILL_AFTER_RESTORE ]
+    privatePkgFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE PARTIALLY_DIRECT_BOOT_AWARE PRIVILEGED PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    apexModuleName=com.android.rkpd
+    declared permissions:
+    requested permissions:
+      android.permission.INTERNET
+    install permissions:
+      android.permission.INTERNET: granted=true
+    User 0: ceDataInode=549064 deDataInode=393462 installed=true hidden=false suspended=false distractionFlags=0 stopped=false notLaunched=false enabled=0 instant=false virtual=false quarantined=false
+      installReason=0
+      dataDir=/data/user/0/com.android.rkpdapp
+      firstInstallTime=2026-08-29 08:59:27
+      uninstallReason=0
+      overlay paths:
+        /data/resource-cache/com.android.systemui-neutral-u6zL.frro
+        /data/resource-cache/com.android.systemui-accent-X5Kn.frro
+        /data/resource-cache/com.android.systemui-dynamic-fDr8.frro
+      gids=[3003]
+      runtime permissions:
+  Package [com.android.bips] (8b8515):
+    appId=10027
+    pkg=Package{286d44a com.android.bips}
+    codePath=/system/priv-app/BuiltInPrintService
+    versionCode=36 minSdk=10000 targetSdk=10000
+    minExtensionVersions=[]
+    versionName=Baklava
+    hiddenApiEnforcementPolicy=0
+    usesNonSdkApi=false
+    splits=[base]
+    apkSigningVersion=3
+    flags=[ SYSTEM HAS_CODE ALLOW_CLEAR_USER_DATA ALLOW_BACKUP KILL_AFTER_RESTORE ]
+    privateFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE PRIVILEGED PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    forceQueryable=false
+    pageSizeCompat=0
+    scannedAsStoppedSystemApp=false
+    supportsScreens=[small, medium, large, xlarge, resizeable, anyDensity]
+    usesOptionalLibraries:
+      androidx.window.extensions
+      androidx.window.sidecar
+    usesLibraryFiles:
+      /system_ext/framework/androidx.window.extensions.jar
+      /system_ext/framework/androidx.window.sidecar.jar
+    timeStamp=2026-07-25 15:48:24
+    lastUpdateTime=2026-08-29 08:59:26
+    installerPackageName=null
+    installerPackageUid=-1
+    initiatingPackageName=null
+    originatingPackageName=null
+    packageSource=0
+    appMetadataFilePath=null
+    appMetadataSource=0
+    signatures=PackageSignatures{3531fbb version:3, signatures:[b4addb29], past signatures:[]}
+    installPermissionsFixed=false
+    pkgFlags=[ SYSTEM HAS_CODE ALLOW_CLEAR_USER_DATA ALLOW_BACKUP KILL_AFTER_RESTORE ]
+    privatePkgFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE PRIVILEGED PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    apexModuleName=null
+    declared permissions:
+    requested permissions:
+      android.permission.INTERNET
+    install permissions:
+      android.permission.INTERNET: granted=true
+    User 0: ceDataInode=549067 deDataInode=393465 installed=true hidden=false suspended=false distractionFlags=0 stopped=false notLaunched=false enabled=0 instant=false virtual=false quarantined=false
+      installReason=0
+      dataDir=/data/user/0/com.android.bips
+      firstInstallTime=2026-08-29 08:59:26
+      uninstallReason=0
+      overlay paths:
+        /data/resource-cache/com.android.systemui-neutral-u6zL.frro
+        /data/resource-cache/com.android.systemui-accent-X5Kn.frro
+        /data/resource-cache/com.android.systemui-dynamic-fDr8.frro
+      gids=[3003]
+      runtime permissions:
+  Package [com.android.sdksetup] (c6e4e1b):
+    appId=10081
+    pkg=Package{ce7cb33 com.android.sdksetup}
+    codePath=/system_ext/priv-app/SdkSetup
+    versionCode=36 minSdk=10000 targetSdk=10000
+    minExtensionVersions=[]
+    versionName=Baklava
+    hiddenApiEnforcementPolicy=0
+    usesNonSdkApi=true
+    splits=[base]
+    apkSigningVersion=3
+    flags=[ SYSTEM HAS_CODE ALLOW_CLEAR_USER_DATA ALLOW_BACKUP KILL_AFTER_RESTORE ]
+    privateFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE PARTIALLY_DIRECT_BOOT_AWARE PRIVILEGED SYSTEM_EXT PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    forceQueryable=false
+    pageSizeCompat=0
+    scannedAsStoppedSystemApp=false
+    supportsScreens=[small, medium, large, xlarge, resizeable, anyDensity]
+    timeStamp=2026-07-25 15:49:09
+    lastUpdateTime=2026-08-29 08:59:27
+    installerPackageName=null
+    installerPackageUid=-1
+    initiatingPackageName=null
+    originatingPackageName=null
+    packageSource=0
+    appMetadataFilePath=null
+    appMetadataSource=0
+    signatures=PackageSignatures{b0d3ef0 version:3, signatures:[b4addb29], past signatures:[]}
+    installPermissionsFixed=false
+    pkgFlags=[ SYSTEM HAS_CODE ALLOW_CLEAR_USER_DATA ALLOW_BACKUP KILL_AFTER_RESTORE ]
+    privatePkgFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE PARTIALLY_DIRECT_BOOT_AWARE PRIVILEGED SYSTEM_EXT PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    apexModuleName=null
+    requested permissions:
+      android.permission.WRITE_SECURE_SETTINGS
+    install permissions:
+      android.permission.WRITE_SECURE_SETTINGS: granted=true
+    User 0: ceDataInode=549073 deDataInode=393471 installed=true hidden=false suspended=false distractionFlags=0 stopped=false notLaunched=false enabled=0 instant=false virtual=false quarantined=false
+      installReason=0
+      dataDir=/data/user/0/com.android.sdksetup
+      firstInstallTime=2026-08-29 08:59:27
+      uninstallReason=0
+      overlay paths:
+        /data/resource-cache/com.android.systemui-neutral-u6zL.frro
+        /data/resource-cache/com.android.systemui-accent-X5Kn.frro
+        /data/resource-cache/com.android.systemui-dynamic-fDr8.frro
+  Package [com.android.server.telecom] (a596e8d):
+    appId=1000
+    sharedUser=SharedUserSetting{6f2dbe0 android.uid.system/1000}
+    pkg=Package{2264420 com.android.server.telecom}
+    codePath=/system/priv-app/Telecom
+    versionCode=36 minSdk=10000 targetSdk=10000
+    minExtensionVersions=[]
+    versionName=Baklava
+    hiddenApiEnforcementPolicy=0
+    usesNonSdkApi=true
+    splits=[base]
+    apkSigningVersion=3
+    flags=[ SYSTEM HAS_CODE ALLOW_CLEAR_USER_DATA ]
+    privateFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE DEFAULT_TO_DEVICE_PROTECTED_STORAGE DIRECT_BOOT_AWARE PRIVILEGED PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    forceQueryable=false
+    pageSizeCompat=0
+    scannedAsStoppedSystemApp=false
+    supportsScreens=[small, medium, large, xlarge, resizeable, anyDensity]
+    timeStamp=2026-07-25 15:48:25
+    lastUpdateTime=2026-08-29 08:59:26
+    installerPackageName=null
+    installerPackageUid=-1
+    initiatingPackageName=null
+    originatingPackageName=null
+    packageSource=0
+    appMetadataFilePath=null
+    appMetadataSource=0
+    signatures=PackageSignatures{3ccf1d9 version:3, signatures:[b4addb29], past signatures:[]}
+    installPermissionsFixed=false
+    pkgFlags=[ SYSTEM HAS_CODE ALLOW_CLEAR_USER_DATA ]
+    privatePkgFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE DEFAULT_TO_DEVICE_PROTECTED_STORAGE DIRECT_BOOT_AWARE PRIVILEGED PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    apexModuleName=null
+    declared permissions:
+    requested permissions:
+    install permissions:
+      android.permission.INTERNET: granted=true
+      android.permission.WRITE_SECURE_SETTINGS: granted=true
+    User 0: ceDataInode=549088 deDataInode=393258 installed=true hidden=false suspended=false distractionFlags=0 stopped=false notLaunched=false enabled=0 instant=false virtual=false quarantined=false
+      installReason=0
+      dataDir=/data/user_de/0/com.android.server.telecom
+      firstInstallTime=2026-08-29 08:59:26
+      uninstallReason=0
+      overlay paths:
+        /data/resource-cache/com.android.systemui-neutral-u6zL.frro
+        /data/resource-cache/com.android.systemui-accent-X5Kn.frro
+        /data/resource-cache/com.android.systemui-dynamic-fDr8.frro
+  Package [com.android.cellbroadcastservice] (8fbdae1):
+    appId=1073
+    sharedUser=SharedUserSetting{311c4e6 android.uid.networkstack/1073}
+    pkg=Package{6c9479e com.android.cellbroadcastservice}
+    codePath=/apex/com.android.cellbroadcast/priv-app/CellBroadcastServiceModule@BP4A.251205.006
+    versionCode=300000000 minSdk=30 targetSdk=10000
+    minExtensionVersions=[]
+    versionName=R-initial
+    hiddenApiEnforcementPolicy=0
+    usesNonSdkApi=true
+    splits=[base]
+    apkSigningVersion=3
+    flags=[ SYSTEM HAS_CODE PERSISTENT ALLOW_CLEAR_USER_DATA ALLOW_BACKUP KILL_AFTER_RESTORE ]
+    privateFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE DEFAULT_TO_DEVICE_PROTECTED_STORAGE DIRECT_BOOT_AWARE PRIVILEGED PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    forceQueryable=true
+    pageSizeCompat=0
+    scannedAsStoppedSystemApp=false
+    supportsScreens=[small, medium, large, xlarge, resizeable, anyDensity]
+    timeStamp=1970-01-01 00:00:00
+    lastUpdateTime=2026-08-29 08:59:27
+    installerPackageName=null
+    installerPackageUid=-1
+    initiatingPackageName=null
+    originatingPackageName=null
+    packageSource=0
+    appMetadataFilePath=null
+    appMetadataSource=0
+    signatures=PackageSignatures{9b9d27f version:3, signatures:[e708811f], past signatures:[]}
+    installPermissionsFixed=false
+    pkgFlags=[ SYSTEM HAS_CODE PERSISTENT ALLOW_CLEAR_USER_DATA ALLOW_BACKUP KILL_AFTER_RESTORE ]
+    privatePkgFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE DEFAULT_TO_DEVICE_PROTECTED_STORAGE DIRECT_BOOT_AWARE PRIVILEGED PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    apexModuleName=com.android.cellbroadcast
+    declared permissions:
+    requested permissions:
+    install permissions:
+      android.permission.INTERNET: granted=true
+    User 0: ceDataInode=549091 deDataInode=393483 installed=true hidden=false suspended=false distractionFlags=0 stopped=false notLaunched=false enabled=0 instant=false virtual=false quarantined=false
+      installReason=0
+      dataDir=/data/user_de/0/com.android.cellbroadcastservice
+      firstInstallTime=2026-08-29 08:59:27
+      uninstallReason=0
+      overlay paths:
+        /data/resource-cache/com.android.systemui-neutral-u6zL.frro
+        /data/resource-cache/com.android.systemui-accent-X5Kn.frro
+        /data/resource-cache/com.android.systemui-dynamic-fDr8.frro
+  Package [com.android.keychain] (8f790db):
+    appId=1000
+    sharedUser=SharedUserSetting{6f2dbe0 android.uid.system/1000}
+    pkg=Package{f7b824c com.android.keychain}
+    codePath=/system/app/KeyChain
+    versionCode=36 minSdk=10000 targetSdk=10000
+    minExtensionVersions=[]
+    versionName=Baklava
+    hiddenApiEnforcementPolicy=0
+    usesNonSdkApi=true
+    splits=[base]
+    apkSigningVersion=3
+    flags=[ SYSTEM HAS_CODE ALLOW_CLEAR_USER_DATA ]
+    privateFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    forceQueryable=false
+    pageSizeCompat=0
+    scannedAsStoppedSystemApp=false
+    supportsScreens=[small, medium, large, xlarge, resizeable, anyDensity]
+    timeStamp=2026-07-25 15:48:24
+    lastUpdateTime=2026-08-29 08:59:26
+    installerPackageName=null
+    installerPackageUid=-1
+    initiatingPackageName=null
+    originatingPackageName=null
+    packageSource=0
+    appMetadataFilePath=null
+    appMetadataSource=0
+    signatures=PackageSignatures{c11d295 version:3, signatures:[b4addb29], past signatures:[]}
+    installPermissionsFixed=false
+    pkgFlags=[ SYSTEM HAS_CODE ALLOW_CLEAR_USER_DATA ]
+    privatePkgFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    apexModuleName=null
+    declared permissions:
+    requested permissions:
+    install permissions:
+      android.permission.INTERNET: granted=true
+      android.permission.WRITE_SECURE_SETTINGS: granted=true
+    User 0: ceDataInode=549094 deDataInode=393486 installed=true hidden=false suspended=false distractionFlags=0 stopped=false notLaunched=false enabled=0 instant=false virtual=false quarantined=false
+      installReason=0
+      dataDir=/data/user/0/com.android.keychain
+      firstInstallTime=2026-08-29 08:59:26
+      uninstallReason=0
+      overlay paths:
+        /data/resource-cache/com.android.systemui-neutral-u6zL.frro
+        /data/resource-cache/com.android.systemui-accent-X5Kn.frro
+        /data/resource-cache/com.android.systemui-dynamic-fDr8.frro
+  Package [com.android.printservice.recommendation] (119b0f7):
+    appId=10054
+    pkg=Package{7d8ac76 com.android.printservice.recommendation}
+    codePath=/system/app/PrintRecommendationService
+    versionCode=4 minSdk=10000 targetSdk=10000
+    minExtensionVersions=[]
+    versionName=1.3.0
+    hiddenApiEnforcementPolicy=0
+    usesNonSdkApi=false
+    splits=[base]
+    apkSigningVersion=3
+    flags=[ SYSTEM HAS_CODE ]
+    privateFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    forceQueryable=false
+    pageSizeCompat=0
+    scannedAsStoppedSystemApp=false
+    supportsScreens=[small, medium, large, xlarge, resizeable, anyDensity]
+    timeStamp=2026-07-25 15:48:24
+    lastUpdateTime=2026-08-29 08:59:26
+    installerPackageName=null
+    installerPackageUid=-1
+    initiatingPackageName=null
+    originatingPackageName=null
+    packageSource=0
+    appMetadataFilePath=null
+    appMetadataSource=0
+    signatures=PackageSignatures{5119277 version:3, signatures:[d7f1f224], past signatures:[]}
+    installPermissionsFixed=false
+    pkgFlags=[ SYSTEM HAS_CODE ]
+    privatePkgFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    apexModuleName=null
+    declared permissions:
+    requested permissions:
+      android.permission.INTERNET
+    install permissions:
+      android.permission.INTERNET: granted=true
+    User 0: ceDataInode=549100 deDataInode=393492 installed=true hidden=false suspended=false distractionFlags=0 stopped=false notLaunched=false enabled=0 instant=false virtual=false quarantined=false
+      installReason=0
+      dataDir=/data/user/0/com.android.printservice.recommendation
+      firstInstallTime=2026-08-29 08:59:26
+      uninstallReason=0
+      overlay paths:
+        /data/resource-cache/com.android.systemui-neutral-u6zL.frro
+        /data/resource-cache/com.android.systemui-accent-X5Kn.frro
+        /data/resource-cache/com.android.systemui-dynamic-fDr8.frro
+      gids=[3003]
+  Package [com.android.dialer] (1e5cb64):
+    appId=10065
+    pkg=Package{77abf4d com.android.dialer}
+    codePath=/product/priv-app/Dialer
+    versionCode=2900000 minSdk=10000 targetSdk=30
+    minExtensionVersions=[]
+    versionName=23.0
+    hiddenApiEnforcementPolicy=2
+    usesNonSdkApi=false
+    splits=[base]
+    apkSigningVersion=3
+    flags=[ SYSTEM HAS_CODE ALLOW_CLEAR_USER_DATA ALLOW_BACKUP KILL_AFTER_RESTORE ]
+    privateFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE PARTIALLY_DIRECT_BOOT_AWARE PRIVILEGED PRODUCT PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    forceQueryable=false
+    pageSizeCompat=0
+    scannedAsStoppedSystemApp=true
+    supportsScreens=[small, medium, large, xlarge, resizeable, anyDensity]
+    usesLibraries:
+      org.apache.http.legacy
+    usesLibraryFiles:
+      /system/framework/org.apache.http.legacy.jar
+    timeStamp=2026-07-25 15:48:42
+    lastUpdateTime=2026-08-29 08:59:27
+    installerPackageName=null
+    installerPackageUid=-1
+    initiatingPackageName=null
+    originatingPackageName=null
+    packageSource=0
+    appMetadataFilePath=null
+    appMetadataSource=0
+    signatures=PackageSignatures{81b1a02 version:3, signatures:[9542d9b9], past signatures:[]}
+    installPermissionsFixed=false
+    pkgFlags=[ SYSTEM HAS_CODE ALLOW_CLEAR_USER_DATA ALLOW_BACKUP KILL_AFTER_RESTORE ]
+    privatePkgFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE PARTIALLY_DIRECT_BOOT_AWARE PRIVILEGED PRODUCT PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    apexModuleName=null
+    requested permissions:
+      android.permission.INTERNET
+      android.permission.CAMERA
+    install permissions:
+      android.permission.INTERNET: granted=true
+    User 0: ceDataInode=549103 deDataInode=393261 installed=true hidden=false suspended=false distractionFlags=0 stopped=false notLaunched=false enabled=0 instant=false virtual=false quarantined=false
+      installReason=0
+      dataDir=/data/user/0/com.android.dialer
+      firstInstallTime=2026-08-29 08:59:27
+      uninstallReason=0
+      overlay paths:
+        /data/resource-cache/com.android.systemui-neutral-u6zL.frro
+        /data/resource-cache/com.android.systemui-accent-X5Kn.frro
+        /data/resource-cache/com.android.systemui-dynamic-fDr8.frro
+      gids=[3002, 3003, 3001]
+      runtime permissions:
+        android.permission.CAMERA: granted=true, flags=[ GRANTED_BY_DEFAULT|USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]
+  Package [com.android.gallery3d] (62841cd):
+    appId=10069
+    pkg=Package{de2f550 com.android.gallery3d}
+    codePath=/product/app/Gallery2
+    versionCode=40030 minSdk=10000 targetSdk=28
+    minExtensionVersions=[]
+    versionName=1.1.40030
+    hiddenApiEnforcementPolicy=2
+    usesNonSdkApi=false
+    splits=[base]
+    apkSigningVersion=3
+    flags=[ SYSTEM HAS_CODE ALLOW_CLEAR_USER_DATA ALLOW_BACKUP KILL_AFTER_RESTORE RESTORE_ANY_VERSION LARGE_HEAP ]
+    privateFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION PRIVATE_FLAG_REQUEST_LEGACY_EXTERNAL_STORAGE HAS_DOMAIN_URLS PRODUCT PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    forceQueryable=false
+    pageSizeCompat=0
+    scannedAsStoppedSystemApp=true
+    supportsScreens=[medium, large, xlarge, resizeable, anyDensity]
+    usesLibraries:
+      android.test.base
+      android.hidl.manager-V1.0-java
+      android.hidl.base-V1.0-java
+    usesOptionalLibraries:
+      com.google.android.media.effects
+      org.apache.http.legacy
+    usesLibraryFiles:
+      /system/framework/android.test.base.jar
+      /system/framework/android.hidl.manager-V1.0-java.jar
+      /system/framework/android.hidl.base-V1.0-java.jar
+      /system/framework/org.apache.http.legacy.jar
+    timeStamp=2026-07-25 15:48:42
+    lastUpdateTime=2026-08-29 08:59:27
+    installerPackageName=null
+    installerPackageUid=-1
+    initiatingPackageName=null
+    originatingPackageName=null
+    packageSource=0
+    appMetadataFilePath=null
+    appMetadataSource=0
+    signatures=PackageSignatures{c410349 version:3, signatures:[d7f1f224], past signatures:[]}
+    installPermissionsFixed=false
+    pkgFlags=[ SYSTEM HAS_CODE ALLOW_CLEAR_USER_DATA ALLOW_BACKUP KILL_AFTER_RESTORE RESTORE_ANY_VERSION LARGE_HEAP ]
+    privatePkgFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION PRIVATE_FLAG_REQUEST_LEGACY_EXTERNAL_STORAGE HAS_DOMAIN_URLS PRODUCT PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    apexModuleName=null
+    declared permissions:
+    requested permissions:
+      android.permission.INTERNET
+      android.permission.CAMERA
+      android.permission.RECORD_AUDIO
+    install permissions:
+      android.permission.INTERNET: granted=true
+    User 0: ceDataInode=549106 deDataInode=393495 installed=true hidden=false suspended=false distractionFlags=0 stopped=false notLaunched=false enabled=0 instant=false virtual=false quarantined=false
+      installReason=0
+      dataDir=/data/user/0/com.android.gallery3d
+      firstInstallTime=2026-08-29 08:59:27
+      uninstallReason=0
+      overlay paths:
+        /data/resource-cache/com.android.systemui-neutral-u6zL.frro
+        /data/resource-cache/com.android.systemui-accent-X5Kn.frro
+        /data/resource-cache/com.android.systemui-dynamic-fDr8.frro
+      gids=[3003]
+      runtime permissions:
+        android.permission.CAMERA: granted=false, flags=[ USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]
+        android.permission.RECORD_AUDIO: granted=false, flags=[ USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]
+  Package [android.ext.services] (4beaa82):
+    appId=10091
+    pkg=Package{cb2596f android.ext.services}
+    codePath=/apex/com.android.extservices/priv-app/ExtServices-sminus@BP4A.251205.006
+    versionCode=309999900 minSdk=31 targetSdk=10000
+    minExtensionVersions=[]
+    versionName=2019-09
+    hiddenApiEnforcementPolicy=0
+    usesNonSdkApi=true
+    splits=[base]
+    apkSigningVersion=3
+    flags=[ SYSTEM HAS_CODE ALLOW_CLEAR_USER_DATA ]
+    privateFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE PARTIALLY_DIRECT_BOOT_AWARE PRIVILEGED PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    forceQueryable=true
+    pageSizeCompat=0
+    scannedAsStoppedSystemApp=false
+    supportsScreens=[small, medium, large, xlarge, resizeable, anyDensity]
+    usesOptionalLibraries:
+      androidx.window.extensions
+      androidx.window.sidecar
+    usesLibraryFiles:
+      /system_ext/framework/androidx.window.extensions.jar
+      /system_ext/framework/androidx.window.sidecar.jar
+    processes:
+      android.ext.services:modelDownloaderServiceProcess
+      android.ext.services
+        deny: android.permission.INTERNET
+      .adservices
+    timeStamp=1970-01-01 00:00:00
+    lastUpdateTime=2026-08-29 08:59:27
+    installerPackageName=null
+    installerPackageUid=-1
+    initiatingPackageName=null
+    originatingPackageName=null
+    packageSource=0
+    appMetadataFilePath=null
+    appMetadataSource=0
+    signatures=PackageSignatures{a0a167c version:3, signatures:[d7f1f224], past signatures:[]}
+    installPermissionsFixed=false
+    pkgFlags=[ SYSTEM HAS_CODE ALLOW_CLEAR_USER_DATA ]
+    privatePkgFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE PARTIALLY_DIRECT_BOOT_AWARE PRIVILEGED PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    apexModuleName=com.android.extservices
+    declared permissions:
+    requested permissions:
+      android.permission.INTERNET
+    install permissions:
+      android.permission.INTERNET: granted=true
+    User 0: ceDataInode=549109 deDataInode=393264 installed=true hidden=false suspended=false distractionFlags=0 stopped=false notLaunched=false enabled=0 instant=false virtual=false quarantined=false
+      installReason=0
+      dataDir=/data/user/0/android.ext.services
+      firstInstallTime=2026-08-29 08:59:27
+      uninstallReason=0
+      overlay paths:
+        /data/resource-cache/com.android.systemui-neutral-u6zL.frro
+        /data/resource-cache/com.android.systemui-accent-X5Kn.frro
+        /data/resource-cache/com.android.systemui-dynamic-fDr8.frro
+      gids=[3003]
+      runtime permissions:
+  Package [com.android.localtransport] (5d13842):
+    appId=1000
+    sharedUser=SharedUserSetting{6f2dbe0 android.uid.system/1000}
+    pkg=Package{e1207b2 com.android.localtransport}
+    codePath=/system/priv-app/LocalTransport
+    versionCode=36 minSdk=10000 targetSdk=10000
+    minExtensionVersions=[]
+    versionName=Baklava
+    hiddenApiEnforcementPolicy=0
+    usesNonSdkApi=true
+    splits=[base]
+    apkSigningVersion=3
+    flags=[ SYSTEM HAS_CODE ALLOW_CLEAR_USER_DATA ]
+    privateFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE PRIVILEGED PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    forceQueryable=false
+    pageSizeCompat=0
+    scannedAsStoppedSystemApp=false
+    supportsScreens=[small, medium, large, xlarge, resizeable, anyDensity]
+    timeStamp=2026-07-25 15:48:24
+    lastUpdateTime=2026-08-29 08:59:26
+    installerPackageName=null
+    installerPackageUid=-1
+    initiatingPackageName=null
+    originatingPackageName=null
+    packageSource=0
+    appMetadataFilePath=null
+    appMetadataSource=0
+    signatures=PackageSignatures{1b1b303 version:3, signatures:[b4addb29], past signatures:[]}
+    installPermissionsFixed=false
+    pkgFlags=[ SYSTEM HAS_CODE ALLOW_CLEAR_USER_DATA ]
+    privatePkgFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE PRIVILEGED PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    apexModuleName=null
+    install permissions:
+      android.permission.INTERNET: granted=true
+      android.permission.WRITE_SECURE_SETTINGS: granted=true
+    User 0: ceDataInode=549121 deDataInode=393504 installed=true hidden=false suspended=false distractionFlags=0 stopped=false notLaunched=false enabled=0 instant=false virtual=false quarantined=false
+      installReason=0
+      dataDir=/data/user/0/com.android.localtransport
+      firstInstallTime=2026-08-29 08:59:26
+      uninstallReason=0
+      overlay paths:
+        /data/resource-cache/com.android.systemui-neutral-u6zL.frro
+        /data/resource-cache/com.android.systemui-accent-X5Kn.frro
+        /data/resource-cache/com.android.systemui-dynamic-fDr8.frro
+  Package [com.android.carrierdefaultapp] (93d22fc):
+    appId=10046
+    pkg=Package{53e16ac com.android.carrierdefaultapp}
+    codePath=/system/app/CarrierDefaultApp
+    versionCode=36 minSdk=10000 targetSdk=10000
+    minExtensionVersions=[]
+    versionName=Baklava
+    hiddenApiEnforcementPolicy=0
+    usesNonSdkApi=true
+    splits=[base]
+    apkSigningVersion=3
+    flags=[ SYSTEM HAS_CODE ALLOW_CLEAR_USER_DATA ALLOW_BACKUP KILL_AFTER_RESTORE ]
+    privateFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE DIRECT_BOOT_AWARE HAS_DOMAIN_URLS PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    forceQueryable=false
+    pageSizeCompat=0
+    scannedAsStoppedSystemApp=false
+    supportsScreens=[small, medium, large, xlarge, resizeable, anyDensity]
+    timeStamp=2026-07-25 15:48:24
+    lastUpdateTime=2026-08-29 08:59:26
+    installerPackageName=null
+    installerPackageUid=-1
+    initiatingPackageName=null
+    originatingPackageName=null
+    packageSource=0
+    appMetadataFilePath=null
+    appMetadataSource=0
+    signatures=PackageSignatures{b603f75 version:3, signatures:[b4addb29], past signatures:[]}
+    installPermissionsFixed=false
+    pkgFlags=[ SYSTEM HAS_CODE ALLOW_CLEAR_USER_DATA ALLOW_BACKUP KILL_AFTER_RESTORE ]
+    privatePkgFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE DIRECT_BOOT_AWARE HAS_DOMAIN_URLS PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    apexModuleName=null
+    requested permissions:
+      android.permission.INTERNET
+    install permissions:
+      android.permission.INTERNET: granted=true
+    User 0: ceDataInode=549127 deDataInode=393510 installed=true hidden=false suspended=false distractionFlags=0 stopped=false notLaunched=false enabled=0 instant=false virtual=false quarantined=false
+      installReason=0
+      dataDir=/data/user/0/com.android.carrierdefaultapp
+      firstInstallTime=2026-08-29 08:59:26
+      uninstallReason=0
+      overlay paths:
+        /data/resource-cache/com.android.systemui-neutral-u6zL.frro
+        /data/resource-cache/com.android.systemui-accent-X5Kn.frro
+        /data/resource-cache/com.android.systemui-dynamic-fDr8.frro
+      gids=[3003]
+      runtime permissions:
+  Package [com.android.DeviceAsWebcam] (420b324):
+    appId=1000
+    sharedUser=SharedUserSetting{6f2dbe0 android.uid.system/1000}
+    pkg=Package{65a8f44 com.android.DeviceAsWebcam}
+    codePath=/system/priv-app/DeviceAsWebcam
+    versionCode=36 minSdk=10000 targetSdk=10000
+    minExtensionVersions=[]
+    versionName=Baklava
+    hiddenApiEnforcementPolicy=0
+    usesNonSdkApi=true
+    splits=[base]
+    apkSigningVersion=3
+    flags=[ SYSTEM HAS_CODE ALLOW_CLEAR_USER_DATA ALLOW_BACKUP KILL_AFTER_RESTORE ]
+    privateFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE PRIVILEGED PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    forceQueryable=false
+    pageSizeCompat=0
+    scannedAsStoppedSystemApp=false
+    supportsScreens=[small, medium, large, xlarge, resizeable, anyDensity]
+    usesOptionalLibraries:
+      androidx.window.extensions
+      androidx.window.sidecar
+    usesLibraryFiles:
+      /system_ext/framework/androidx.window.extensions.jar
+      /system_ext/framework/androidx.window.sidecar.jar
+    timeStamp=2026-07-25 15:48:24
+    lastUpdateTime=2026-08-29 08:59:26
+    installerPackageName=null
+    installerPackageUid=-1
+    initiatingPackageName=null
+    originatingPackageName=null
+    packageSource=0
+    appMetadataFilePath=null
+    appMetadataSource=0
+    signatures=PackageSignatures{ecde82d version:3, signatures:[b4addb29], past signatures:[]}
+    installPermissionsFixed=false
+    pkgFlags=[ SYSTEM HAS_CODE ALLOW_CLEAR_USER_DATA ALLOW_BACKUP KILL_AFTER_RESTORE ]
+    privatePkgFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE PRIVILEGED PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    apexModuleName=null
+    declared permissions:
+    requested permissions:
+      android.permission.CAMERA
+    install permissions:
+      android.permission.INTERNET: granted=true
+      android.permission.WRITE_SECURE_SETTINGS: granted=true
+    User 0: ceDataInode=549136 deDataInode=393270 installed=true hidden=false suspended=false distractionFlags=0 stopped=false notLaunched=false enabled=0 instant=false virtual=false quarantined=false
+      installReason=0
+      dataDir=/data/user/0/com.android.DeviceAsWebcam
+      firstInstallTime=2026-08-29 08:59:26
+      uninstallReason=0
+      overlay paths:
+        /data/resource-cache/com.android.systemui-neutral-u6zL.frro
+        /data/resource-cache/com.android.systemui-accent-X5Kn.frro
+        /data/resource-cache/com.android.systemui-dynamic-fDr8.frro
+  Package [com.android.proxyhandler] (7307da):
+    appId=10043
+    pkg=Package{a7562f3 com.android.proxyhandler}
+    codePath=/system/priv-app/ProxyHandler
+    versionCode=36 minSdk=10000 targetSdk=10000
+    minExtensionVersions=[]
+    versionName=Baklava
+    hiddenApiEnforcementPolicy=0
+    usesNonSdkApi=true
+    splits=[base]
+    apkSigningVersion=3
+    flags=[ SYSTEM HAS_CODE ALLOW_CLEAR_USER_DATA ALLOW_BACKUP KILL_AFTER_RESTORE ]
+    privateFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE DEFAULT_TO_DEVICE_PROTECTED_STORAGE DIRECT_BOOT_AWARE PRIVILEGED PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    forceQueryable=false
+    pageSizeCompat=0
+    scannedAsStoppedSystemApp=false
+    supportsScreens=[small, medium, large, xlarge, resizeable, anyDensity]
+    timeStamp=2026-07-25 15:48:24
+    lastUpdateTime=2026-08-29 08:59:26
+    installerPackageName=null
+    installerPackageUid=-1
+    initiatingPackageName=null
+    originatingPackageName=null
+    packageSource=0
+    appMetadataFilePath=null
+    appMetadataSource=0
+    signatures=PackageSignatures{3135bb0 version:3, signatures:[b4addb29], past signatures:[]}
+    installPermissionsFixed=false
+    pkgFlags=[ SYSTEM HAS_CODE ALLOW_CLEAR_USER_DATA ALLOW_BACKUP KILL_AFTER_RESTORE ]
+    privatePkgFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE DEFAULT_TO_DEVICE_PROTECTED_STORAGE DIRECT_BOOT_AWARE PRIVILEGED PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    apexModuleName=null
+    requested permissions:
+      android.permission.INTERNET
+    install permissions:
+      android.permission.INTERNET: granted=true
+    User 0: ceDataInode=549139 deDataInode=393273 installed=true hidden=false suspended=false distractionFlags=0 stopped=false notLaunched=false enabled=0 instant=false virtual=false quarantined=false
+      installReason=0
+      dataDir=/data/user_de/0/com.android.proxyhandler
+      firstInstallTime=2026-08-29 08:59:26
+      uninstallReason=0
+      overlay paths:
+        /data/resource-cache/com.android.systemui-neutral-u6zL.frro
+        /data/resource-cache/com.android.systemui-accent-X5Kn.frro
+        /data/resource-cache/com.android.systemui-dynamic-fDr8.frro
+      gids=[3003]
+  Package [org.chromium.webview_shell] (78ecd01):
+    appId=10079
+    pkg=Package{d4d10e0 org.chromium.webview_shell}
+    codePath=/product/app/Browser2
+    versionCode=1 minSdk=10000 targetSdk=29
+    minExtensionVersions=[]
+    versionName=1.0
+    hiddenApiEnforcementPolicy=2
+    usesNonSdkApi=false
+    splits=[base]
+    apkSigningVersion=3
+    flags=[ SYSTEM HAS_CODE ALLOW_CLEAR_USER_DATA ALLOW_BACKUP KILL_AFTER_RESTORE ]
+    privateFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE HAS_DOMAIN_URLS PRODUCT PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    forceQueryable=false
+    pageSizeCompat=0
+    scannedAsStoppedSystemApp=true
+    supportsScreens=[small, medium, large, xlarge, resizeable, anyDensity]
+    usesLibraries:
+      android.test.base
+      android.test.mock
+      android.test.runner
+    usesLibraryFiles:
+      /system/framework/android.test.base.jar
+      /system/framework/android.test.mock.jar
+      /system/framework/android.test.runner.jar
+    timeStamp=2026-07-25 15:48:42
+    lastUpdateTime=2026-08-29 08:59:27
+    installerPackageName=null
+    installerPackageUid=-1
+    initiatingPackageName=null
+    originatingPackageName=null
+    packageSource=0
+    appMetadataFilePath=null
+    appMetadataSource=0
+    signatures=PackageSignatures{2349f99 version:3, signatures:[d7f1f224], past signatures:[]}
+    installPermissionsFixed=false
+    pkgFlags=[ SYSTEM HAS_CODE ALLOW_CLEAR_USER_DATA ALLOW_BACKUP KILL_AFTER_RESTORE ]
+    privatePkgFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE HAS_DOMAIN_URLS PRODUCT PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    apexModuleName=null
+    requested permissions:
+      android.permission.INTERNET
+      android.permission.CAMERA
+      android.permission.RECORD_AUDIO
+    install permissions:
+      android.permission.INTERNET: granted=true
+    User 0: ceDataInode=549157 deDataInode=393528 installed=true hidden=false suspended=false distractionFlags=0 stopped=false notLaunched=false enabled=0 instant=false virtual=false quarantined=false
+      installReason=0
+      dataDir=/data/user/0/org.chromium.webview_shell
+      firstInstallTime=2026-08-29 08:59:27
+      uninstallReason=0
+      overlay paths:
+        /data/resource-cache/com.android.systemui-neutral-u6zL.frro
+        /data/resource-cache/com.android.systemui-accent-X5Kn.frro
+        /data/resource-cache/com.android.systemui-dynamic-fDr8.frro
+      gids=[3003]
+      runtime permissions:
+        android.permission.CAMERA: granted=false, flags=[ USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]
+        android.permission.RECORD_AUDIO: granted=false, flags=[ USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]
+  Package [com.android.managedprovisioning] (a09c7a6):
+    appId=10025
+    pkg=Package{445963f com.android.managedprovisioning}
+    codePath=/system/priv-app/ManagedProvisioning
+    versionCode=36 minSdk=10000 targetSdk=10000
+    minExtensionVersions=[]
+    versionName=Baklava
+    hiddenApiEnforcementPolicy=0
+    usesNonSdkApi=true
+    splits=[base]
+    apkSigningVersion=3
+    flags=[ SYSTEM HAS_CODE ALLOW_BACKUP KILL_AFTER_RESTORE ]
+    privateFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE PRIVILEGED PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    forceQueryable=false
+    pageSizeCompat=0
+    queriesIntents=[Intent { act=com.android.setupwizard.action.PARTNER_CUSTOMIZATION }]
+    scannedAsStoppedSystemApp=false
+    supportsScreens=[small, medium, large, xlarge, resizeable, anyDensity]
+    usesOptionalLibraries:
+      androidx.window.extensions
+      androidx.window.sidecar
+    usesLibraryFiles:
+      /system_ext/framework/androidx.window.extensions.jar
+      /system_ext/framework/androidx.window.sidecar.jar
+    timeStamp=2026-07-25 15:48:25
+    lastUpdateTime=2026-08-29 08:59:26
+    installerPackageName=null
+    installerPackageUid=-1
+    initiatingPackageName=null
+    originatingPackageName=null
+    packageSource=0
+    appMetadataFilePath=null
+    appMetadataSource=0
+    signatures=PackageSignatures{9225b0c version:3, signatures:[b4addb29], past signatures:[]}
+    installPermissionsFixed=false
+    pkgFlags=[ SYSTEM HAS_CODE ALLOW_BACKUP KILL_AFTER_RESTORE ]
+    privatePkgFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE PRIVILEGED PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    apexModuleName=null
+    declared permissions:
+    requested permissions:
+      android.permission.INTERNET
+      android.permission.WRITE_SECURE_SETTINGS
+    install permissions:
+      android.permission.INTERNET: granted=true
+      android.permission.WRITE_SECURE_SETTINGS: granted=true
+    User 0: ceDataInode=549160 deDataInode=393531 installed=true hidden=false suspended=false distractionFlags=0 stopped=false notLaunched=false enabled=0 instant=false virtual=false quarantined=false
+      installReason=0
+      dataDir=/data/user/0/com.android.managedprovisioning
+      firstInstallTime=2026-08-29 08:59:26
+      uninstallReason=0
+      overlay paths:
+        /data/resource-cache/com.android.systemui-neutral-u6zL.frro
+        /data/resource-cache/com.android.systemui-accent-X5Kn.frro
+        /data/resource-cache/com.android.systemui-dynamic-fDr8.frro
+      gids=[3003]
+      runtime permissions:
+  Package [com.android.networkstack.tethering] (af2f006):
+    appId=1073
+    sharedUser=SharedUserSetting{311c4e6 android.uid.networkstack/1073}
+    pkg=Package{2a69c55 com.android.networkstack.tethering}
+    codePath=/apex/com.android.tethering/priv-app/TetheringNext@BP4A.251205.006
+    versionCode=36 minSdk=31 targetSdk=10000
+    minExtensionVersions=[]
+    versionName=Baklava
+    hiddenApiEnforcementPolicy=0
+    usesNonSdkApi=true
+    splits=[base]
+    apkSigningVersion=3
+    flags=[ SYSTEM HAS_CODE PERSISTENT ALLOW_CLEAR_USER_DATA ALLOW_BACKUP KILL_AFTER_RESTORE ]
+    privateFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE DEFAULT_TO_DEVICE_PROTECTED_STORAGE DIRECT_BOOT_AWARE PRIVILEGED PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    forceQueryable=false
+    pageSizeCompat=0
+    scannedAsStoppedSystemApp=false
+    supportsScreens=[small, medium, large, xlarge, resizeable, anyDensity]
+    timeStamp=1970-01-01 00:00:00
+    lastUpdateTime=2026-08-29 08:59:27
+    installerPackageName=null
+    installerPackageUid=-1
+    initiatingPackageName=null
+    originatingPackageName=null
+    packageSource=0
+    appMetadataFilePath=null
+    appMetadataSource=0
+    signatures=PackageSignatures{350a66a version:3, signatures:[e708811f], past signatures:[]}
+    installPermissionsFixed=false
+    pkgFlags=[ SYSTEM HAS_CODE PERSISTENT ALLOW_CLEAR_USER_DATA ALLOW_BACKUP KILL_AFTER_RESTORE ]
+    privatePkgFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE DEFAULT_TO_DEVICE_PROTECTED_STORAGE DIRECT_BOOT_AWARE PRIVILEGED PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    apexModuleName=com.android.tethering
+    requested permissions:
+    install permissions:
+      android.permission.INTERNET: granted=true
+    User 0: ceDataInode=549163 deDataInode=393534 installed=true hidden=false suspended=false distractionFlags=0 stopped=false notLaunched=false enabled=0 instant=false virtual=false quarantined=false
+      installReason=0
+      dataDir=/data/user_de/0/com.android.networkstack.tethering
+      firstInstallTime=2026-08-29 08:59:27
+      uninstallReason=0
+      overlay paths:
+        /data/resource-cache/com.android.systemui-neutral-u6zL.frro
+        /data/resource-cache/com.android.systemui-accent-X5Kn.frro
+        /data/resource-cache/com.android.systemui-dynamic-fDr8.frro
+  Package [com.android.soundpicker] (b0f665c):
+    appId=10023
+    sharedUser=SharedUserSetting{6921d3f android.media/10023}
+    pkg=Package{c07575b com.android.soundpicker}
+    codePath=/system/priv-app/SoundPicker
+    versionCode=36 minSdk=10000 targetSdk=10000
+    minExtensionVersions=[]
+    versionName=Baklava
+    hiddenApiEnforcementPolicy=0
+    usesNonSdkApi=true
+    splits=[base]
+    apkSigningVersion=3
+    flags=[ SYSTEM HAS_CODE ALLOW_CLEAR_USER_DATA ]
+    privateFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE PRIVILEGED PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    forceQueryable=false
+    pageSizeCompat=0
+    scannedAsStoppedSystemApp=false
+    supportsScreens=[small, medium, large, xlarge, resizeable, anyDensity]
+    timeStamp=2026-07-25 15:48:24
+    lastUpdateTime=2026-08-29 08:59:26
+    installerPackageName=null
+    installerPackageUid=-1
+    initiatingPackageName=null
+    originatingPackageName=null
+    packageSource=0
+    appMetadataFilePath=null
+    appMetadataSource=0
+    signatures=PackageSignatures{7201bf8 version:3, signatures:[aa7e44b2], past signatures:[]}
+    installPermissionsFixed=false
+    pkgFlags=[ SYSTEM HAS_CODE ALLOW_CLEAR_USER_DATA ]
+    privatePkgFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE PRIVILEGED PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    apexModuleName=null
+    declared permissions:
+    requested permissions:
+    install permissions:
+      android.permission.INTERNET: granted=true
+    User 0: ceDataInode=549166 deDataInode=393537 installed=true hidden=false suspended=false distractionFlags=0 stopped=false notLaunched=false enabled=0 instant=false virtual=false quarantined=false
+      installReason=0
+      dataDir=/data/user/0/com.android.soundpicker
+      firstInstallTime=2026-08-29 08:59:26
+      uninstallReason=0
+      overlay paths:
+        /data/resource-cache/com.android.systemui-neutral-u6zL.frro
+        /data/resource-cache/com.android.systemui-accent-X5Kn.frro
+        /data/resource-cache/com.android.systemui-dynamic-fDr8.frro
+  Package [com.android.emulator.multidisplay] (dbed9d5):
+    appId=1000
+    sharedUser=SharedUserSetting{6f2dbe0 android.uid.system/1000}
+    pkg=Package{536ffa4 com.android.emulator.multidisplay}
+    codePath=/system_ext/priv-app/MultiDisplayProvider
+    versionCode=36 minSdk=10000 targetSdk=10000
+    minExtensionVersions=[]
+    versionName=Baklava
+    hiddenApiEnforcementPolicy=0
+    usesNonSdkApi=true
+    splits=[base]
+    apkSigningVersion=3
+    flags=[ SYSTEM HAS_CODE PERSISTENT ALLOW_CLEAR_USER_DATA ALLOW_BACKUP KILL_AFTER_RESTORE ]
+    privateFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE PRIVILEGED SYSTEM_EXT PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    forceQueryable=false
+    pageSizeCompat=0
+    scannedAsStoppedSystemApp=false
+    supportsScreens=[small, medium, large, xlarge, resizeable, anyDensity]
+    timeStamp=2026-07-25 15:49:09
+    lastUpdateTime=2026-08-29 08:59:27
+    installerPackageName=null
+    installerPackageUid=-1
+    initiatingPackageName=null
+    originatingPackageName=null
+    packageSource=0
+    appMetadataFilePath=null
+    appMetadataSource=0
+    signatures=PackageSignatures{727010d version:3, signatures:[b4addb29], past signatures:[]}
+    installPermissionsFixed=false
+    pkgFlags=[ SYSTEM HAS_CODE PERSISTENT ALLOW_CLEAR_USER_DATA ALLOW_BACKUP KILL_AFTER_RESTORE ]
+    privatePkgFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE PRIVILEGED SYSTEM_EXT PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    apexModuleName=null
+    requested permissions:
+    install permissions:
+      android.permission.INTERNET: granted=true
+      android.permission.WRITE_SECURE_SETTINGS: granted=true
+    User 0: ceDataInode=549172 deDataInode=393543 installed=true hidden=false suspended=false distractionFlags=0 stopped=false notLaunched=false enabled=0 instant=false virtual=false quarantined=false
+      installReason=0
+      dataDir=/data/user/0/com.android.emulator.multidisplay
+      firstInstallTime=2026-08-29 08:59:27
+      uninstallReason=0
+      overlay paths:
+        /data/resource-cache/com.android.systemui-neutral-u6zL.frro
+        /data/resource-cache/com.android.systemui-accent-X5Kn.frro
+        /data/resource-cache/com.android.systemui-dynamic-fDr8.frro
+  Package [com.android.devicediagnostics] (a9a383d):
+    appId=10033
+    pkg=Package{db756d3 com.android.devicediagnostics}
+    codePath=/system/priv-app/DeviceDiagnostics
+    versionCode=36 minSdk=10000 targetSdk=10000
+    minExtensionVersions=[]
+    versionName=Baklava
+    hiddenApiEnforcementPolicy=0
+    usesNonSdkApi=true
+    splits=[base]
+    apkSigningVersion=3
+    flags=[ SYSTEM HAS_CODE ALLOW_CLEAR_USER_DATA ALLOW_BACKUP KILL_AFTER_RESTORE ]
+    privateFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE PARTIALLY_DIRECT_BOOT_AWARE PRIVILEGED PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    forceQueryable=false
+    pageSizeCompat=0
+    queriesIntents=[Intent { act=com.android.setupwizard.action.PARTNER_CUSTOMIZATION }]
+    scannedAsStoppedSystemApp=false
+    supportsScreens=[small, medium, large, xlarge, resizeable, anyDensity]
+    usesOptionalLibraries:
+      androidx.window.extensions
+      androidx.window.sidecar
+    usesLibraryFiles:
+      /system_ext/framework/androidx.window.extensions.jar
+      /system_ext/framework/androidx.window.sidecar.jar
+    timeStamp=2026-07-25 15:48:24
+    lastUpdateTime=2026-08-29 08:59:26
+    installerPackageName=null
+    installerPackageUid=-1
+    initiatingPackageName=null
+    originatingPackageName=null
+    packageSource=0
+    appMetadataFilePath=null
+    appMetadataSource=0
+    signatures=PackageSignatures{db67210 version:3, signatures:[b4addb29], past signatures:[]}
+    installPermissionsFixed=false
+    pkgFlags=[ SYSTEM HAS_CODE ALLOW_CLEAR_USER_DATA ALLOW_BACKUP KILL_AFTER_RESTORE ]
+    privatePkgFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE PARTIALLY_DIRECT_BOOT_AWARE PRIVILEGED PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    apexModuleName=null
+    declared permissions:
+    requested permissions:
+      android.permission.INTERNET
+      android.permission.CAMERA
+    install permissions:
+      android.permission.INTERNET: granted=true
+    User 0: ceDataInode=549175 deDataInode=393546 installed=true hidden=false suspended=false distractionFlags=0 stopped=false notLaunched=false enabled=0 instant=false virtual=false quarantined=false
+      installReason=0
+      dataDir=/data/user/0/com.android.devicediagnostics
+      firstInstallTime=2026-08-29 08:59:26
+      uninstallReason=0
+      overlay paths:
+        /data/resource-cache/com.android.systemui-neutral-u6zL.frro
+        /data/resource-cache/com.android.systemui-accent-X5Kn.frro
+        /data/resource-cache/com.android.systemui-dynamic-fDr8.frro
+      gids=[3003]
+      runtime permissions:
+        android.permission.CAMERA: granted=false, flags=[ USER_SENSITIVE_WHEN_GRANTED]
+  Package [com.android.imsserviceentitlement] (198257e):
+    appId=10067
+    pkg=Package{da5de79 com.android.imsserviceentitlement}
+    codePath=/product/priv-app/ImsServiceEntitlement
+    versionCode=36 minSdk=10000 targetSdk=10000
+    minExtensionVersions=[]
+    versionName=Baklava
+    hiddenApiEnforcementPolicy=2
+    usesNonSdkApi=false
+    splits=[base]
+    apkSigningVersion=3
+    flags=[ SYSTEM HAS_CODE ALLOW_CLEAR_USER_DATA ALLOW_BACKUP KILL_AFTER_RESTORE ]
+    privateFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE PARTIALLY_DIRECT_BOOT_AWARE PRIVILEGED PRODUCT PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    forceQueryable=false
+    pageSizeCompat=0
+    queriesIntents=[Intent { act=com.android.setupwizard.action.PARTNER_CUSTOMIZATION }]
+    scannedAsStoppedSystemApp=false
+    supportsScreens=[small, medium, large, xlarge, resizeable, anyDensity]
+    usesOptionalLibraries:
+      androidx.window.extensions
+      androidx.window.sidecar
+    usesLibraryFiles:
+      /system_ext/framework/androidx.window.extensions.jar
+      /system_ext/framework/androidx.window.sidecar.jar
+    timeStamp=2026-07-25 15:48:42
+    lastUpdateTime=2026-08-29 08:59:27
+    installerPackageName=null
+    installerPackageUid=-1
+    initiatingPackageName=null
+    originatingPackageName=null
+    packageSource=0
+    appMetadataFilePath=null
+    appMetadataSource=0
+    signatures=PackageSignatures{3fec7be version:3, signatures:[d7f1f224], past signatures:[]}
+    installPermissionsFixed=false
+    pkgFlags=[ SYSTEM HAS_CODE ALLOW_CLEAR_USER_DATA ALLOW_BACKUP KILL_AFTER_RESTORE ]
+    privatePkgFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE PARTIALLY_DIRECT_BOOT_AWARE PRIVILEGED PRODUCT PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    apexModuleName=null
+    declared permissions:
+    requested permissions:
+      android.permission.INTERNET
+    install permissions:
+      android.permission.INTERNET: granted=true
+    User 0: ceDataInode=549193 deDataInode=393564 installed=true hidden=false suspended=false distractionFlags=0 stopped=false notLaunched=false enabled=0 instant=false virtual=false quarantined=false
+      installReason=0
+      dataDir=/data/user/0/com.android.imsserviceentitlement
+      firstInstallTime=2026-08-29 08:59:27
+      uninstallReason=0
+      overlay paths:
+        /data/resource-cache/com.android.systemui-neutral-u6zL.frro
+        /data/resource-cache/com.android.systemui-accent-X5Kn.frro
+        /data/resource-cache/com.android.systemui-dynamic-fDr8.frro
+      gids=[3003]
+  Package [com.android.storagemanager] (78d432c):
+    appId=10083
+    pkg=Package{20b9f3b com.android.storagemanager}
+    codePath=/system_ext/priv-app/StorageManager
+    versionCode=36 minSdk=10000 targetSdk=10000
+    minExtensionVersions=[]
+    versionName=Baklava
+    hiddenApiEnforcementPolicy=0
+    usesNonSdkApi=true
+    splits=[base]
+    apkSigningVersion=3
+    flags=[ SYSTEM HAS_CODE ALLOW_CLEAR_USER_DATA ]
+    privateFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE PARTIALLY_DIRECT_BOOT_AWARE PRIVILEGED SYSTEM_EXT PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    forceQueryable=false
+    pageSizeCompat=0
+    queriesIntents=[Intent { act=com.android.setupwizard.action.PARTNER_CUSTOMIZATION }]
+    scannedAsStoppedSystemApp=false
+    supportsScreens=[small, medium, large, xlarge, resizeable, anyDensity]
+    usesLibraries:
+      org.apache.http.legacy
+    usesOptionalLibraries:
+      androidx.window.extensions
+      androidx.window.sidecar
+    usesLibraryFiles:
+      /system/framework/org.apache.http.legacy.jar
+      /system_ext/framework/androidx.window.extensions.jar
+      /system_ext/framework/androidx.window.sidecar.jar
+    timeStamp=2026-07-25 15:49:09
+    lastUpdateTime=2026-08-29 08:59:27
+    installerPackageName=null
+    installerPackageUid=-1
+    initiatingPackageName=null
+    originatingPackageName=null
+    packageSource=0
+    appMetadataFilePath=null
+    appMetadataSource=0
+    signatures=PackageSignatures{c18f658 version:3, signatures:[b4addb29], past signatures:[]}
+    installPermissionsFixed=false
+    pkgFlags=[ SYSTEM HAS_CODE ALLOW_CLEAR_USER_DATA ]
+    privatePkgFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE PARTIALLY_DIRECT_BOOT_AWARE PRIVILEGED SYSTEM_EXT PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    apexModuleName=null
+    declared permissions:
+    requested permissions:
+      android.permission.WRITE_SECURE_SETTINGS
+    install permissions:
+      android.permission.WRITE_SECURE_SETTINGS: granted=true
+    User 0: ceDataInode=549199 deDataInode=393570 installed=true hidden=false suspended=false distractionFlags=0 stopped=false notLaunched=false enabled=0 instant=false virtual=false quarantined=false
+      installReason=0
+      dataDir=/data/user/0/com.android.storagemanager
+      firstInstallTime=2026-08-29 08:59:27
+      uninstallReason=0
+      overlay paths:
+        /data/resource-cache/com.android.systemui-neutral-u6zL.frro
+        /data/resource-cache/com.android.systemui-accent-X5Kn.frro
+        /data/resource-cache/com.android.systemui-dynamic-fDr8.frro
+      gids=[1065]
+      runtime permissions:
+  Package [com.android.settings] (f203e51):
+    appId=1000
+    sharedUser=SharedUserSetting{6f2dbe0 android.uid.system/1000}
+    pkg=Package{f8b3ac com.android.settings}
+    codePath=/system_ext/priv-app/Settings
+    versionCode=36 minSdk=10000 targetSdk=10000
+    minExtensionVersions=[]
+    versionName=Baklava
+    hiddenApiEnforcementPolicy=0
+    usesNonSdkApi=true
+    splits=[base]
+    apkSigningVersion=3
+    flags=[ SYSTEM HAS_CODE ALLOW_CLEAR_USER_DATA ALLOW_BACKUP KILL_AFTER_RESTORE RESTORE_ANY_VERSION ]
+    privateFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE DEFAULT_TO_DEVICE_PROTECTED_STORAGE DIRECT_BOOT_AWARE PARTIALLY_DIRECT_BOOT_AWARE PRIVILEGED SYSTEM_EXT PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    forceQueryable=false
+    pageSizeCompat=0
+    queriesIntents=[Intent { act=com.android.setupwizard.action.PARTNER_CUSTOMIZATION }]
+    scannedAsStoppedSystemApp=false
+    supportsScreens=[small, medium, large, xlarge, resizeable, anyDensity]
+    usesLibraries:
+      org.apache.http.legacy
+    usesOptionalLibraries:
+      androidx.window.extensions
+      androidx.window.sidecar
+      com.android.extensions.appfunctions
+    usesLibraryFiles:
+      /system/framework/org.apache.http.legacy.jar
+      /system_ext/framework/androidx.window.extensions.jar
+      /system_ext/framework/androidx.window.sidecar.jar
+      /system_ext/framework/com.android.extensions.appfunctions.jar
+    timeStamp=2026-07-25 15:49:09
+    lastUpdateTime=2026-08-29 08:59:27
+    installerPackageName=null
+    installerPackageUid=-1
+    initiatingPackageName=null
+    originatingPackageName=null
+    packageSource=0
+    appMetadataFilePath=null
+    appMetadataSource=0
+    signatures=PackageSignatures{3ab1875 version:3, signatures:[b4addb29], past signatures:[]}
+    installPermissionsFixed=false
+    pkgFlags=[ SYSTEM HAS_CODE ALLOW_CLEAR_USER_DATA ALLOW_BACKUP KILL_AFTER_RESTORE RESTORE_ANY_VERSION ]
+    privatePkgFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE DEFAULT_TO_DEVICE_PROTECTED_STORAGE DIRECT_BOOT_AWARE PARTIALLY_DIRECT_BOOT_AWARE PRIVILEGED SYSTEM_EXT PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    apexModuleName=null
+    declared permissions:
+    requested permissions:
+      android.permission.INTERNET
+      android.permission.WRITE_SECURE_SETTINGS
+      android.permission.CAMERA
+    install permissions:
+      android.permission.INTERNET: granted=true
+      android.permission.WRITE_SECURE_SETTINGS: granted=true
+    User 0: ceDataInode=549205 deDataInode=393282 installed=true hidden=false suspended=false distractionFlags=0 stopped=false notLaunched=false enabled=0 instant=false virtual=false quarantined=false
+      installReason=0
+      dataDir=/data/user_de/0/com.android.settings
+      firstInstallTime=2026-08-29 08:59:27
+      uninstallReason=0
+      overlay paths:
+        /data/resource-cache/com.android.systemui-neutral-u6zL.frro
+        /data/resource-cache/com.android.systemui-accent-X5Kn.frro
+        /data/resource-cache/com.android.systemui-dynamic-fDr8.frro
+  Package [com.android.wallpaper] (6216618):
+    appId=10085
+    pkg=Package{c824f0f com.android.wallpaper}
+    codePath=/system_ext/priv-app/ThemePicker
+    versionCode=36 minSdk=10000 targetSdk=30
+    minExtensionVersions=[]
+    versionName=Baklava
+    hiddenApiEnforcementPolicy=0
+    usesNonSdkApi=true
+    splits=[base]
+    apkSigningVersion=3
+    flags=[ SYSTEM HAS_CODE ALLOW_CLEAR_USER_DATA ALLOW_BACKUP KILL_AFTER_RESTORE RESTORE_ANY_VERSION ]
+    privateFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE HAS_DOMAIN_URLS PRIVILEGED SYSTEM_EXT PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    forceQueryable=false
+    pageSizeCompat=0
+    queriesPackages=[android, com.android.launcher3, com.android.settings, com.android.systemui, com.android.camera2, com.android.customization.themes]
+    queriesIntents=[Intent { act=android.intent.action.SET_WALLPAPER }, Intent { act=android.intent.action.GET_CONTENT dat=content://*/... typ=image/* }, Intent { act=android.intent.action.VIEW dat=http:/... }, Intent { act=android.service.wallpaper.WallpaperService }, Intent { act=com.android.launcher3.action.PARTNER_CUSTOMIZATION }, Intent { act=android.intent.action.MAIN cat=[android.intent.category.HOME] }, Intent { act=android.intent.action.VIEW }, Intent { act=com.android.photopicker.core.embedded.EmbeddedService.BIND }]
+    scannedAsStoppedSystemApp=false
+    supportsScreens=[small, medium, large, xlarge, resizeable, anyDensity]
+    usesOptionalLibraries:
+      androidx.window.extensions
+      androidx.window.sidecar
+      org.apache.http.legacy
+    usesLibraryFiles:
+      /system_ext/framework/androidx.window.extensions.jar
+      /system_ext/framework/androidx.window.sidecar.jar
+      /system/framework/org.apache.http.legacy.jar
+    timeStamp=2026-07-25 15:49:09
+    lastUpdateTime=2026-08-29 08:59:27
+    installerPackageName=null
+    installerPackageUid=-1
+    initiatingPackageName=null
+    originatingPackageName=null
+    packageSource=0
+    appMetadataFilePath=null
+    appMetadataSource=0
+    signatures=PackageSignatures{c2c6b9c version:3, signatures:[d7f1f224], past signatures:[]}
+    installPermissionsFixed=false
+    pkgFlags=[ SYSTEM HAS_CODE ALLOW_CLEAR_USER_DATA ALLOW_BACKUP KILL_AFTER_RESTORE RESTORE_ANY_VERSION ]
+    privatePkgFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE HAS_DOMAIN_URLS PRIVILEGED SYSTEM_EXT PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    apexModuleName=null
+    declared permissions:
+    requested permissions:
+      android.permission.INTERNET
+      android.permission.WRITE_SECURE_SETTINGS
+    install permissions:
+      android.permission.INTERNET: granted=true
+      android.permission.WRITE_SECURE_SETTINGS: granted=true
+    User 0: ceDataInode=549214 deDataInode=393582 installed=true hidden=false suspended=false distractionFlags=0 stopped=false notLaunched=false enabled=0 instant=false virtual=false quarantined=false
+      installReason=0
+      dataDir=/data/user/0/com.android.wallpaper
+      firstInstallTime=2026-08-29 08:59:27
+      uninstallReason=0
+      overlay paths:
+        /data/resource-cache/com.android.systemui-neutral-u6zL.frro
+        /data/resource-cache/com.android.systemui-accent-X5Kn.frro
+        /data/resource-cache/com.android.systemui-dynamic-fDr8.frro
+      gids=[3003]
+      runtime permissions:
+  Package [com.android.phone] (47dd90):
+    appId=1001
+    sharedUser=SharedUserSetting{eff05e3 android.uid.phone/1001}
+    pkg=Package{d3355d2 com.android.phone}
+    codePath=/system/priv-app/TeleService
+    versionCode=36 minSdk=10000 targetSdk=10000
+    minExtensionVersions=[]
+    versionName=Baklava
+    hiddenApiEnforcementPolicy=0
+    usesNonSdkApi=true
+    splits=[base]
+    apkSigningVersion=3
+    flags=[ SYSTEM HAS_CODE PERSISTENT ALLOW_CLEAR_USER_DATA ]
+    privateFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE DEFAULT_TO_DEVICE_PROTECTED_STORAGE DIRECT_BOOT_AWARE PRIVILEGED PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    forceQueryable=false
+    pageSizeCompat=0
+    scannedAsStoppedSystemApp=false
+    supportsScreens=[small, medium, large, xlarge, resizeable, anyDensity]
+    usesLibraries:
+      org.apache.http.legacy
+    usesOptionalLibraries:
+      androidx.window.extensions
+      androidx.window.sidecar
+    usesLibraryFiles:
+      /system/framework/org.apache.http.legacy.jar
+      /system_ext/framework/androidx.window.extensions.jar
+      /system_ext/framework/androidx.window.sidecar.jar
+    timeStamp=2026-07-25 15:48:25
+    lastUpdateTime=2026-08-29 08:59:26
+    installerPackageName=null
+    installerPackageUid=-1
+    initiatingPackageName=null
+    originatingPackageName=null
+    packageSource=0
+    appMetadataFilePath=null
+    appMetadataSource=0
+    signatures=PackageSignatures{56db6a3 version:3, signatures:[b4addb29], past signatures:[]}
+    installPermissionsFixed=false
+    pkgFlags=[ SYSTEM HAS_CODE PERSISTENT ALLOW_CLEAR_USER_DATA ]
+    privatePkgFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE DEFAULT_TO_DEVICE_PROTECTED_STORAGE DIRECT_BOOT_AWARE PRIVILEGED PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    apexModuleName=null
+    declared permissions:
+    requested permissions:
+      android.permission.INTERNET
+      android.permission.WRITE_SECURE_SETTINGS
+      android.permission.RECORD_AUDIO
+    install permissions:
+      android.permission.INTERNET: granted=true
+      android.permission.WRITE_SECURE_SETTINGS: granted=true
+    User 0: ceDataInode=549226 deDataInode=393285 installed=true hidden=false suspended=false distractionFlags=0 stopped=false notLaunched=false enabled=0 instant=false virtual=false quarantined=false
+      installReason=0
+      dataDir=/data/user_de/0/com.android.phone
+      firstInstallTime=2026-08-29 08:59:26
+      uninstallReason=0
+      overlay paths:
+        /data/resource-cache/com.android.systemui-neutral-u6zL.frro
+        /data/resource-cache/com.android.systemui-accent-X5Kn.frro
+        /data/resource-cache/com.android.systemui-dynamic-fDr8.frro
+  Package [com.android.shell] (37542bc):
+    appId=2000
+    sharedUser=SharedUserSetting{d52f6d7 android.uid.shell/2000}
+    pkg=Package{6e00d59 com.android.shell}
+    codePath=/system/priv-app/Shell
+    versionCode=36 minSdk=10000 targetSdk=10000
+    minExtensionVersions=[]
+    versionName=Baklava
+    hiddenApiEnforcementPolicy=0
+    usesNonSdkApi=true
+    splits=[base]
+    apkSigningVersion=3
+    flags=[ SYSTEM HAS_CODE ALLOW_CLEAR_USER_DATA ALLOW_BACKUP KILL_AFTER_RESTORE ]
+    privateFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE DEFAULT_TO_DEVICE_PROTECTED_STORAGE DIRECT_BOOT_AWARE PRIVILEGED PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    updatableSystem=false
+    forceQueryable=false
+    pageSizeCompat=0
+    scannedAsStoppedSystemApp=false
+    supportsScreens=[small, medium, large, xlarge, resizeable, anyDensity]
+    timeStamp=2026-07-25 15:48:24
+    lastUpdateTime=2026-08-29 08:59:26
+    installerPackageName=null
+    installerPackageUid=-1
+    initiatingPackageName=null
+    originatingPackageName=null
+    packageSource=0
+    appMetadataFilePath=null
+    appMetadataSource=0
+    signatures=PackageSignatures{d4cfd1e version:3, signatures:[b4addb29], past signatures:[]}
+    installPermissionsFixed=false
+    pkgFlags=[ SYSTEM HAS_CODE ALLOW_CLEAR_USER_DATA ALLOW_BACKUP KILL_AFTER_RESTORE ]
+    privatePkgFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE DEFAULT_TO_DEVICE_PROTECTED_STORAGE DIRECT_BOOT_AWARE PRIVILEGED PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    apexModuleName=null
+    declared permissions:
+    requested permissions:
+      android.permission.INTERNET
+      android.permission.WRITE_SECURE_SETTINGS
+      android.permission.CAMERA
+      android.permission.RECORD_AUDIO
+    install permissions:
+      android.permission.INTERNET: granted=true
+      android.permission.WRITE_SECURE_SETTINGS: granted=true
+    User 0: ceDataInode=549229 deDataInode=393288 installed=true hidden=false suspended=false distractionFlags=0 stopped=false notLaunched=false enabled=0 instant=false virtual=false quarantined=false
+      installReason=0
+      dataDir=/data/user_de/0/com.android.shell
+      firstInstallTime=2026-08-29 08:59:26
+      uninstallReason=0
+      overlay paths:
+        /data/resource-cache/com.android.systemui-neutral-u6zL.frro
+        /data/resource-cache/com.android.systemui-accent-X5Kn.frro
+        /data/resource-cache/com.android.systemui-dynamic-fDr8.frro
+  Package [com.android.sdksandbox] (4d2cbc4):
+    appId=10103
+    pkg=Package{1aff3cc com.android.sdksandbox}
+    codePath=/apex/com.android.adservices/app/SdkSandbox@BP4A.251205.006
+    versionCode=1 minSdk=33 targetSdk=10000
+    minExtensionVersions=[]
+    versionName=T-initial
+    hiddenApiEnforcementPolicy=2
+    usesNonSdkApi=false
+    splits=[base]
+    apkSigningVersion=3
+    flags=[ SYSTEM HAS_CODE ALLOW_CLEAR_USER_DATA ]
+    privateFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    forceQueryable=true
+    pageSizeCompat=0
+    scannedAsStoppedSystemApp=false
+    supportsScreens=[small, medium, large, xlarge, resizeable, anyDensity]
+    timeStamp=1970-01-01 00:00:00
+    lastUpdateTime=2026-08-29 08:59:27
+    installerPackageName=null
+    installerPackageUid=-1
+    initiatingPackageName=null
+    originatingPackageName=null
+    packageSource=0
+    appMetadataFilePath=null
+    appMetadataSource=0
+    signatures=PackageSignatures{ffb2615 version:3, signatures:[fc01139a], past signatures:[]}
+    installPermissionsFixed=false
+    pkgFlags=[ SYSTEM HAS_CODE ALLOW_CLEAR_USER_DATA ]
+    privatePkgFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    apexModuleName=com.android.adservices
+    declared permissions:
+    requested permissions:
+      android.permission.INTERNET
+    install permissions:
+      android.permission.INTERNET: granted=true
+    User 0: ceDataInode=0 deDataInode=0 installed=true hidden=false suspended=false distractionFlags=0 stopped=false notLaunched=false enabled=0 instant=false virtual=false quarantined=false
+      installReason=0
+      dataDir=/data/user/0/com.android.sdksandbox
+      firstInstallTime=2026-08-29 08:59:27
+      uninstallReason=0
+      overlay paths:
+        /data/resource-cache/com.android.systemui-neutral-u6zL.frro
+        /data/resource-cache/com.android.systemui-accent-X5Kn.frro
+        /data/resource-cache/com.android.systemui-dynamic-fDr8.frro
+      gids=[3003]
+  Package [com.android.hotspot2.osulogin] (c662973):
+    appId=10089
+    pkg=Package{e11fec9 com.android.hotspot2.osulogin}
+    codePath=/apex/com.android.wifi/app/OsuLogin@BP4A.251205.006
+    versionCode=36 minSdk=30 targetSdk=10000
+    minExtensionVersions=[]
+    versionName=Baklava
+    hiddenApiEnforcementPolicy=2
+    usesNonSdkApi=false
+    splits=[base]
+    apkSigningVersion=3
+    flags=[ SYSTEM HAS_CODE ALLOW_CLEAR_USER_DATA ALLOW_BACKUP KILL_AFTER_RESTORE ]
+    privateFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    forceQueryable=false
+    pageSizeCompat=0
+    scannedAsStoppedSystemApp=false
+    supportsScreens=[small, medium, large, xlarge, resizeable, anyDensity]
+    timeStamp=1970-01-01 00:00:00
+    lastUpdateTime=2026-08-29 08:59:27
+    installerPackageName=null
+    installerPackageUid=-1
+    initiatingPackageName=null
+    originatingPackageName=null
+    packageSource=0
+    appMetadataFilePath=null
+    appMetadataSource=0
+    signatures=PackageSignatures{1c0e9ce version:3, signatures:[568893c0], past signatures:[]}
+    installPermissionsFixed=false
+    pkgFlags=[ SYSTEM HAS_CODE ALLOW_CLEAR_USER_DATA ALLOW_BACKUP KILL_AFTER_RESTORE ]
+    privatePkgFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    apexModuleName=com.android.wifi
+    declared permissions:
+    requested permissions:
+      android.permission.INTERNET
+    install permissions:
+      android.permission.INTERNET: granted=true
+    User 0: ceDataInode=549244 deDataInode=393606 installed=true hidden=false suspended=false distractionFlags=0 stopped=false notLaunched=false enabled=0 instant=false virtual=false quarantined=false
+      installReason=0
+      dataDir=/data/user/0/com.android.hotspot2.osulogin
+      firstInstallTime=2026-08-29 08:59:27
+      uninstallReason=0
+      overlay paths:
+        /data/resource-cache/com.android.systemui-neutral-u6zL.frro
+        /data/resource-cache/com.android.systemui-accent-X5Kn.frro
+        /data/resource-cache/com.android.systemui-dynamic-fDr8.frro
+      gids=[3003]
+  Package [com.android.location.fused] (75d66b6):
+    appId=1000
+    sharedUser=SharedUserSetting{6f2dbe0 android.uid.system/1000}
+    pkg=Package{4e5be01 com.android.location.fused}
+    codePath=/system/priv-app/FusedLocation
+    versionCode=36 minSdk=10000 targetSdk=10000
+    minExtensionVersions=[]
+    versionName=Baklava
+    hiddenApiEnforcementPolicy=0
+    usesNonSdkApi=true
+    splits=[base]
+    apkSigningVersion=3
+    flags=[ SYSTEM HAS_CODE ALLOW_CLEAR_USER_DATA ALLOW_BACKUP KILL_AFTER_RESTORE ]
+    privateFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE DEFAULT_TO_DEVICE_PROTECTED_STORAGE DIRECT_BOOT_AWARE PRIVILEGED PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    forceQueryable=false
+    pageSizeCompat=0
+    scannedAsStoppedSystemApp=false
+    supportsScreens=[small, medium, large, xlarge, resizeable, anyDensity]
+    usesLibraries:
+      com.android.location.provider
+    usesLibraryFiles:
+      /system/framework/com.android.location.provider.jar
+    timeStamp=2026-07-25 15:48:24
+    lastUpdateTime=2026-08-29 08:59:26
+    installerPackageName=null
+    installerPackageUid=-1
+    initiatingPackageName=null
+    originatingPackageName=null
+    packageSource=0
+    appMetadataFilePath=null
+    appMetadataSource=0
+    signatures=PackageSignatures{b7c64a6 version:3, signatures:[b4addb29], past signatures:[]}
+    installPermissionsFixed=false
+    pkgFlags=[ SYSTEM HAS_CODE ALLOW_CLEAR_USER_DATA ALLOW_BACKUP KILL_AFTER_RESTORE ]
+    privatePkgFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE DEFAULT_TO_DEVICE_PROTECTED_STORAGE DIRECT_BOOT_AWARE PRIVILEGED PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    apexModuleName=null
+    requested permissions:
+    install permissions:
+      android.permission.INTERNET: granted=true
+      android.permission.WRITE_SECURE_SETTINGS: granted=true
+    User 0: ceDataInode=549253 deDataInode=393291 installed=true hidden=false suspended=false distractionFlags=0 stopped=false notLaunched=false enabled=0 instant=false virtual=false quarantined=false
+      installReason=0
+      dataDir=/data/user_de/0/com.android.location.fused
+      firstInstallTime=2026-08-29 08:59:26
+      uninstallReason=0
+      overlay paths:
+        /data/resource-cache/com.android.systemui-neutral-u6zL.frro
+        /data/resource-cache/com.android.systemui-accent-X5Kn.frro
+        /data/resource-cache/com.android.systemui-dynamic-fDr8.frro
+  Package [com.android.systemui] (93636c7):
+    appId=10080
+    sharedUser=SharedUserSetting{ed6ea2e android.uid.systemui/10080}
+    pkg=Package{5034283 com.android.systemui}
+    codePath=/system_ext/priv-app/SystemUI
+    versionCode=36 minSdk=10000 targetSdk=10000
+    minExtensionVersions=[]
+    versionName=Baklava
+    hiddenApiEnforcementPolicy=0
+    usesNonSdkApi=true
+    splits=[base]
+    apkSigningVersion=3
+    flags=[ SYSTEM HAS_CODE PERSISTENT ALLOW_BACKUP ]
+    privateFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE DEFAULT_TO_DEVICE_PROTECTED_STORAGE DIRECT_BOOT_AWARE PARTIALLY_DIRECT_BOOT_AWARE PRIVILEGED SYSTEM_EXT PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    forceQueryable=false
+    pageSizeCompat=0
+    queriesIntents=[Intent { act=android.intent.action.CREATE_NOTE }, Intent { act=android.intent.action.TTS_SERVICE }, Intent { act=com.android.setupwizard.action.PARTNER_CUSTOMIZATION }]
+    scannedAsStoppedSystemApp=false
+    supportsScreens=[small, medium, large, xlarge, resizeable, anyDensity]
+    usesOptionalLibraries:
+      androidx.window.extensions
+      androidx.window.sidecar
+    usesLibraryFiles:
+      /system_ext/framework/androidx.window.extensions.jar
+      /system_ext/framework/androidx.window.sidecar.jar
+    timeStamp=2026-07-25 15:49:09
+    lastUpdateTime=2026-08-29 08:59:27
+    installerPackageName=null
+    installerPackageUid=-1
+    initiatingPackageName=null
+    originatingPackageName=null
+    packageSource=0
+    appMetadataFilePath=null
+    appMetadataSource=0
+    signatures=PackageSignatures{4f96c00 version:3, signatures:[b4addb29], past signatures:[]}
+    installPermissionsFixed=false
+    pkgFlags=[ SYSTEM HAS_CODE PERSISTENT ALLOW_BACKUP ]
+    privatePkgFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE DEFAULT_TO_DEVICE_PROTECTED_STORAGE DIRECT_BOOT_AWARE PARTIALLY_DIRECT_BOOT_AWARE PRIVILEGED SYSTEM_EXT PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    apexModuleName=null
+    declared permissions:
+    requested permissions:
+      android.permission.INTERNET
+      android.permission.WRITE_SECURE_SETTINGS
+      android.permission.CAMERA
+      android.permission.RECORD_AUDIO
+    install permissions:
+      android.permission.INTERNET: granted=true
+      android.permission.WRITE_SECURE_SETTINGS: granted=true
+    User 0: ceDataInode=549259 deDataInode=393294 installed=true hidden=false suspended=false distractionFlags=0 stopped=false notLaunched=false enabled=0 instant=false virtual=false quarantined=false
+      installReason=0
+      dataDir=/data/user_de/0/com.android.systemui
+      firstInstallTime=2026-08-29 08:59:27
+      uninstallReason=0
+      overlay paths:
+        /data/resource-cache/com.android.systemui-neutral-u6zL.frro
+        /data/resource-cache/com.android.systemui-accent-X5Kn.frro
+        /data/resource-cache/com.android.systemui-dynamic-fDr8.frro
+  Package [com.android.permissioncontroller] (ffdcf5c):
+    appId=10095
+    pkg=Package{f7952f5 com.android.permissioncontroller}
+    codePath=/apex/com.android.permission/priv-app/PermissionController@BP4A.251205.006
+    versionCode=330000000 minSdk=31 targetSdk=10000
+    minExtensionVersions=[]
+    versionName=33 system image
+    hiddenApiEnforcementPolicy=0
+    usesNonSdkApi=false
+    splits=[base]
+    apkSigningVersion=3
+    flags=[ SYSTEM HAS_CODE ]
+    privateFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE DEFAULT_TO_DEVICE_PROTECTED_STORAGE DIRECT_BOOT_AWARE PARTIALLY_DIRECT_BOOT_AWARE PRIVILEGED PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    forceQueryable=true
+    pageSizeCompat=0
+    queriesIntents=[Intent { act=android.view.InputMethod }]
+    scannedAsStoppedSystemApp=false
+    supportsScreens=[small, medium, large, xlarge, resizeable, anyDensity]
+    usesOptionalLibraries:
+      com.android.extensions.appfunctions
+      androidx.window.extensions
+      androidx.window.sidecar
+      org.apache.http.legacy
+    usesLibraryFiles:
+      /system_ext/framework/com.android.extensions.appfunctions.jar
+      /system_ext/framework/androidx.window.extensions.jar
+      /system_ext/framework/androidx.window.sidecar.jar
+      /system/framework/org.apache.http.legacy.jar
+    timeStamp=1970-01-01 00:00:00
+    lastUpdateTime=2026-08-29 08:59:27
+    installerPackageName=null
+    installerPackageUid=-1
+    initiatingPackageName=null
+    originatingPackageName=null
+    packageSource=0
+    appMetadataFilePath=null
+    appMetadataSource=0
+    signatures=PackageSignatures{c6d288a version:3, signatures:[b4addb29], past signatures:[]}
+    installPermissionsFixed=false
+    pkgFlags=[ SYSTEM HAS_CODE ]
+    privatePkgFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE DEFAULT_TO_DEVICE_PROTECTED_STORAGE DIRECT_BOOT_AWARE PARTIALLY_DIRECT_BOOT_AWARE PRIVILEGED PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    apexModuleName=com.android.permission
+    declared permissions:
+    requested permissions:
+      android.permission.WRITE_SECURE_SETTINGS
+    install permissions:
+      android.permission.WRITE_SECURE_SETTINGS: granted=true
+    User 0: ceDataInode=549265 deDataInode=393297 installed=true hidden=false suspended=false distractionFlags=0 stopped=false notLaunched=false enabled=0 instant=false virtual=false quarantined=false
+      installReason=0
+      dataDir=/data/user_de/0/com.android.permissioncontroller
+      firstInstallTime=2026-08-29 08:59:27
+      uninstallReason=0
+      overlay paths:
+        /data/resource-cache/com.android.systemui-neutral-u6zL.frro
+        /data/resource-cache/com.android.systemui-accent-X5Kn.frro
+        /data/resource-cache/com.android.systemui-dynamic-fDr8.frro
+      runtime permissions:
+  Package [com.android.traceur] (1678265):
+    appId=10052
+    pkg=Package{258bb18 com.android.traceur}
+    codePath=/system/app/Traceur
+    versionCode=2 minSdk=10000 targetSdk=35
+    minExtensionVersions=[]
+    versionName=1.0
+    hiddenApiEnforcementPolicy=0
+    usesNonSdkApi=true
+    splits=[base]
+    apkSigningVersion=3
+    flags=[ SYSTEM HAS_CODE ALLOW_CLEAR_USER_DATA ALLOW_BACKUP KILL_AFTER_RESTORE ]
+    privateFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE PARTIALLY_DIRECT_BOOT_AWARE PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    forceQueryable=false
+    pageSizeCompat=0
+    queriesIntents=[Intent { act=com.android.setupwizard.action.PARTNER_CUSTOMIZATION }]
+    scannedAsStoppedSystemApp=false
+    supportsScreens=[small, medium, large, xlarge, resizeable, anyDensity]
+    usesOptionalLibraries:
+      androidx.window.extensions
+      androidx.window.sidecar
+    usesLibraryFiles:
+      /system_ext/framework/androidx.window.extensions.jar
+      /system_ext/framework/androidx.window.sidecar.jar
+    timeStamp=2026-07-25 15:48:25
+    lastUpdateTime=2026-08-29 08:59:26
+    installerPackageName=null
+    installerPackageUid=-1
+    initiatingPackageName=null
+    originatingPackageName=null
+    packageSource=0
+    appMetadataFilePath=null
+    appMetadataSource=0
+    signatures=PackageSignatures{5592971 version:3, signatures:[b4addb29], past signatures:[]}
+    installPermissionsFixed=false
+    pkgFlags=[ SYSTEM HAS_CODE ALLOW_CLEAR_USER_DATA ALLOW_BACKUP KILL_AFTER_RESTORE ]
+    privatePkgFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE PARTIALLY_DIRECT_BOOT_AWARE PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    apexModuleName=null
+    declared permissions:
+    requested permissions:
+      android.permission.WRITE_SECURE_SETTINGS
+    install permissions:
+      android.permission.WRITE_SECURE_SETTINGS: granted=true
+    User 0: ceDataInode=549268 deDataInode=393621 installed=true hidden=false suspended=false distractionFlags=0 stopped=false notLaunched=false enabled=0 instant=false virtual=false quarantined=false
+      installReason=0
+      dataDir=/data/user/0/com.android.traceur
+      firstInstallTime=2026-08-29 08:59:26
+      uninstallReason=0
+      overlay paths:
+        /data/resource-cache/com.android.systemui-neutral-u6zL.frro
+        /data/resource-cache/com.android.systemui-accent-X5Kn.frro
+        /data/resource-cache/com.android.systemui-dynamic-fDr8.frro
+      runtime permissions:
+  Package [com.android.ondevicepersonalization.services] (1eb7b3a):
+    appId=10093
+    pkg=Package{3de0fd7 com.android.ondevicepersonalization.services}
+    codePath=/apex/com.android.ondevicepersonalization/priv-app/OnDevicePersonalization@BP4A.251205.006
+    versionCode=370499999 minSdk=33 targetSdk=10000
+    minExtensionVersions=[]
+    versionName=Baklava
+    hiddenApiEnforcementPolicy=0
+    usesNonSdkApi=true
+    splits=[base]
+    apkSigningVersion=3
+    flags=[ SYSTEM HAS_CODE ALLOW_CLEAR_USER_DATA ALLOW_BACKUP KILL_AFTER_RESTORE ]
+    privateFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE PRIVILEGED PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    forceQueryable=true
+    pageSizeCompat=0
+    scannedAsStoppedSystemApp=false
+    supportsScreens=[small, medium, large, xlarge, resizeable, anyDensity]
+    timeStamp=1970-01-01 00:00:00
+    lastUpdateTime=2026-08-29 08:59:27
+    installerPackageName=null
+    installerPackageUid=-1
+    initiatingPackageName=null
+    originatingPackageName=null
+    packageSource=0
+    appMetadataFilePath=null
+    appMetadataSource=0
+    signatures=PackageSignatures{5aa70c4 version:3, signatures:[b4addb29], past signatures:[]}
+    installPermissionsFixed=false
+    pkgFlags=[ SYSTEM HAS_CODE ALLOW_CLEAR_USER_DATA ALLOW_BACKUP KILL_AFTER_RESTORE ]
+    privatePkgFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE PRIVILEGED PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    apexModuleName=com.android.ondevicepersonalization
+    declared permissions:
+    requested permissions:
+      android.permission.INTERNET
+    install permissions:
+      android.permission.INTERNET: granted=true
+    User 0: ceDataInode=549271 deDataInode=393624 installed=true hidden=false suspended=false distractionFlags=0 stopped=false notLaunched=false enabled=0 instant=false virtual=false quarantined=false
+      installReason=0
+      dataDir=/data/user/0/com.android.ondevicepersonalization.services
+      firstInstallTime=2026-08-29 08:59:27
+      uninstallReason=0
+      overlay paths:
+        /data/resource-cache/com.android.systemui-neutral-u6zL.frro
+        /data/resource-cache/com.android.systemui-accent-X5Kn.frro
+        /data/resource-cache/com.android.systemui-dynamic-fDr8.frro
+      gids=[3003]
+  Package [com.android.bluetooth] (9be0692):
+    appId=1002
+    sharedUser=SharedUserSetting{9ab53eb android.uid.bluetooth/1002}
+    pkg=Package{2a23ee2 com.android.bluetooth}
+    codePath=/apex/com.android.bt/app/Bluetooth@BP4A.251205.006
+    versionCode=36 minSdk=36 targetSdk=10000
+    minExtensionVersions=[]
+    versionName=Baklava
+    hiddenApiEnforcementPolicy=0
+    usesNonSdkApi=true
+    splits=[base]
+    apkSigningVersion=3
+    flags=[ SYSTEM HAS_CODE ALLOW_CLEAR_USER_DATA ALLOW_BACKUP KILL_AFTER_RESTORE ]
+    privateFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE DEFAULT_TO_DEVICE_PROTECTED_STORAGE DIRECT_BOOT_AWARE PARTIALLY_DIRECT_BOOT_AWARE PRIVILEGED PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    forceQueryable=false
+    pageSizeCompat=0
+    scannedAsStoppedSystemApp=false
+    supportsScreens=[small, medium, large, xlarge, resizeable, anyDensity]
+    timeStamp=1970-01-01 00:00:00
+    lastUpdateTime=2026-08-29 08:59:27
+    installerPackageName=null
+    installerPackageUid=-1
+    initiatingPackageName=null
+    originatingPackageName=null
+    packageSource=0
+    appMetadataFilePath=null
+    appMetadataSource=0
+    signatures=PackageSignatures{309d273 version:3, signatures:[d77294ce], past signatures:[]}
+    installPermissionsFixed=false
+    pkgFlags=[ SYSTEM HAS_CODE ALLOW_CLEAR_USER_DATA ALLOW_BACKUP KILL_AFTER_RESTORE ]
+    privatePkgFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE DEFAULT_TO_DEVICE_PROTECTED_STORAGE DIRECT_BOOT_AWARE PARTIALLY_DIRECT_BOOT_AWARE PRIVILEGED PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    apexModuleName=com.android.bt
+    declared permissions:
+    requested permissions:
+      android.permission.INTERNET
+      android.permission.WRITE_SECURE_SETTINGS
+    install permissions:
+      android.permission.INTERNET: granted=true
+      android.permission.WRITE_SECURE_SETTINGS: granted=true
+    User 0: ceDataInode=549274 deDataInode=393627 installed=true hidden=false suspended=false distractionFlags=0 stopped=false notLaunched=false enabled=0 instant=false virtual=false quarantined=false
+      installReason=0
+      dataDir=/data/user_de/0/com.android.bluetooth
+      firstInstallTime=2026-08-29 08:59:27
+      uninstallReason=0
+      overlay paths:
+        /data/resource-cache/com.android.systemui-neutral-u6zL.frro
+        /data/resource-cache/com.android.systemui-accent-X5Kn.frro
+        /data/resource-cache/com.android.systemui-dynamic-fDr8.frro
+  Package [com.android.captiveportallogin] (4468548):
+    appId=10045
+    pkg=Package{22522cf com.android.captiveportallogin}
+    codePath=/system/app/CaptivePortalLogin
+    versionCode=370499999 minSdk=31 targetSdk=36
+    minExtensionVersions=[]
+    versionName=Baklava
+    hiddenApiEnforcementPolicy=0
+    usesNonSdkApi=true
+    splits=[base]
+    apkSigningVersion=3
+    flags=[ SYSTEM HAS_CODE ALLOW_CLEAR_USER_DATA ALLOW_BACKUP KILL_AFTER_RESTORE ]
+    privateFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    forceQueryable=false
+    pageSizeCompat=0
+    queriesIntents=[Intent { act=android.support.customtabs.action.CustomTabsService }]
+    scannedAsStoppedSystemApp=false
+    supportsScreens=[small, medium, large, xlarge, resizeable, anyDensity]
+    timeStamp=2026-07-25 15:48:24
+    lastUpdateTime=2026-08-29 08:59:26
+    installerPackageName=null
+    installerPackageUid=-1
+    initiatingPackageName=null
+    originatingPackageName=null
+    packageSource=0
+    appMetadataFilePath=null
+    appMetadataSource=0
+    signatures=PackageSignatures{585145c version:3, signatures:[e708811f], past signatures:[]}
+    installPermissionsFixed=false
+    pkgFlags=[ SYSTEM HAS_CODE ALLOW_CLEAR_USER_DATA ALLOW_BACKUP KILL_AFTER_RESTORE ]
+    privatePkgFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    apexModuleName=null
+    declared permissions:
+    requested permissions:
+      android.permission.INTERNET
+    install permissions:
+      android.permission.INTERNET: granted=true
+    User 0: ceDataInode=549280 deDataInode=393633 installed=true hidden=false suspended=false distractionFlags=0 stopped=false notLaunched=false enabled=0 instant=false virtual=false quarantined=false
+      installReason=0
+      dataDir=/data/user/0/com.android.captiveportallogin
+      firstInstallTime=2026-08-29 08:59:26
+      uninstallReason=0
+      overlay paths:
+        /data/resource-cache/com.android.systemui-neutral-u6zL.frro
+        /data/resource-cache/com.android.systemui-accent-X5Kn.frro
+        /data/resource-cache/com.android.systemui-dynamic-fDr8.frro
+      gids=[3003, 3005, 3004]
+      runtime permissions:
+  Package [com.android.devicelockcontroller] (c52dfe1):
+    appId=10105
+    pkg=Package{fe8c83a com.android.devicelockcontroller}
+    codePath=/apex/com.android.devicelock/priv-app/DeviceLockController@BP4A.251205.006
+    versionCode=36 minSdk=34 targetSdk=10000
+    minExtensionVersions=[]
+    versionName=Baklava
+    hiddenApiEnforcementPolicy=0
+    usesNonSdkApi=true
+    splits=[base]
+    apkSigningVersion=3
+    flags=[ SYSTEM HAS_CODE ]
+    privateFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE PARTIALLY_DIRECT_BOOT_AWARE PRIVILEGED PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    forceQueryable=false
+    pageSizeCompat=0
+    scannedAsStoppedSystemApp=false
+    supportsScreens=[small, medium, large, xlarge, resizeable, anyDensity]
+    usesLibraries:
+      org.apache.http.legacy
+    usesOptionalLibraries:
+      androidx.window.extensions
+      androidx.window.sidecar
+    usesLibraryFiles:
+      /system/framework/org.apache.http.legacy.jar
+      /system_ext/framework/androidx.window.extensions.jar
+      /system_ext/framework/androidx.window.sidecar.jar
+    timeStamp=1970-01-01 00:00:00
+    lastUpdateTime=2026-08-29 08:59:27
+    installerPackageName=null
+    installerPackageUid=-1
+    initiatingPackageName=null
+    originatingPackageName=null
+    packageSource=0
+    appMetadataFilePath=null
+    appMetadataSource=0
+    signatures=PackageSignatures{9fb1ceb version:3, signatures:[b4addb29], past signatures:[]}
+    installPermissionsFixed=false
+    pkgFlags=[ SYSTEM HAS_CODE ]
+    privatePkgFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE PARTIALLY_DIRECT_BOOT_AWARE PRIVILEGED PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    apexModuleName=com.android.devicelock
+    declared permissions:
+    requested permissions:
+      android.permission.INTERNET
+    install permissions:
+      android.permission.INTERNET: granted=true
+    User 0: ceDataInode=549283 deDataInode=393636 installed=true hidden=false suspended=false distractionFlags=0 stopped=false notLaunched=false enabled=0 instant=false virtual=false quarantined=false
+      installReason=0
+      dataDir=/data/user/0/com.android.devicelockcontroller
+      firstInstallTime=2026-08-29 08:59:27
+      uninstallReason=0
+      overlay paths:
+        /data/resource-cache/com.android.systemui-neutral-u6zL.frro
+        /data/resource-cache/com.android.systemui-accent-X5Kn.frro
+        /data/resource-cache/com.android.systemui-dynamic-fDr8.frro
+      gids=[3003]
+      runtime permissions:
+
+Shared users:
+  SharedUser [android.media] (6921d3f):
+    appId=10023
+    Packages
+      PackageSetting{2ff16eb com.android.providers.downloads.ui/10023}
+      PackageSetting{b0f665c com.android.soundpicker/10023}
+      PackageSetting{cfd7ccf com.android.providers.media/10023}
+      PackageSetting{de6cd65 com.android.providers.downloads/10023}
+      PackageSetting{ef86a3a com.android.mtp/10023}
+    install permissions:
+      android.permission.INTERNET: granted=true
+    User 0: 
+      gids=[2001, 3003, 3007, 1024]
+      runtime permissions:
+  SharedUser [android.uid.networkstack] (311c4e6):
+    appId=1073
+    Packages
+      PackageSetting{45a8c48 com.android.networkstack/1073}
+      PackageSetting{8fbdae1 com.android.cellbroadcastservice/1073}
+      PackageSetting{af2f006 com.android.networkstack.tethering/1073}
+    install permissions:
+      android.permission.INTERNET: granted=true
+    User 0: 
+      gids=[3002, 3003, 3007, 3006, 3005, 3004]
+      runtime permissions:
+  SharedUser [android.uid.systemui] (ed6ea2e):
+    appId=10080
+    Packages
+      PackageSetting{93636c7 com.android.systemui/10080}
+    install permissions:
+      android.permission.INTERNET: granted=true
+      android.permission.WRITE_SECURE_SETTINGS: granted=true
+    User 0: 
+      gids=[1065, 3002, 3003, 3001, 3006]
+      runtime permissions:
+        android.permission.CAMERA: granted=true, flags=[ SYSTEM_FIXED|GRANTED_BY_DEFAULT]
+        android.permission.RECORD_AUDIO: granted=true, flags=[ SYSTEM_FIXED|GRANTED_BY_DEFAULT]
+  SharedUser [android.uid.nfc] (cc0042b):
+    appId=1027
+    Packages
+      PackageSetting{5b024f4 com.android.nfc/1027}
+    install permissions:
+      android.permission.INTERNET: granted=true
+      android.permission.WRITE_SECURE_SETTINGS: granted=true
+    User 0: 
+      gids=[3002, 3003, 3001, 3007, 1091]
+      runtime permissions:
+  SharedUser [android.uid.bluetooth] (9ab53eb):
+    appId=1002
+    Packages
+      PackageSetting{9be0692 com.android.bluetooth/1002}
+    install permissions:
+      android.permission.INTERNET: granted=true
+      android.permission.WRITE_SECURE_SETTINGS: granted=true
+    User 0: 
+      gids=[3002, 3003, 3001, 3007, 1002, 3010, 3011, 3005, 1016, 1091]
+      runtime permissions:
+  SharedUser [android.uid.system] (6f2dbe0):
+    appId=1000
+    Packages
+      PackageSetting{5fd5ea android/1000}
+      PackageSetting{3ed9778 com.android.providers.settings/1000}
+      PackageSetting{420b324 com.android.DeviceAsWebcam/1000}
+      PackageSetting{5d13842 com.android.localtransport/1000}
+      PackageSetting{75d66b6 com.android.location.fused/1000}
+      PackageSetting{8f790db com.android.keychain/1000}
+      PackageSetting{a596e8d com.android.server.telecom/1000}
+      PackageSetting{ba71e8c com.android.inputdevices/1000}
+      PackageSetting{dbed9d5 com.android.emulator.multidisplay/1000}
+      PackageSetting{ed45fb7 com.android.dynsystem/1000}
+      PackageSetting{f203e51 com.android.settings/1000}
+    install permissions:
+      android.permission.INTERNET: granted=true
+      android.permission.WRITE_SECURE_SETTINGS: granted=true
+    User 0: 
+      gids=[1065, 3002, 3003, 3001, 3007, 1007, 1096]
+      runtime permissions:
+        android.permission.CAMERA: granted=true, flags=[ SYSTEM_FIXED|GRANTED_BY_DEFAULT]
+  SharedUser [android.uid.phone] (eff05e3):
+    appId=1001
+    Packages
+      PackageSetting{47dd90 com.android.phone/1001}
+      PackageSetting{17b6689 com.android.ons/1001}
+      PackageSetting{1be968e com.android.providers.telephony/1001}
+      PackageSetting{e454053 com.android.stk/1001}
+      PackageSetting{fd98eaf com.android.mms.service/1001}
+    install permissions:
+      android.permission.INTERNET: granted=true
+      android.permission.WRITE_SECURE_SETTINGS: granted=true
+    User 0: 
+      gids=[1065, 3003, 3007, 3006]
+      runtime permissions:
+        android.permission.RECORD_AUDIO: granted=true, flags=[ SYSTEM_FIXED|GRANTED_BY_DEFAULT]
+  SharedUser [android.uid.shell] (d52f6d7):
+    appId=2000
+    Packages
+      PackageSetting{37542bc com.android.shell/2000}
+    install permissions:
+      android.permission.INTERNET: granted=true
+      android.permission.WRITE_SECURE_SETTINGS: granted=true
+    User 0: 
+      gids=[1065, 1005, 3002, 3003, 1013, 3001, 3007, 1002, 3010, 3011, 1024, 1007, 1096, 3013]
+      runtime permissions:
+        android.permission.CAMERA: granted=true, flags=[ SYSTEM_FIXED|GRANTED_BY_DEFAULT]
+        android.permission.RECORD_AUDIO: granted=true, flags=[ SYSTEM_FIXED|GRANTED_BY_DEFAULT]
+  SharedUser [android.uid.calendar] (97d055e):
+    appId=10038
+    Packages
+      PackageSetting{caae245 com.android.providers.calendar/10038}
+    install permissions:
+      android.permission.INTERNET: granted=true
+    User 0: 
+      gids=[1065, 3003]
+      runtime permissions:
