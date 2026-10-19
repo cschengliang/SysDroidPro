@@ -519,10 +519,18 @@ class EmptyState(W.QWidget):
         if body:
             b = W.QLabel(body)
             b.setWordWrap(True)
+            b.setAlignment(Qt.AlignmentFlag.AlignHCenter)
             b.setMaximumWidth(440)
+            # 换行标签不能带对齐参数加入布局：那样按 sizeHint 的宽度估算高度，实际更窄时末行被截掉。
+            # 放进两侧留弹性的横排里，标签占满（≤440）宽度，高度按实际宽度计算。
+            b.setSizePolicy(W.QSizePolicy.Policy.Expanding, W.QSizePolicy.Policy.Preferred)
             repolish(b, role="muted")
             outer.addSpacing(8)
-            outer.addWidget(b, 0, Qt.AlignmentFlag.AlignHCenter)
+            row = W.QHBoxLayout()
+            row.addStretch(1)
+            row.addWidget(b, 100)          # 宽度优先给标签（上限 440），剩余留给两侧
+            row.addStretch(1)
+            outer.addLayout(row)
         if actions:
             outer.addSpacing(24)
             row = W.QHBoxLayout()
