@@ -43,16 +43,19 @@ def page(qapp, tmp_path):
 def test_winscope_start_serve_and_stop(page, qapp):
     svc = page.services[0]
     assert svc.check_available() is None, "附带的 Winscope 文件应存在"
-    assert page.start_btn.isEnabled() and not page.stop_btn.isEnabled()
-    page.start_btn.click()
+    row = page.actions[svc.id]          # 每个功能所在行自己的按钮
+    assert row.start_btn.isEnabled() and not row.stop_btn.isEnabled() and not row.open_btn.isEnabled()
+    assert not page.stop_all_btn.isEnabled()
+    row.start_btn.click()
     assert wait_until(qapp, lambda: svc.state == "running", 30), f"state={svc.state} error={svc.error}"
-    assert page.stop_btn.isEnabled() and page.open_btn.isEnabled()
+    assert row.stop_btn.isEnabled() and row.open_btn.isEnabled() and not row.start_btn.isEnabled()
+    assert page.stop_all_btn.isEnabled() and page.hint.text() == "1 / 1 running"
     html = urllib.request.urlopen(svc.address(), timeout=5).read().decode("utf-8", "replace")
     assert "<html" in html.lower()
     assert wait_until(qapp, lambda: bool(svc.read_token()), 5), "ADB 代理应输出令牌"
     assert "running" in page.table.table_model.data(page.table.table_model.index(0, 1))
-    page.stop_btn.click()
-    assert svc.state == "stopped"
+    row.stop_btn.click()
+    assert svc.state == "stopped" and row.start_btn.isEnabled() and not page.stop_all_btn.isEnabled()
     assert wait_until(qapp, lambda: not port_open(svc.web_port) and not port_open(svc.proxy_port), 5)
 
 
@@ -62,12 +65,21 @@ def test_port_in_use_reports_error(page, qapp):
     blocker.bind(("127.0.0.1", svc.web_port))
     blocker.listen(1)
     try:
-        page.start_btn.click()
+        page.actions[svc.id].start_btn.click()
         pump(qapp, 0.3)
         assert svc.state == "error" and "端口已被占用" in svc.error
-        assert page.start_btn.isEnabled()
+        assert page.actions[svc.id].start_btn.isEnabled()
     finally:
         blocker.close()
+
+
+def test_stop_all(page, qapp):
+    svc = page.services[0]
+    svc.start()
+    assert wait_until(qapp, lambda: svc.state == "running", 30), f"state={svc.state} error={svc.error}"
+    page.stop_all_btn.click()
+    assert svc.state == "stopped"
+    assert wait_until(qapp, lambda: not port_open(svc.web_port), 5)
 
 
 def test_close_window_stops_service(qapp, tmp_path):

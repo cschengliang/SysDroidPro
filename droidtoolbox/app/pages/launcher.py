@@ -1,4 +1,7 @@
-"""功能启动：在电脑上启动 / 停止辅助服务（目前为 Winscope），查看运行输出。不需要连接设备。"""
+"""功能启动：在电脑上启动 / 停止辅助服务（目前为 Winscope），查看运行输出。不需要连接设备。
+
+每个功能在自己那一行有 Start / Stop / 打开 / 复制令牌按钮；工具栏只放“全部停止”。
+"""
 from __future__ import annotations
 
 from pathlib import Path
@@ -14,6 +17,39 @@ from .base import Page
 W = QtWidgets
 STATE = {"stopped": ("stopped", "ink-muted"), "starting": ("starting…", "info"), "running": ("running", "ok"),
          "stopping": ("stopping…", "info"), "error": ("error", "danger")}
+ACTIONS_COL = 2
+ROW_H = 36                       # 行内放 28px 按钮，比普通表格行（28）高一些
+
+
+class RowActions(W.QWidget):
+    """表格里一行的操作按钮：Start / Stop / 浏览器打开 / 复制令牌（仅 Winscope）。"""
+
+    def __init__(self, page: "LauncherPage", svc: HostService):
+        super().__init__()
+        self.svc = svc
+        lay = W.QHBoxLayout(self)
+        lay.setContentsMargins(6, 0, 6, 0)
+        lay.setSpacing(4)
+        lay.setAlignment(QtCore.Qt.AlignmentFlag.AlignVCenter)
+        self.start_btn = tbtn("Start", f"启动 {svc.title}", "primary", icon="play")
+        self.stop_btn = tbtn("Stop", f"停止 {svc.title}", icon="square")
+        self.open_btn = ui.icon_button("external-link", "在浏览器中打开（双击运行中的行也可以）")
+        self.token_btn = ui.icon_button("copy", "复制 Winscope 代理令牌（网页连接 ADB 代理时需要填写）")
+        self.token_btn.setVisible(isinstance(svc, WinscopeService))
+        for b in (self.start_btn, self.stop_btn, self.open_btn, self.token_btn):
+            lay.addWidget(b)
+        lay.addStretch(1)
+        self.start_btn.clicked.connect(svc.start)
+        self.stop_btn.clicked.connect(svc.stop)
+        self.open_btn.clicked.connect(lambda: page.open_service(svc))
+        self.token_btn.clicked.connect(lambda: page.copy_token(svc))
+        self.sync()
+
+    def sync(self):
+        st = self.svc.state
+        self.start_btn.setEnabled(st in ("stopped", "error"))
+        self.stop_btn.setEnabled(st in ("starting", "running"))
+        self.open_btn.setEnabled(st == "running")
 
 
 class LauncherPage(Page):
@@ -27,11 +63,7 @@ class LauncherPage(Page):
         lay.setContentsMargins(0, 0, 0, 0)
         lay.setSpacing(0)
         tb = ui.Toolbar()
-        self.start_btn = tb.add(tbtn("Start", "启动所选功能", "primary", icon="play"))
-        self.stop_btn = tb.add(tbtn("Stop", "停止所选功能", icon="square"))
-        tb.separator()
-        self.open_btn = tb.add(ui.icon_button("external-link", "在浏览器中打开（双击运行中的行也可以）"))
-        self.token_btn = tb.add(ui.icon_button("copy", "复制 Winscope 代理令牌（网页连接 ADB 代理时需要填写）"))
+        self.stop_all_btn = tb.add(tbtn("Stop all", "停止所有正在运行的功能", icon="square"))
         tb.stretch()
         self.hint = tb.add(label("", "caption"))
         lay.addWidget(tb)
@@ -40,6 +72,7 @@ class LauncherPage(Page):
             Column("功能", lambda s: s.title, 140),
             Column("状态", lambda s: STATE[s.state][0], 96, mono=True, tone=lambda s: STATE[s.state][1],
                    tip=lambda s: s.error or ""),
+            Column("操作", lambda s: "", 240),
             Column("地址", lambda s: s.address() if s.state == "running" else "—", 200, mono=True),
             Column("端口", lambda s: s.detail(), 190, mono=True, tone=lambda s: "ink-muted"),
             Column("备注", lambda s: s.error if s.state == "error" else s.remark, None,
@@ -50,26 +83,26 @@ class LauncherPage(Page):
         clear = ui.icon_button("eraser", "清空输出")
         lay.addWidget(PanelHead("输出", clear))
         self.log = output_log(160)
-        self.log.write("在上方选择功能后点 Start；Winscope 启动后点打开按钮在浏览器中使用。", "system")
+        self.log.write("点功能所在行的 Start 启动；Winscope 启动后点打开按钮在浏览器中使用。", "system")
         lay.addWidget(self.log, 1)
 
         self._adb_dir: str | None = None
         self.services: list[HostService] = [WinscopeService(self.ctx.settings, self._adb_dir_for_proxy)]
-        for s in self.services:
+        self.table.verticalHeader().setDefaultSectionSize(ROW_H)
+        self.table.set_rows(self.services)
+        self.actions: dict[str, RowActions] = {}
+        for i, s in enumerate(self.services):
+            self.actions[s.id] = RowActions(self, s)
+            self.table.setIndexWidget(self.table.filter.mapFromSource(self.table.table_model.index(i, ACTIONS_COL)),
+                                      self.actions[s.id])
             s.stateChanged.connect(lambda st, s=s: self._state_changed(s, st))
             s.output.connect(self.log.write)
-        self.table.set_rows(self.services)
-        self.table.setFixedHeight(28 + 28 * max(3, len(self.services)) + 2)   # 表头 + 行，不留大片空白
-        self.table.selectRow(0)
+        self.table.setFixedHeight(28 + ROW_H * max(2, len(self.services)) + 2)   # 表头 + 行，不留大片空白
 
-        self.start_btn.clicked.connect(lambda: self._cur() and self._cur().start())
-        self.stop_btn.clicked.connect(lambda: self._cur() and self._cur().stop())
-        self.open_btn.clicked.connect(self._open)
-        self.token_btn.clicked.connect(self._copy_token)
-        self.table.rowActivated.connect(lambda s: self._open() if s.state == "running" else s.start())
-        self.table.selectionChangedRows.connect(lambda *_: self._sync_buttons())
+        self.stop_all_btn.clicked.connect(self.shutdown)
+        self.table.rowActivated.connect(lambda s: self.open_service(s) if s.state == "running" else s.start())
         clear.clicked.connect(self.log.out.clear)
-        self._sync_buttons()
+        self._sync_toolbar()
 
     # 数据 ------------------------------------------------------------
     def shown(self):
@@ -86,8 +119,8 @@ class LauncherPage(Page):
         bundled = ROOT / "tool" / "platform-tools"
         return str(bundled) if (bundled / "adb.exe").exists() else None
 
-    def _cur(self) -> HostService | None:
-        return self.table.current_row() or (self.services[0] if len(self.services) == 1 else None)
+    def _running(self) -> list[HostService]:
+        return [s for s in self.services if s.state in ("starting", "running")]
 
     def status_text(self) -> str:
         running = [s.title for s in self.services if s.state == "running"]
@@ -95,32 +128,26 @@ class LauncherPage(Page):
 
     # 状态 ------------------------------------------------------------
     def _state_changed(self, s: HostService, state: str):
-        i = self.services.index(s)
-        self.table.table_model.update_row(i, s)
-        self._sync_buttons()
+        self.table.table_model.update_row(self.services.index(s), s)
+        self.actions[s.id].sync()
+        self._sync_toolbar()
         self.ctx.window.update_status(self)
         if state == "running":
             self.ctx.notify("ok", f"{s.title} 已启动", s.address())
         elif state == "error":
             self.ctx.notify("danger", f"{s.title} 启动失败", s.error)
 
-    def _sync_buttons(self):
-        s = self._cur()
-        st = s.state if s else "stopped"
-        self.start_btn.setEnabled(s is not None and st in ("stopped", "error"))
-        self.stop_btn.setEnabled(s is not None and st in ("starting", "running"))
-        self.open_btn.setEnabled(s is not None and st == "running")
-        self.token_btn.setEnabled(isinstance(s, WinscopeService))
-        self.hint.setText(f"{s.title}: {STATE[st][0]}" if s else "")
+    def _sync_toolbar(self):
+        n = len(self._running())
+        self.stop_all_btn.setEnabled(n > 0)
+        self.hint.setText(f"{n} / {len(self.services)} running")
 
     # 操作 ------------------------------------------------------------
-    def _open(self):
-        s = self._cur()
-        if s and s.state == "running":
+    def open_service(self, s: HostService):
+        if s.state == "running":
             QtGui.QDesktopServices.openUrl(QtCore.QUrl(s.address()))
 
-    def _copy_token(self):
-        s = self._cur()
+    def copy_token(self, s: HostService):
         if not isinstance(s, WinscopeService):
             return
         token = s.read_token()
@@ -131,7 +158,6 @@ class LauncherPage(Page):
         self.ctx.notify("ok", "已复制 Winscope 令牌", "在 Winscope 网页里连接 ADB 代理时粘贴。")
 
     def shutdown(self):
-        """主窗口关闭时停止所有正在运行的服务，避免留下孤儿进程。"""
-        for s in self.services:
-            if s.state in ("starting", "running"):
-                s.stop()
+        """停止所有正在运行的服务（“全部停止”按钮；主窗口关闭时也会调用，避免留下孤儿进程）。"""
+        for s in self._running():
+            s.stop()
