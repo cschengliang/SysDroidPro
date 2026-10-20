@@ -241,7 +241,7 @@ print(f"smoke ok: {len(w.pages)} pages")
 
 
 def make_zip(out: Path) -> Path:
-    z = out.with_suffix(".zip")
+    z = out.parent / (out.name + ".zip")      # 不能用 with_suffix：版本号里的点会被当成扩展名
     z.unlink(missing_ok=True)
     with zipfile.ZipFile(z, "w", zipfile.ZIP_DEFLATED, compresslevel=6) as zf:
         for f in sorted(out.rglob("*")):
