@@ -155,6 +155,7 @@ class TextField(W.QWidget):
             self.edit.setFont(theme().mono_font(12))
         self._hint = hint
         self.hint = W.QLabel(hint)
+        self.hint.setWordWrap(True)          # 长说明换行，不把所在页面撑出横向滚动条
         repolish(self.hint, fieldhint=True)
         self.label.setBuddy(self.edit)
         lay.addWidget(self.label)
