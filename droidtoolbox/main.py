@@ -36,7 +36,6 @@ def main(argv: list[str] | None = None) -> int:
             pass
 
     from tbui._qt import QtWidgets
-    import tbui as ui
     from app.backend import create_backend
     from app.core.settings import Settings
     from app.core.state import AppState
@@ -49,7 +48,8 @@ def main(argv: list[str] | None = None) -> int:
     settings = Settings()
     theme_id = "light" if args.light else "dark" if args.dark else settings.get("theme")
     style.install(app, theme_id if theme_id in ("dark", "light") else "dark")
-    app.setWindowIcon(ui.theme().icon("smartphone", "signal-ink", 32))
+    from app.ui.app_icon import app_icon
+    app.setWindowIcon(app_icon())
 
     state = AppState(create_backend(mock=args.mock), settings)
     win = MainWindow(state)

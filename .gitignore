@@ -24,3 +24,6 @@ backend-adb-checkout/
 .test-tmp/
 pytest-cache-files-*/
 backend-adb.bundle
+
+# 构建输出
+dist/

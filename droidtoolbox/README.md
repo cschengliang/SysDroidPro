@@ -16,7 +16,16 @@ run-debug.bat --mock    :: 带控制台，便于看异常
 
 参数：`--mock` 演示数据；`--dark` / `--light` 指定主题（默认浅色，之后会记住）。快捷键：`Ctrl+T` 切换主题，`Ctrl+B` 收起侧栏，`F5` 刷新当前页，`Ctrl+1…9` 切换页面；ADB 命令页 `Ctrl+Enter` 执行、`Ctrl+S` 保存、`Ctrl+N` 新建。
 
-> 当前状态：**前端按 v3 完成，真实后端待实现**。没有 `app/backend/adb.py` 时自动使用演示数据，状态栏显示“演示数据”标记。
+> 默认连接真实设备（`app/backend/adb.py`）；`--mock` 使用演示数据，状态栏显示 MOCK 标记。
+
+## 构建发布版
+
+```bat
+..\python-3.14.8-embed-amd64\python.exe packaging\build_release.py            :: 构建 + 自检 + zip
+..\python-3.14.8-embed-amd64\python.exe packaging\build_release.py --no-zip   :: 只生成目录
+```
+
+输出 `<仓库>/dist/DroidToolbox-<版本>-win64/` 与同名 `.zip`：免安装绿色版，双击 `DroidToolbox.exe` 启动（.NET Framework 自带的 csc 编译的启动器，调用 `runtime\pythonw.exe`）。运行时只保留 PySide6 的 QtCore / QtGui / QtWidgets / QtSvg，源码预编译为 .pyc，附带 adb、scrcpy、Winscope、本地 Perfetto（不含 .pdb 与原始下载包）。构建完成后会用打包后的运行时无窗口启动并逐页打开做自检。版本号取自 `app/__init__.py`。
 
 ## 页面
 
@@ -42,6 +51,7 @@ run-debug.bat --mock    :: 带控制台，便于看异常
 droidtoolbox/
 ├─ main.py                  入口（处理 sys.path、主题、后端选择）
 ├─ run.bat / run-debug.bat  用嵌入式 Python 启动
+├─ packaging/               构建绿色版：build_release.py、启动器 launcher.cs
 ├─ pytest.ini
 ├─ app/
 │  ├─ backend/
@@ -49,7 +59,7 @@ droidtoolbox/
 │  │  ├─ models.py          ★ 数据结构（dataclass，无 Qt 依赖）
 │  │  ├─ mock.py            演示后端（userdebug 行为：root / verity / remount 状态）
 │  │  ├─ mock_data.py       演示用样例数据
-│  │  └─ adb.py             真实后端（待实现）
+│  │  └─ adb.py             真实后端（adb / fastboot / scrcpy）
 │  ├─ core/
 │  │  ├─ jobs.py            线程池调用、进度、取消；回调转回主线程（run / on_ui）
 │  │  ├─ state.py           AppState：设备轮询、当前设备、自动 root、提示；Context：页面依赖
