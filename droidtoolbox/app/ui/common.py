@@ -7,6 +7,7 @@ from typing import Any, Callable
 
 import tbui as ui
 from tbui._qt import QtCore, QtGui, QtWidgets, Qt, Signal
+from tbui.widgets import retint, token_format
 
 W = QtWidgets
 
@@ -412,7 +413,12 @@ class TextViewer(W.QWidget):
         self.copy.clicked.connect(lambda: QtWidgets.QApplication.clipboard().setText(self.text.toPlainText()))
         sc = QtGui.QShortcut(QtGui.QKeySequence.StandardKey.Find, self)
         sc.activated.connect(lambda: (self.find.edit.setFocus(), self.find.edit.selectAll()))
-        ui.theme().changed.connect(self._search)
+        ui.theme().changed.connect(self._on_theme)
+
+    def _on_theme(self, *_):
+        """append 写入的着色文字按新主题重新着色，并刷新查找高亮。"""
+        retint(self.text.document())
+        self._search()
 
     def set_text(self, text: str):
         self.text.setPlainText(text)
@@ -424,11 +430,7 @@ class TextViewer(W.QWidget):
         """追加一段着色文本（不自动换行）：input 命令行 / output 标准输出 / error 错误输出 / system 提示 / ok 成功。"""
         c = self.text.textCursor()
         c.movePosition(QtGui.QTextCursor.MoveOperation.End)
-        f = QtGui.QTextCharFormat()
-        f.setForeground(ui.theme().color(self.KIND_TOKEN.get(kind, "ink")))
-        if kind == "input":
-            f.setFontWeight(QtGui.QFont.Weight.DemiBold)
-        c.insertText(text, f)
+        c.insertText(text, token_format(self.KIND_TOKEN.get(kind, "ink"), kind == "input"))
         self.text.setTextCursor(c)
         self.text.ensureCursorVisible()
 

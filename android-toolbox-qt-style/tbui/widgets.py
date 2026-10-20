@@ -676,6 +676,41 @@ class PropertyList(W.QTableWidget):
         QtWidgets.QApplication.clipboard().setText(self.item(item.row(), 1).text())
 
 
+TOKEN_PROPERTY = QtGui.QTextFormat.Property.UserProperty.value + 1   # 字符格式里记下颜色令牌名
+
+
+def token_format(token: str, bold: bool = False) -> QtGui.QTextCharFormat:
+    """按颜色令牌着色的字符格式；令牌名记在格式里，主题切换后 retint() 据此重新着色。"""
+    f = QtGui.QTextCharFormat()
+    f.setForeground(theme().color(token))
+    f.setProperty(TOKEN_PROPERTY, token)
+    if bold:
+        f.setFontWeight(QtGui.QFont.Weight.DemiBold)
+    return f
+
+
+def retint(doc: QtGui.QTextDocument):
+    """把 token_format 写入的文字按当前主题重新着色（插入时的颜色是固定值，不会跟着主题变）。"""
+    t = theme()
+    c = QtGui.QTextCursor(doc)
+    c.beginEditBlock()
+    block = doc.begin()
+    while block.isValid():
+        it = block.begin()
+        while not it.atEnd():
+            frag = it.fragment()
+            token = frag.charFormat().property(TOKEN_PROPERTY) if frag.isValid() else None
+            if token:
+                c.setPosition(frag.position())
+                c.setPosition(frag.position() + frag.length(), QtGui.QTextCursor.MoveMode.KeepAnchor)
+                f = QtGui.QTextCharFormat()
+                f.setForeground(t.color(token))
+                c.mergeCharFormat(f)
+            it += 1
+        block = block.next()
+    c.endEditBlock()
+
+
 class Terminal(W.QWidget):
     """adb shell 终端：只读输出 + 提示符输入行，↑/↓ 浏览历史。submitted 信号发出命令文本。"""
 
@@ -711,13 +746,14 @@ class Terminal(W.QWidget):
         self.input.installEventFilter(self)
         rl.addWidget(self.input, 1)
         lay.addWidget(row)
+        theme().changed.connect(self._on_theme)
+
+    def _on_theme(self, *_):
+        """已输出的文字按新主题重新着色，否则切到深色后浅色主题下写的深色字看不清。绑定方法：控件销毁时自动断开。"""
+        retint(self.out.document())
 
     def _fmt(self, token: str, bold: bool = False):
-        f = QtGui.QTextCharFormat()
-        f.setForeground(theme().color(token))
-        if bold:
-            f.setFontWeight(QtGui.QFont.Weight.DemiBold)
-        return f
+        return token_format(token, bold)
 
     def write(self, text: str, kind: str = "output"):
         """kind = input / output / error / system。"""
