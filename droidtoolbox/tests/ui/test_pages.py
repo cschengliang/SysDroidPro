@@ -114,13 +114,15 @@ def test_adb_commands_run_persistent_and_save(win, qapp, monkeypatch):
     win.open_page("commands")
     pump(qapp, 0.3)
     store = win.state.commands
+    assert len([c for c in store.all() if c.builtin]) >= 100
     cp._select("builtin:当前焦点窗口")
     cp._run()
     assert wait_until(qapp, lambda: not cp._running and "mCurrentFocus" in cp.result.plain(), 5)
     assert "exit 0" in cp.status.text()
     shot(win, "commands-result")
     # 参数占位
-    monkeypatch.setattr(cp, "_ask_values", lambda c: {"属性名": "ro.build.type"})
+    import app.pages.adb_commands as ac
+    monkeypatch.setattr(ac, "ask_param_values", lambda parent, ctx, c, serial: {"属性": "ro.build.type"})
     cp._select("builtin:属性的 SELinux 上下文")
     cp._run()
     assert wait_until(qapp, lambda: not cp._running and "getprop -Z ro.build.type" in cp.result.plain(), 5)

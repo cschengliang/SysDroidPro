@@ -700,6 +700,21 @@ class Dialog(W.QDialog):
         return self.exec() == W.QDialog.DialogCode.Accepted
 
 
+def ask_choice(parent, title: str, body: str, choices: list[tuple[str, str, str]], danger: bool = False) -> str | None:
+    """多按钮对话框：choices = [(键, 按钮文字, variant), …]，第一项为主按钮（最右）；取消 / 关闭返回 None。"""
+    d = Dialog(parent, title, choices[0][1], danger=danger, width=460)
+    d.add_text(body)
+    picked: list[str] = []
+    for key, text, variant in choices[1:]:
+        b = ui.button(text, variant, "lg")
+        b.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
+        b.clicked.connect(lambda _=False, k=key: (picked.append(k), d.done(2)))
+        d.footer.insertWidget(d.footer.count() - 1, b)     # 取消 与 主按钮 之间
+    if d.exec() == W.QDialog.DialogCode.Accepted:
+        return choices[0][0]
+    return picked[0] if picked else None
+
+
 def ask_text(parent, title: str, field_label: str, value: str = "", placeholder: str = "", hint: str = "",
              ok_text: str = "确定", mono: bool = True, check: Callable[[str], str | None] | None = None) -> str | None:
     """单行输入对话框；check 返回错误文字时阻止关闭。"""

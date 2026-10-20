@@ -244,6 +244,10 @@ class MainWindow(W.QMainWindow):
 
     def closeEvent(self, e):
         for p in self.pages.values():
+            if hasattr(p, "can_close") and not p.can_close():   # 命令库：有未保存的修改且选择了取消
+                e.ignore()
+                return
+        for p in self.pages.values():
             if hasattr(p, "shutdown"):   # 功能启动页：停止本机服务进程
                 p.shutdown()
         for p in self.pages.values():

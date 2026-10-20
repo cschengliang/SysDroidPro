@@ -14,7 +14,7 @@ run.bat --mock          :: 演示数据（不连接设备）
 run-debug.bat --mock    :: 带控制台，便于看异常
 ```
 
-参数：`--mock` 演示数据；`--dark` / `--light` 指定主题（默认浅色，之后会记住）。快捷键：`Ctrl+T` 切换主题，`Ctrl+B` 收起侧栏，`F5` 刷新当前页，`Ctrl+1…9` 切换页面；ADB 命令页 `Ctrl+Enter` 执行、`Ctrl+S` 保存。
+参数：`--mock` 演示数据；`--dark` / `--light` 指定主题（默认浅色，之后会记住）。快捷键：`Ctrl+T` 切换主题，`Ctrl+B` 收起侧栏，`F5` 刷新当前页，`Ctrl+1…9` 切换页面；ADB 命令页 `Ctrl+Enter` 执行、`Ctrl+S` 保存、`Ctrl+N` 新建。
 
 > 当前状态：**前端按 v3 完成，真实后端待实现**。没有 `app/backend/adb.py` 时自动使用演示数据，状态栏显示“演示数据”标记。
 
@@ -23,7 +23,7 @@ run-debug.bat --mock    :: 带控制台，便于看异常
 | 分组 | 页面 | 内容 |
 | --- | --- | --- |
 | 设备 | 设备总览 | 设备列表；Root / Remount / 重启按钮与状态（Remount 自动先 root，需要重启时询问一次、设备回来后自动继续）；版本信息（各分区指纹不一致时标出）、复制全部；APEX 模块；操作输出 |
-| 调试 | ADB 命令 | 命令库（内置预设 + 我的命令）、编辑保存、`{参数}` 占位、多行、持续运行可停止、着色结果、执行历史、导入导出 JSON |
+| 调试 | ADB 命令 | 命令库（113 条按系统模块分组的内置命令 + 我的命令）、草稿 / 未保存提示、带类型参数（包名 / 服务 / PID / 属性从设备选择，文件 / 目录选择）、需要 root 提示、多行、持续运行可停止、着色结果、执行历史（重启后保留、可重新执行）、复制 adb 命令行、导入导出 JSON |
 |  | Shell 终端 | 持久会话；“常用命令”读取命令库 |
 |  | Logcat 日志 | 级别 / 文字 / 正则、PID 或包名、SELinux 拒绝、dmesg、暂停、导出 |
 |  | 崩溃与 Bug 报告 | tombstone / ANR / dropbox 预览、生成 bugreport |
@@ -53,7 +53,8 @@ droidtoolbox/
 │  ├─ core/
 │  │  ├─ jobs.py            线程池调用、进度、取消；回调转回主线程（run / on_ui）
 │  │  ├─ state.py           AppState：设备轮询、当前设备、自动 root、提示；Context：页面依赖
-│  │  ├─ commands.py        ADB 命令库（data/commands.json）、预设、占位符、执行历史
+│  │  ├─ commands.py        ADB 命令库（data/commands.json）、参数语法、执行历史（data/command_history.json）
+│  │  ├─ command_presets.py 内置命令数据（按系统模块分组）
 │  │  └─ settings.py        便携设置 data/settings.ini
 │  ├─ ui/
 │  │  ├─ common.py          DataTable、TextViewer、TaskStrip、ToastHost、Dialog、SegmentStack …
