@@ -1,6 +1,7 @@
-"""功能启动：在电脑上启动 / 停止辅助服务（目前为 Winscope），查看运行输出。不需要连接设备。
+"""功能启动：在电脑上启动 / 停止辅助服务（Winscope、本地 Perfetto），查看运行输出。不需要连接设备。
 
-每个功能在自己那一行有 Start / Stop / 打开 / 复制令牌按钮；工具栏只放“全部停止”。
+每个功能在自己那一行有 Start / Stop / 浏览器打开 / 附加按钮（Winscope 复制令牌、Perfetto 打开 traces 目录）；
+工具栏只放“全部停止”。
 """
 from __future__ import annotations
 
@@ -9,9 +10,9 @@ from pathlib import Path
 import tbui as ui
 from tbui._qt import QtCore, QtGui, QtWidgets
 
-from ..core.host_services import HostService, WinscopeService
+from ..core.host_services import HostService, PerfettoService, WinscopeService
 from ..core.settings import ROOT
-from ..ui.common import Column, DataTable, PanelHead, label, output_log, tbtn
+from ..ui.common import Column, DataTable, PanelHead, label, output_log, reveal, tbtn
 from .base import Page
 
 W = QtWidgets
@@ -22,7 +23,7 @@ ROW_H = 36                       # 行内放 28px 按钮，比普通表格行（
 
 
 class RowActions(W.QWidget):
-    """表格里一行的操作按钮：Start / Stop / 浏览器打开 / 复制令牌（仅 Winscope）。"""
+    """表格里一行的操作按钮：Start / Stop / 浏览器打开 / 附加按钮（按功能而定，没有则不显示）。"""
 
     def __init__(self, page: "LauncherPage", svc: HostService):
         super().__init__()
@@ -34,15 +35,21 @@ class RowActions(W.QWidget):
         self.start_btn = tbtn("Start", f"启动 {svc.title}", "primary", icon="play")
         self.stop_btn = tbtn("Stop", f"停止 {svc.title}", icon="square")
         self.open_btn = ui.icon_button("external-link", "在浏览器中打开（双击运行中的行也可以）")
-        self.token_btn = ui.icon_button("copy", "复制 Winscope 代理令牌（网页连接 ADB 代理时需要填写）")
-        self.token_btn.setVisible(isinstance(svc, WinscopeService))
-        for b in (self.start_btn, self.stop_btn, self.open_btn, self.token_btn):
+        if isinstance(svc, WinscopeService):
+            self.extra_btn = ui.icon_button("copy", "复制 Winscope 代理令牌（网页连接 ADB 代理时需要填写）")
+            self.extra_btn.clicked.connect(lambda: page.copy_token(svc))
+        elif isinstance(svc, PerfettoService):
+            self.extra_btn = ui.icon_button("folder-open", f"打开 traces 目录（{svc.traces_dir}），trace 文件可以放在这里")
+            self.extra_btn.clicked.connect(lambda: reveal(str(svc.traces_dir)))
+        else:
+            self.extra_btn = ui.icon_button("copy", "")
+            self.extra_btn.hide()
+        for b in (self.start_btn, self.stop_btn, self.open_btn, self.extra_btn):
             lay.addWidget(b)
         lay.addStretch(1)
         self.start_btn.clicked.connect(svc.start)
         self.stop_btn.clicked.connect(svc.stop)
         self.open_btn.clicked.connect(lambda: page.open_service(svc))
-        self.token_btn.clicked.connect(lambda: page.copy_token(svc))
         self.sync()
 
     def sync(self):
@@ -73,7 +80,8 @@ class LauncherPage(Page):
             Column("状态", lambda s: STATE[s.state][0], 96, mono=True, tone=lambda s: STATE[s.state][1],
                    tip=lambda s: s.error or ""),
             Column("操作", lambda s: "", 240),
-            Column("地址", lambda s: s.address() if s.state == "running" else "—", 200, mono=True),
+            Column("地址", lambda s: s.address() if s.state == "running" else "—", 200, mono=True,
+                   tip=lambda s: s.address() if s.state == "running" else ""),
             Column("端口", lambda s: s.detail(), 190, mono=True, tone=lambda s: "ink-muted"),
             Column("备注", lambda s: s.error if s.state == "error" else s.remark, None,
                    tone=lambda s: "danger" if s.state == "error" else "ink-muted", tip=lambda s: s.error or s.remark),
@@ -83,11 +91,13 @@ class LauncherPage(Page):
         clear = ui.icon_button("eraser", "清空输出")
         lay.addWidget(PanelHead("输出", clear))
         self.log = output_log(160)
-        self.log.write("点功能所在行的 Start 启动；Winscope 启动后点打开按钮在浏览器中使用。", "system")
+        self.log.write("点功能所在行的 Start 启动，就绪后点打开按钮在浏览器中使用。"
+                       "Perfetto 打开 trace 时选 YES（使用本机 Trace Processor）。", "system")
         lay.addWidget(self.log, 1)
 
         self._adb_dir: str | None = None
-        self.services: list[HostService] = [WinscopeService(self.ctx.settings, self._adb_dir_for_proxy)]
+        self.services: list[HostService] = [WinscopeService(self.ctx.settings, self._adb_dir_for_proxy),
+                                            PerfettoService(self.ctx.settings)]
         self.table.verticalHeader().setDefaultSectionSize(ROW_H)
         self.table.set_rows(self.services)
         self.actions: dict[str, RowActions] = {}

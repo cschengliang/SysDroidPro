@@ -86,6 +86,11 @@ class PrefsPage(Page):
                                                                          (10000, "10k")]), "启动时回溯的行数（logcat -T）")
         ports = hbox(self._port("winscope_web_port", "web"), self._port("winscope_proxy_port", "proxy"), spacing=6)
         self._row(form, "Winscope 端口", ports, "Web 界面 / ADB 代理；修改后下次启动生效")
+        tp = self._port("perfetto_rpc_port", "Trace Processor")
+        tp.setToolTip("Trace Processor 端口（1024–65535）。Perfetto UI 默认只连接 9001；改成其它端口后，"
+                      "需要在 Perfetto 的 Flags 页打开 “Relax Content Security Policy for 127.0.0.1:*”")
+        ports = hbox(self._port("perfetto_web_port", "web"), tp, spacing=6)
+        self._row(form, "Perfetto 端口", ports, "Web 界面 / Trace Processor（UI 默认连 9001）")
         v.addWidget(ui.card("外观与行为", beh))
 
         # 导出目录 ------------------------------------------------------

@@ -189,6 +189,9 @@ Android 系统工程师工具箱 —— 需求说明（v3，方案已定）
     - 在电脑上一键启动 / 停止辅助服务，表格列出：功能、状态、地址、端口、备注；下方显示服务输出。
     - 首个功能：Winscope（附带的 tool/tools/winscope-android17）：本机 Web 界面 + ADB 代理，
       启动后可在浏览器打开、复制代理令牌；端口在偏好设置里改（默认 8080 / 5544）。
+    - 第二个功能：本地 Perfetto（附带的 tool/perfetto-local，官方 v58.2）：静态 UI + 原生 trace_processor_shell，
+      默认 web 10000 / Trace Processor 9001（UI 只自动连接 9001）；行内附加按钮打开 traces 目录。
+    - 每个功能在自己那一行有 Start / Stop 按钮，工具栏只放 Stop all。
     - 不依赖设备连接；关闭工具箱时自动停止仍在运行的服务。后续功能按同样方式添加。
 
 

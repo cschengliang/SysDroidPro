@@ -29,6 +29,10 @@ DEFAULTS = {
     "winscope_dir": "",
     "winscope_web_port": 8080,
     "winscope_proxy_port": 5544,
+    # Perfetto：本地部署目录（空串为附带的 tool/perfetto-local）与端口；UI 默认只连 9001 的 Trace Processor
+    "perfetto_dir": "",
+    "perfetto_web_port": 10000,
+    "perfetto_rpc_port": 9001,
 }
 
 

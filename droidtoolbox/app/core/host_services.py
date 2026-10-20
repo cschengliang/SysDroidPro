@@ -1,7 +1,8 @@
 """本机服务：在电脑上启动 / 停止的辅助进程（与设备后端无关，演示模式下也可用）。
 
 一个 HostService 由若干子进程组成；端口都能连上才算 running。输出逐行转发给界面。
-目前只有 Winscope（Web 界面 + ADB 代理）；新增功能时继承 HostService，在 SERVICES 里登记。
+目前有 Winscope（Web 界面 + ADB 代理）与 Perfetto（Web 界面 + 原生 Trace Processor）；
+新增功能时继承 HostService，在功能启动页的 services 列表里登记。
 """
 from __future__ import annotations
 
@@ -249,3 +250,69 @@ class WinscopeService(HostService):
             return self.TOKEN_FILE.read_text("utf-8").strip()
         except OSError:
             return ""
+
+
+class PerfettoService(HostService):
+    """本地 Perfetto（附带的 tool/perfetto-local，官方 v58.2）：静态 UI（http.server）+ 原生 trace_processor_shell。
+
+    UI 检测到 127.0.0.1:9001 上的 Trace Processor 时会询问是否使用原生加速，选 YES 后大 trace 由本机进程解析。
+    """
+
+    id = "perfetto"
+    title = "Perfetto"
+    remark = "本地 Perfetto UI + 原生 Trace Processor：打开 trace 时选 YES 使用本机处理器，大文件更快，不上传数据"
+    DEFAULT_RPC_PORT = 9001
+
+    def __init__(self, settings):
+        super().__init__()
+        self.settings = settings
+
+    @property
+    def root(self) -> Path:
+        custom = self.settings.get("perfetto_dir")
+        return Path(custom) if custom else ROOT / "tool" / "perfetto-local"
+
+    @property
+    def ui_dir(self) -> Path:
+        return self.root / "ui"
+
+    @property
+    def processor(self) -> Path:
+        return self.root / "bin" / "windows-amd64" / "trace_processor_shell.exe"
+
+    @property
+    def traces_dir(self) -> Path:
+        return self.root / "traces"
+
+    @property
+    def web_port(self) -> int:
+        return int(self.settings.get("perfetto_web_port"))
+
+    @property
+    def rpc_port(self) -> int:
+        return int(self.settings.get("perfetto_rpc_port"))
+
+    def check_available(self):
+        if not (self.ui_dir / "index.html").exists():
+            return f"找不到 Perfetto 网页文件：{self.ui_dir / 'index.html'}"
+        if not self.processor.exists():
+            return f"找不到 Trace Processor：{self.processor}"
+        return None
+
+    def processes(self):
+        origins = f"http://127.0.0.1:{self.web_port},http://localhost:{self.web_port}"
+        return [
+            Proc("processor", [str(self.processor), "server", "http", "--ip-address", "127.0.0.1", "--port", str(self.rpc_port),
+                               "--additional-cors-origins", origins], self.rpc_port, str(self.root)),
+            # 只托管 ui/ 目录，traces/ 等不会暴露
+            Proc("ui", [python_exe(), "-m", "http.server", str(self.web_port), "--bind", "127.0.0.1",
+                        "--directory", str(self.ui_dir)], self.web_port, str(self.ui_dir)),
+        ]
+
+    def address(self) -> str:
+        url = f"http://127.0.0.1:{self.web_port}/"
+        # 非默认端口：UI 需打开 Flags 里的 “Relax Content Security Policy for 127.0.0.1:*” 才会连接
+        return url if self.rpc_port == self.DEFAULT_RPC_PORT else f"{url}#!/?rpc_port={self.rpc_port}"
+
+    def detail(self) -> str:
+        return f"web {self.web_port} · tp {self.rpc_port}"
