@@ -1,4 +1,4 @@
-/* 工具箱自己的补充样式，语法与 tbui/style.qss 相同（@令牌名），拼接在它后面。 */
+/* SysDroidPro 自己的补充样式，语法与 tbui/style.qss 相同（@令牌名），拼接在它后面。 */
 
 /* 页面内的面板标题条：40px，与 Toolbar 同高 */
 QFrame[panelhead="true"] { background: @bg-200; border: none; border-bottom: 1px solid @line; }

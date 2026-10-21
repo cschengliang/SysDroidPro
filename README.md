@@ -1,6 +1,8 @@
 <div align="center">
 
-<h1>SysDroidPro · Android 系统工程师工具箱</h1>
+<h1>SysDroidPro</h1>
+
+<p><b>Android 系统工程师工具箱</b></p>
 
 <p>面向 Android 系统开发工程师的 Windows 桌面工具：连上 userdebug 设备，快速查询系统各模块、组件的信息。</p>
 
@@ -28,15 +30,15 @@ SysDroidPro 把这些查询整理成界面，信息紧凑、可筛选、可对�
 
 ## 下载使用
 
-1. 到 [Releases](https://github.com/cschengliang/SysDroidPro/releases/latest) 下载 `DroidToolbox-<版本>-win64.zip`（免安装绿色版，约 80 MB）。
-2. 解压到任意目录（路径可以有中文和空格），双击 `DroidToolbox.exe`。
+1. 到 [Releases](https://github.com/cschengliang/SysDroidPro/releases/latest) 下载 `SysDroidPro-<版本>-win64.zip`（免安装绿色版，约 80 MB）。
+2. 解压到任意目录（路径可以有中文和空格），双击 `SysDroidPro.exe`。
 
 已附带 adb（platform-tools 37）、scrcpy 4.1、Winscope（Android 17）和本地 Perfetto v58.2，不需要另外安装 Python 或 Android SDK。
 
 ```bat
-DroidToolbox.exe            :: 连接真实设备
-DroidToolbox.exe --mock     :: 演示数据，不需要设备
-DroidToolbox-debug.bat      :: 带控制台启动，出现异常时可以看到堆栈
+SysDroidPro.exe             :: 连接真实设备
+SysDroidPro.exe --mock      :: 演示数据，不需要设备
+SysDroidPro-debug.bat       :: 带控制台启动，出现异常时可以看到堆栈
 ```
 
 - 设置、命令库、执行历史保存在 `droidtoolbox\data\`，升级时把这个目录复制到新版本即可保留。
@@ -114,8 +116,8 @@ cd droidtoolbox
 ..\python-3.14.8-embed-amd64\python.exe packaging\build_release.py
 ```
 
-输出 `dist/DroidToolbox-<版本>-win64/` 与同名 `.zip`：精简运行时（PySide6 只保留 QtCore / QtGui / QtWidgets / QtSvg）、预编译 `.pyc`、附带工具，
-以及用 .NET Framework 自带 `csc` 编译的启动器 `DroidToolbox.exe`。构建结束会用打包后的运行时无窗口启动并逐页打开做自检。版本号取自 `droidtoolbox/app/__init__.py`。
+输出 `dist/SysDroidPro-<版本>-win64/` 与同名 `.zip`：精简运行时（PySide6 只保留 QtCore / QtGui / QtWidgets / QtSvg）、预编译 `.pyc`、附带工具，
+以及用 .NET Framework 自带 `csc` 编译的启动器 `SysDroidPro.exe`。构建结束会用打包后的运行时无窗口启动并逐页打开做自检。版本号取自 `droidtoolbox/app/__init__.py`。
 
 ## 测试
 

@@ -3,10 +3,10 @@
     ..\\python-3.14.8-embed-amd64\\python.exe packaging\\build_release.py            # 构建 + 自检 + 打 zip
     ..\\python-3.14.8-embed-amd64\\python.exe packaging\\build_release.py --no-zip   # 只生成目录
 
-输出 <仓库>/dist/DroidToolbox-<版本>-win64/ 与同名 .zip：
+输出 <仓库>/dist/SysDroidPro-<版本>-win64/ 与同名 .zip：
 
-    DroidToolbox.exe          启动器（runtime\\pythonw.exe droidtoolbox\\main.py，参数原样传递）
-    DroidToolbox-debug.bat    带控制台启动，便于看异常
+    SysDroidPro.exe           启动器（runtime\\pythonw.exe droidtoolbox\\main.py，参数原样传递）
+    SysDroidPro-debug.bat     带控制台启动，便于看异常
     使用说明.txt               版本、提交、目录说明
     runtime\\                  精简后的嵌入式 Python 3.14 + PySide6（只保留 QtCore / QtGui / QtWidgets / QtSvg）
     android-toolbox-qt-style\\tbui\\   界面样式包
@@ -150,35 +150,35 @@ def build_launcher(out: Path, ver: str, tmp: Path):
     text = (APP / "packaging" / "launcher.cs").read_text("utf-8").replace("@VERSION@", ".".join(n if n.isdigit() else "0" for n in nums))
     src.write_text(text, "utf-8-sig")             # 带 BOM，csc 才按 UTF-8 读中文
     r = subprocess.run([str(CSC), "/nologo", "/target:winexe", "/optimize+", "/codepage:65001", f"/win32icon:{ico}",
-                        "/r:System.Windows.Forms.dll", f"/out:{out / 'DroidToolbox.exe'}", str(src)],
+                        "/r:System.Windows.Forms.dll", f"/out:{out / 'SysDroidPro.exe'}", str(src)],
                        capture_output=True, text=True, encoding="mbcs", errors="replace")
     if r.returncode:
         raise SystemExit("编译启动器失败：\n" + r.stdout + r.stderr)
 
 
 def write_extras(out: Path, ver: str):
-    (out / "DroidToolbox-debug.bat").write_text(
-        "@echo off\r\nrem 带控制台启动，异常堆栈会打印在这里。例如 DroidToolbox-debug.bat --mock\r\n"
+    (out / "SysDroidPro-debug.bat").write_text(
+        "@echo off\r\nrem 带控制台启动，异常堆栈会打印在这里。例如 SysDroidPro-debug.bat --mock\r\n"
         "\"%~dp0runtime\\python.exe\" \"%~dp0droidtoolbox\\main.py\" %*\r\npause\r\n", "utf-8")
     now = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
-    (out / "使用说明.txt").write_text(f"""Android 系统工程师工具箱 {ver}（Windows x64 绿色版）
+    (out / "使用说明.txt").write_text(f"""SysDroidPro {ver}（Android 系统工程师工具箱，Windows x64 绿色版）
 构建时间：{now}
 源码提交：{git_info()}
 
 运行
-    双击 DroidToolbox.exe。
-    DroidToolbox.exe --mock     演示数据，不连接设备
-    DroidToolbox-debug.bat      带控制台窗口，出现异常时可以看到堆栈
+    双击 SysDroidPro.exe。
+    SysDroidPro.exe --mock      演示数据，不连接设备
+    SysDroidPro-debug.bat       带控制台窗口，出现异常时可以看到堆栈
 
 说明
     - 免安装：整个文件夹可以放在任意位置（路径中可以有中文和空格），不写注册表。
     - 设置、命令库、执行历史、快照保存在 droidtoolbox\\data\\；升级时把这个目录复制到新版本即可保留。
     - 已附带 adb（platform-tools）、scrcpy 4.1、Winscope（Android 17）、本地 Perfetto v58.2（UI + trace_processor_shell）。
       偏好设置里可以改用自己的 adb / scrcpy 路径。
-    - 移动或删除文件夹前请先关闭工具箱（功能启动页里运行的 Winscope / Perfetto 会随之停止）。
+    - 移动或删除文件夹前请先关闭 SysDroidPro（功能启动页里运行的 Winscope / Perfetto 会随之停止）。
 
 目录
-    DroidToolbox.exe            启动器
+    SysDroidPro.exe             启动器
     runtime\\                    嵌入式 Python 3.14 + PySide6 6.12（精简）
     android-toolbox-qt-style\\   界面样式包
     droidtoolbox\\               程序（app\\）与附带工具（tool\\）
@@ -251,7 +251,7 @@ def make_zip(out: Path) -> Path:
 
 
 def main() -> int:
-    ap = argparse.ArgumentParser(description="构建 DroidToolbox Windows 绿色版")
+    ap = argparse.ArgumentParser(description="构建 SysDroidPro Windows 绿色版")
     ap.add_argument("--out", type=Path, default=REPO / "dist", help="输出目录（默认 <仓库>/dist）")
     ap.add_argument("--no-zip", action="store_true", help="不打 zip")
     ap.add_argument("--no-tools", action="store_true", help="不附带 tool\\ 下的 adb / scrcpy / Winscope / Perfetto")
@@ -259,13 +259,13 @@ def main() -> int:
     args = ap.parse_args()
 
     ver = version()
-    out = args.out.resolve() / f"DroidToolbox-{ver}-win64"
+    out = args.out.resolve() / f"SysDroidPro-{ver}-win64"
     if out.exists():
-        if out.parent.name != "dist" and not (out / "DroidToolbox.exe").exists():
+        if out.parent.name != "dist" and not (out / "SysDroidPro.exe").exists():
             raise SystemExit(f"输出目录已存在且不像之前的构建结果，拒绝删除：{out}")
         shutil.rmtree(out)
     out.mkdir(parents=True)
-    log(f"构建 DroidToolbox {ver} → {out}")
+    log(f"构建 SysDroidPro {ver} → {out}")
     with tempfile.TemporaryDirectory() as t:
         tmp = Path(t)
         log("· 运行时（精简 PySide6）");          build_runtime(out)

@@ -1,4 +1,4 @@
-"""Android 系统工程师工具箱 — 入口。
+"""SysDroidPro（Android 系统工程师工具箱）— 入口。
 
     python main.py              # 有 app/backend/adb.py 时连接真实设备，否则使用演示数据
     python main.py --mock       # 强制演示数据
@@ -21,7 +21,7 @@ for p in (HERE, STYLE_KIT):
 
 
 def main(argv: list[str] | None = None) -> int:
-    ap = argparse.ArgumentParser(description="Android 系统工程师工具箱")
+    ap = argparse.ArgumentParser(description="SysDroidPro — Android 系统工程师工具箱")
     ap.add_argument("--mock", action="store_true", help="使用演示数据，不连接设备")
     g = ap.add_mutually_exclusive_group()
     g.add_argument("--dark", action="store_true")
@@ -31,7 +31,7 @@ def main(argv: list[str] | None = None) -> int:
     if sys.platform == "win32":  # 任务栏使用自己的图标分组
         try:
             import ctypes
-            ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID("DroidToolbox.App")
+            ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID("SysDroidPro.App")
         except Exception:  # noqa: BLE001
             pass
 
@@ -43,8 +43,8 @@ def main(argv: list[str] | None = None) -> int:
     from app.ui import style
 
     app = QtWidgets.QApplication(sys.argv[:1])
-    app.setApplicationName("DroidToolbox")
-    app.setApplicationDisplayName("Android 系统工程师工具箱")
+    app.setApplicationName("SysDroidPro")
+    app.setApplicationDisplayName("SysDroidPro")
     settings = Settings()
     theme_id = "light" if args.light else "dark" if args.dark else settings.get("theme")
     style.install(app, theme_id if theme_id in ("dark", "light") else "dark")

@@ -1,4 +1,4 @@
-// DroidToolbox.exe：绿色版启动器。用同目录 runtime\pythonw.exe 运行 droidtoolbox\main.py，参数原样传递（例如 --mock）。
+// SysDroidPro.exe：绿色版启动器。用同目录 runtime\pythonw.exe 运行 droidtoolbox\main.py，参数原样传递（例如 --mock）。
 // 由 packaging/build_release.py 调用 .NET Framework 自带的 csc.exe 编译，不需要安装 SDK。
 using System;
 using System.Diagnostics;
@@ -6,8 +6,9 @@ using System.IO;
 using System.Text;
 using System.Windows.Forms;
 
-[assembly: System.Reflection.AssemblyTitle("Android 系统工程师工具箱")]
-[assembly: System.Reflection.AssemblyProduct("DroidToolbox")]
+[assembly: System.Reflection.AssemblyTitle("SysDroidPro")]
+[assembly: System.Reflection.AssemblyDescription("Android 系统工程师工具箱")]
+[assembly: System.Reflection.AssemblyProduct("SysDroidPro")]
 [assembly: System.Reflection.AssemblyVersion("@VERSION@.0")]
 [assembly: System.Reflection.AssemblyFileVersion("@VERSION@.0")]
 
@@ -22,7 +23,7 @@ static class Launcher
         if (!File.Exists(py) || !File.Exists(main))
         {
             MessageBox.Show("找不到运行环境：\n" + py + "\n" + main + "\n\n请完整解压整个文件夹后再运行。",
-                            "DroidToolbox", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            "SysDroidPro", MessageBoxButtons.OK, MessageBoxIcon.Error);
             return 1;
         }
         var cmd = new StringBuilder(Quote(main));
@@ -36,7 +37,7 @@ static class Launcher
         }
         catch (Exception e)
         {
-            MessageBox.Show("启动失败：" + e.Message, "DroidToolbox", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            MessageBox.Show("启动失败：" + e.Message, "SysDroidPro", MessageBoxButtons.OK, MessageBoxIcon.Error);
             return 1;
         }
     }

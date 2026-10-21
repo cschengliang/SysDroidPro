@@ -4,7 +4,7 @@
 
 ## 背景
 
-Windows 桌面工具 **Android 系统工程师工具箱**（嵌入式 Python 3.14 + PySide6）。使用者是 Android 系统开发工程师，设备是 userdebug，主要用来查询系统模块 / 组件信息。
+Windows 桌面工具 **SysDroidPro（Android 系统工程师工具箱）**（嵌入式 Python 3.14 + PySide6）。使用者是 Android 系统开发工程师，设备是 userdebug，主要用来查询系统模块 / 组件信息。
 前端已全部完成并提交（git 仓库根目录是 `rebuild-droidtooxbox/`，前端在 `droidtoolbox/`），目前跑在演示数据（`app/backend/mock.py`）上。
 你的任务是实现**真实后端** `app/backend/adb.py` 并补齐**测试**。
 

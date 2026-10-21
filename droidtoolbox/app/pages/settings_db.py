@@ -21,7 +21,7 @@ NAMESPACES = [("system", "system"), ("secure", "secure"), ("global", "global")]
 TABS = NAMESPACES + [("presets", "presets")]   # presets：常用键 + 备注
 # 改错会断开调试或影响开机流程的键
 SENSITIVE = {
-    "adb_enabled": "设为 0 会立即关闭 USB 调试，工具箱将失去与设备的连接。",
+    "adb_enabled": "设为 0 会立即关闭 USB 调试，SysDroidPro 将失去与设备的连接。",
     "adb_wifi_enabled": "会影响无线调试连接。",
     "development_settings_enabled": "设为 0 会隐藏开发者选项并可能关闭 USB 调试。",
     "device_provisioned": "设为 0 可能让系统认为设备未完成初始化，部分功能被限制。",

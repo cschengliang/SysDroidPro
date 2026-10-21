@@ -13,7 +13,7 @@ DEFAULTS = {
     "adb_path": "",
     "fastboot_path": "",
     "scrcpy_path": "",
-    "export_dir": str(Path.home() / "Documents" / "DroidToolbox"),
+    "export_dir": str(Path.home() / "Documents" / "SysDroidPro"),
     "poll_interval_ms": 2000,
     "logcat_max_rows": 200_000,
     "logcat_tail": 2000,

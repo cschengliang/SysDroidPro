@@ -1,4 +1,4 @@
-"""偏好设置（工具箱自身的配置，区别于“系统设置”页的 Android settings）：工具路径、外观、行为、导出目录、关于。修改即保存。"""
+"""偏好设置（SysDroidPro 自身的配置，区别于“系统设置”页的 Android settings）：工具路径、外观、行为、导出目录、关于。修改即保存。"""
 from __future__ import annotations
 
 import platform

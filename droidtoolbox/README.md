@@ -1,4 +1,4 @@
-# Android 系统工程师工具箱
+# SysDroidPro（Android 系统工程师工具箱）
 
 面向 Android 系统开发工程师（userdebug 设备）的 Windows 桌面工具，重点是**查询系统各模块、组件的信息**：
 设备版本与 Root / Remount、ADB 命令库、Shell、Logcat（含 dmesg 与 SELinux 拒绝过滤）、崩溃记录、系统属性与 settings（快照对比）、
@@ -25,7 +25,7 @@ run-debug.bat --mock    :: 带控制台，便于看异常
 ..\python-3.14.8-embed-amd64\python.exe packaging\build_release.py --no-zip   :: 只生成目录
 ```
 
-输出 `<仓库>/dist/DroidToolbox-<版本>-win64/` 与同名 `.zip`：免安装绿色版，双击 `DroidToolbox.exe` 启动（.NET Framework 自带的 csc 编译的启动器，调用 `runtime\pythonw.exe`）。运行时只保留 PySide6 的 QtCore / QtGui / QtWidgets / QtSvg，源码预编译为 .pyc，附带 adb、scrcpy、Winscope、本地 Perfetto（不含 .pdb 与原始下载包）。构建完成后会用打包后的运行时无窗口启动并逐页打开做自检。版本号取自 `app/__init__.py`。
+输出 `<仓库>/dist/SysDroidPro-<版本>-win64/` 与同名 `.zip`：免安装绿色版，双击 `SysDroidPro.exe` 启动（.NET Framework 自带的 csc 编译的启动器，调用 `runtime\pythonw.exe`）。运行时只保留 PySide6 的 QtCore / QtGui / QtWidgets / QtSvg，源码预编译为 .pyc，附带 adb、scrcpy、Winscope、本地 Perfetto（不含 .pdb 与原始下载包）。构建完成后会用打包后的运行时无窗口启动并逐页打开做自检。版本号取自 `app/__init__.py`。
 
 ## 页面
 

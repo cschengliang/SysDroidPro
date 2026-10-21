@@ -100,7 +100,7 @@ class MainWindow(W.QMainWindow):
         super().__init__()
         self.state = state
         self.ctx = Context(state, self)
-        self.setWindowTitle("Android 系统工程师工具箱")
+        self.setWindowTitle("SysDroidPro")
         self.resize(1360, 860)
         self.setMinimumSize(1100, 680)
 
