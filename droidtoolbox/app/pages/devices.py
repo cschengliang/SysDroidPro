@@ -20,17 +20,15 @@ W = QtWidgets
 PARTS = ["system", "system_ext", "product", "vendor", "odm"]
 
 
-class _Card(W.QFrame):
-    """带标题栏操作按钮的卡片。"""
+class _Card(ui.GlassCard):
+    """带标题栏操作按钮的光学玻璃卡片。"""
 
     def __init__(self, title: str, content: W.QWidget, *actions):
         super().__init__()
-        ui.repolish(self, card=True)
         lay = W.QVBoxLayout(self)
         lay.setContentsMargins(1, 1, 1, 1)
         lay.setSpacing(0)
         self.head = PanelHead(title, *actions)
-        self.head.setStyleSheet("border-top-left-radius: 6px; border-top-right-radius: 6px;")
         lay.addWidget(self.head)
         lay.addWidget(content)
 
@@ -76,6 +74,7 @@ class DevicesPage(Page):
         self.scroll = W.QScrollArea()
         self.scroll.setWidgetResizable(True)
         self.scroll.setFrameShape(W.QFrame.Shape.NoFrame)
+        self.scroll.viewport().setAutoFillBackground(False)
         self.scroll.viewport().installEventFilter(self)
         lay.addWidget(self.scroll, 1)
 
@@ -178,7 +177,7 @@ class DevicesPage(Page):
         name.setToolTip(d.display_name)
         name.setMinimumWidth(0)                      # 名字过长时截断，不把右侧快捷按钮挤出去
         name.setSizePolicy(W.QSizePolicy.Policy.Ignored, W.QSizePolicy.Policy.Preferred)
-        name.setFont(ui.theme().display_font(24))
+        name.setFont(ui.theme().display_font(24, 700))
         sub = [ui.DeviceStatus("fastboot" if d.state == "bootloader" else d.state), label(d.serial, "muted", mono=True)]
         if d.android:
             sub.append(ui.badge(f"Android {d.android}", mono=True))

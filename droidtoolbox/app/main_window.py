@@ -34,8 +34,9 @@ class DeviceSwitcher(W.QFrame):
         col = W.QVBoxLayout()
         col.setSpacing(0)
         self.name = W.QLabel()
-        self.name.setFont(ui.theme().ui_font(13, 600))
+        self.name.setFont(ui.theme().ui_font(13, 700))
         self.serial = label("", "faint", mono=True, px=11)
+        self.serial.setFont(ui.theme().mono_font(11, 600))
         col.addWidget(self.name)
         col.addWidget(self.serial)
         self.text = W.QWidget()
@@ -105,7 +106,26 @@ class MainWindow(W.QMainWindow):
         self.setMinimumSize(1100, 680)
 
         central = W.QWidget()
-        h = W.QHBoxLayout(central)
+        root = W.QVBoxLayout(central)
+        root.setContentsMargins(0, 0, 0, 0)
+        root.setSpacing(0)
+
+        # 一体化无边框玻璃顶栏（最先构造，供 nativeEvent 安全引用）
+        self.titlebar = ui.GlassTitleBar("SysDroidPro", self)
+        self.collapse_btn = ui.icon_button("panel-left", "收起侧栏（Ctrl+B）")
+        self.collapse_btn.clicked.connect(lambda: self.set_sidebar_collapsed(not self.side.collapsed))
+        self.titlebar.add_left(self.collapse_btn)
+
+        self.refresh_btn = ui.icon_button("refresh-cw", "刷新当前页（F5）")
+        self.refresh_btn.clicked.connect(lambda: self._current and self._current.refresh())
+        self.theme_btn = ui.icon_button("sun", "切换深浅色（Ctrl+T）")
+        self.theme_btn.clicked.connect(ui.theme().toggle)
+        self.titlebar.add_right(self.refresh_btn)
+        self.titlebar.add_right(self.theme_btn)
+        root.addWidget(self.titlebar)
+
+        body = W.QWidget()
+        h = W.QHBoxLayout(body)
         h.setContentsMargins(0, 0, 0, 0)
         h.setSpacing(0)
 
@@ -118,23 +138,11 @@ class MainWindow(W.QMainWindow):
         sv.addWidget(self.switcher)
         self.side = ui.Sidebar()
         sv.addWidget(self.side, 1)
-        foot = W.QFrame()
-        ui.repolish(foot, sidefoot=True)
-        fl = W.QHBoxLayout(foot)
-        fl.setContentsMargins(8, 6, 8, 6)
-        fl.setSpacing(4)
-        self.collapse_btn = ui.icon_button("panel-left", "收起侧栏（Ctrl+B）")
-        self.collapse_btn.clicked.connect(lambda: self.set_sidebar_collapsed(not self.side.collapsed))
-        self.theme_btn = ui.icon_button("sun", "切换深浅色（Ctrl+T）")
-        self.theme_btn.clicked.connect(ui.theme().toggle)
-        fl.addWidget(self.collapse_btn)
-        fl.addStretch(1)
-        fl.addWidget(self.theme_btn)
-        sv.addWidget(foot)
         h.addWidget(side)
 
         self.stack = W.QStackedWidget()
         h.addWidget(self.stack, 1)
+        root.addWidget(body, 1)
         self.setCentralWidget(central)
         self.toasts = ToastHost(central)
 
@@ -163,6 +171,16 @@ class MainWindow(W.QMainWindow):
         self.set_sidebar_collapsed(state.settings.get("sidebar_collapsed"))
         last = state.settings.get("last_page")
         self.open_page(last if last in self.pages else "devices")
+        self._refresh_backdrop = ui.bind_backdrop(self, enabled_fn=lambda: state.settings.get("glass_backdrop"), frameless=True)
+        state.settings.changed.connect(lambda k: k == "glass_backdrop" and self._refresh_backdrop())
+
+    def nativeEvent(self, eventType, message):
+        tb = getattr(self, "titlebar", None)
+        if tb is not None:
+            handled, res = ui.handle_frameless_native_event(self, eventType, message, tb)
+            if handled:
+                return True, res
+        return super().nativeEvent(eventType, message)
 
     # 状态栏 ----------------------------------------------------------
     def _build_status(self):
@@ -220,6 +238,7 @@ class MainWindow(W.QMainWindow):
             self._current.set_visible_page(False)
         self._current = page
         self.stack.setCurrentWidget(page)
+        self.titlebar.set_subtitle(page.title)
         page.set_visible_page(True)
         self.update_status(page)
         self.state.settings.set("last_page", page_id)
@@ -228,7 +247,6 @@ class MainWindow(W.QMainWindow):
         self.side.set_collapsed(on)
         self.switcher.set_collapsed(on)
         self.switcher.setFixedWidth(48 if on else 200)
-        self.theme_btn.setVisible(not on)
         self.collapse_btn.setToolTip("展开侧栏（Ctrl+B）" if on else "收起侧栏（Ctrl+B）")
         self.state.settings.set("sidebar_collapsed", on)
 

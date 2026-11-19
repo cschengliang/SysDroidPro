@@ -10,6 +10,7 @@ DATA_DIR = ROOT / "data"
 
 DEFAULTS = {
     "theme": "light",
+    "glass_backdrop": True,         # Win11 原生 Acrylic 毛玻璃透底与深色标题栏
     "adb_path": "",
     "fastboot_path": "",
     "scrcpy_path": "",

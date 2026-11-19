@@ -2,7 +2,7 @@
 
 面向 Android 系统开发工程师（userdebug 设备）的 Windows 桌面工具，重点是**查询系统各模块、组件的信息**：
 设备版本与 Root / Remount、ADB 命令库、Shell、Logcat（含 dmesg 与 SELinux 拒绝过滤）、崩溃记录、系统属性与 settings（快照对比）、
-Binder 服务 / init 服务 / HAL / 进程、按 Android 用户的应用与组件、文件管理、scrcpy 投屏。需求见上级目录 `我的需求.txt`（v3）。
+Binder 服务 / init 服务 / HAL / 进程、按 Android 用户的应用与组件、文件管理、scrcpy 投屏。
 
 界面基于同级目录的 `android-toolbox-qt-style`（tbui 样式包），运行在同级目录的嵌入式 Python 3.14 上。
 
@@ -70,10 +70,10 @@ droidtoolbox/
 │  │  ├─ common.py          DataTable、TextViewer、TaskStrip、ToastHost、Dialog、SegmentStack …
 │  │  ├─ snapshot.py        快照记录与对比（data/snapshots/）
 │  │  ├─ style.py / app.qss 在 tbui 主题上叠加的样式
-│  ├─ pages/                12 个页面 + base.py（按设备状态切换内容 / 空状态）
+│  ├─ pages/                13 个页面 + base.py（按设备状态切换内容 / 空状态）
 │  └─ main_window.py        侧栏、设备切换器、状态栏、快捷键
-├─ docs/                    后端规格、测试计划、交接说明（待按 v3 同步）
-└─ tests/                   契约测试 + 离屏界面测试（38 个，均通过）
+├─ docs/                    后端历史规格、实测报告与当前测试说明
+└─ tests/                   后端、命令库、契约、离屏界面与设备测试
 ```
 
 ## 架构要点

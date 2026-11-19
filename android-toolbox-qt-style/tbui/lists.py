@@ -55,17 +55,24 @@ class _SidebarDelegate(W.QStyledItemDelegate):
         if collapsed:
             item = QtCore.QRectF(r.left() + 6, r.top(), r.width() - 12, 28)
         if selected:
-            _rounded(p, item, 4, t.color("signal-soft"))
+            edge = QtGui.QColor(t.color("signal-ink"))
+            edge.setAlpha(75)
+            _rounded(p, item, 6, t.color("signal-soft"), QtGui.QPen(edge, 1))
+            p.setPen(QtGui.QPen(t.color("glass-hi"), 1))
+            p.drawLine(QtCore.QPointF(item.left() + 5, item.top() + 1), QtCore.QPointF(item.right() - 5, item.top() + 1))
+            halo = QtGui.QColor(t.color("signal-ink"))
+            halo.setAlpha(65)
+            _rounded(p, QtCore.QRectF(item.left() - 1, item.top() + 6, 5, 16), 2.5, halo)
             _rounded(p, QtCore.QRectF(item.left(), item.top() + 7, 3, 14), 1.5, t.color("signal-ink"))
         elif hover:
-            _rounded(p, item, 4, t.color("bg-400"))
+            _rounded(p, item, 6, t.color("bg-400"), QtGui.QPen(t.color("glass-border"), 1))
         icon_color = "signal-ink" if selected else ("ink" if hover else "ink-muted")
         pm = t.pixmap(index.data(ROLE_ICON), icon_color, 16)
         ix = item.center().x() - 8 if collapsed else item.left() + 10
         p.drawPixmap(QtCore.QPointF(ix, item.top() + 6), pm)
         badge = index.data(ROLE_BADGE)
         if not collapsed:
-            p.setFont(t.ui_font(13, 600 if selected else 400))
+            p.setFont(t.ui_font(13, 700 if selected else 600))
             p.setPen(t.color("ink") if (selected or hover) else t.color("ink-muted"))
             text_r = item.adjusted(36, 0, -8, 0)
             if badge not in (None, ""):
@@ -73,7 +80,7 @@ class _SidebarDelegate(W.QStyledItemDelegate):
             p.drawText(text_r, Qt.AlignmentFlag.AlignVCenter | Qt.AlignmentFlag.AlignLeft,
                        p.fontMetrics().elidedText(index.data(Qt.ItemDataRole.DisplayRole), Qt.TextElideMode.ElideRight, int(text_r.width())))
         if badge not in (None, ""):
-            f = t.mono_font(11 if not collapsed else 10, 500)
+            f = t.mono_font(11 if not collapsed else 10, 700)
             p.setFont(f)
             w = max(16, QtGui.QFontMetrics(f).horizontalAdvance(str(badge)) + 10)
             h = 16 if not collapsed else 14
@@ -159,35 +166,53 @@ class _DeviceDelegate(W.QStyledItemDelegate):
         hover = bool(option.state & S.State_MouseOver)
         p.save()
         p.setRenderHint(QtGui.QPainter.RenderHint.Antialiasing)
-        card = QtCore.QRectF(option.rect).adjusted(8.5, 0.5, -8.5, -2.5)
+        card = QtCore.QRectF(option.rect).adjusted(8.5, 1.5, -8.5, -2.5)
         if selected:
-            _rounded(p, card, 6, t.color("signal-soft"), QtGui.QPen(t.color("signal-ink"), 1))
+            grad = QtGui.QLinearGradient(card.topLeft(), card.bottomLeft())
+            c_top = QtGui.QColor(t.color("signal-soft"))
+            c_top.setAlpha(min(255, c_top.alpha() + 28))
+            grad.setColorAt(0.0, c_top)
+            grad.setColorAt(1.0, t.color("signal-soft"))
+            _rounded(p, card, 8, grad, QtGui.QPen(t.color("signal-ink"), 1))
+            p.setPen(QtGui.QPen(t.color("glass-hi"), 1))
+            p.drawLine(QtCore.QPointF(card.left() + 6, card.top() + 1), QtCore.QPointF(card.right() - 6, card.top() + 1))
         elif hover:
-            _rounded(p, card, 6, t.color("bg-400"))
+            _rounded(p, card, 8, t.color("bg-400"), QtGui.QPen(t.color("glass-border"), 1))
         # 图标块
         ib = QtCore.QRectF(card.left() + 12, card.top() + 10, 32, 32)
-        _rounded(p, ib, 4, t.color("bg-100" if selected else "bg-400"))
+        _rounded(p, ib, 6, t.color("glass-well" if selected else "bg-400"), QtGui.QPen(t.color("glass-border"), 1))
         icon = "monitor-smartphone" if d.get("transport") == "emulator" else "smartphone"
         p.drawPixmap(QtCore.QPointF(ib.left() + 6, ib.top() + 6), t.pixmap(icon, "signal-ink" if selected else "ink-muted", 20))
         x = ib.right() + 12
         right = card.right() - 12
-        # 状态（右上）
+        # 状态（右上 LED 光晕）
         text, tone = STATE_TEXT.get(d.get("state", "offline"), STATE_TEXT["offline"])
-        f12 = t.ui_font(12)
-        p.setFont(f12)
-        sw = QtGui.QFontMetrics(f12).horizontalAdvance(text)
+        f12_bold = t.ui_font(12, 700)
+        p.setFont(f12_bold)
+        sw = QtGui.QFontMetrics(f12_bold).horizontalAdvance(text)
         sx = right - sw
+        cx, cy = sx - 10.0, card.top() + 20.0
+        tone_c = t.color(tone)
+        halo = QtGui.QRadialGradient(cx, cy, 6.5)
+        h0 = QtGui.QColor(tone_c)
+        h0.setAlphaF(0.42)
+        h1 = QtGui.QColor(tone_c)
+        h1.setAlphaF(0.0)
+        halo.setColorAt(0.0, h0)
+        halo.setColorAt(1.0, h1)
         p.setPen(Qt.PenStyle.NoPen)
-        p.setBrush(t.color(tone))
-        p.drawEllipse(QtCore.QRectF(sx - 14, card.top() + 16, 8, 8))
-        p.setPen(t.color(tone))
+        p.setBrush(halo)
+        p.drawEllipse(QtCore.QPointF(cx, cy), 6.5, 6.5)
+        p.setBrush(tone_c)
+        p.drawEllipse(QtCore.QPointF(cx, cy), 3.8, 3.8)
+        p.setPen(tone_c)
         p.drawText(QtCore.QRectF(sx, card.top() + 10, sw + 1, 20), Qt.AlignmentFlag.AlignVCenter, text)
         # 型号
         maker = d.get("manufacturer") or ""
         model = d.get("model", "")
         top = QtCore.QRectF(x, card.top() + 10, sx - 20 - x, 20)
-        fm_reg = t.ui_font(13)
-        fm_bold = t.ui_font(13, 600)
+        fm_reg = t.ui_font(13, 600)
+        fm_bold = t.ui_font(13, 700)
         if maker:
             p.setFont(fm_reg)
             p.setPen(t.color("ink-muted"))
@@ -199,7 +224,7 @@ class _DeviceDelegate(W.QStyledItemDelegate):
         p.drawText(top, Qt.AlignmentFlag.AlignVCenter,
                    QtGui.QFontMetrics(fm_bold).elidedText(model, Qt.TextElideMode.ElideRight, int(top.width())))
         # 序列号
-        mono = t.mono_font(12)
+        mono = t.mono_font(12, 600)
         p.setFont(mono)
         p.setPen(t.color("ink-muted"))
         p.drawText(QtCore.QRectF(x, card.top() + 32, right - x, 16), Qt.AlignmentFlag.AlignVCenter,
@@ -214,7 +239,7 @@ class _DeviceDelegate(W.QStyledItemDelegate):
             parts.append("API " + str(d["api"]))
         if d.get("battery") is not None:
             parts.append(f"{d['battery']}%")
-        p.setFont(f12)
+        p.setFont(t.ui_font(12, 600))
         p.setPen(t.color("ink-muted"))
         p.drawText(QtCore.QRectF(x + 16, card.top() + 50, right - x - 16, 16), Qt.AlignmentFlag.AlignVCenter, "  ·  ".join(parts))
         p.restore()

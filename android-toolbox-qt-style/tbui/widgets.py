@@ -254,7 +254,7 @@ def select(options: list[tuple[str, str]], value: str | None = None, size: str =
 
 
 class Switch(W.QAbstractButton):
-    """开关：32×18 轨道，10px 圆点，切换动画 120ms。文字放在右侧。"""
+    """macOS 玻璃拨动开关：34×19 轨道，13px 带阴影与微高光圆点，切换动画 120ms。文字放在右侧。"""
 
     def __init__(self, text: str = "", checked: bool = False, parent=None):
         super().__init__(parent)
@@ -291,7 +291,7 @@ class Switch(W.QAbstractButton):
 
     def sizeHint(self):
         fm = self.fontMetrics()
-        return QtCore.QSize(32 + (8 + fm.horizontalAdvance(self.text()) if self.text() else 0), 20)
+        return QtCore.QSize(34 + (8 + fm.horizontalAdvance(self.text()) if self.text() else 0), 22)
 
     def minimumSizeHint(self):
         """放进工具栏时不被压到比文字还窄（否则文字被截断）。"""
@@ -304,31 +304,56 @@ class Switch(W.QAbstractButton):
         t = theme()
         p = QtGui.QPainter(self)
         p.setRenderHint(QtGui.QPainter.RenderHint.Antialiasing)
-        track = QtCore.QRectF(0.5, (self.height() - 18) / 2 + 0.5, 31, 17)
+        track = QtCore.QRectF(1.0, (self.height() - 19) / 2 + 0.5, 32, 18)
         on = self.isChecked()
         enabled = self.isEnabled()
+        if on and enabled:
+            halo = QtGui.QColor(t.color("signal"))
+            halo.setAlpha(45)
+            p.setPen(Qt.PenStyle.NoPen)
+            p.setBrush(halo)
+            p.drawRoundedRect(track.adjusted(-1.5, -1.5, 1.5, 1.5), 10.5, 10.5)
         if not enabled:
-            fill, edge, knob = t.color("bg-300"), t.color("line"), t.color("ink-disabled")
+            brush = t.color("bg-300")
+            edge = t.color("line")
+            knob = t.color("ink-disabled")
         elif on:
-            fill, edge, knob = t.color("signal"), t.color("signal-edge"), t.color("on-signal")
+            grad = QtGui.QLinearGradient(track.topLeft(), track.bottomLeft())
+            grad.setColorAt(0.0, t.color("signal-top"))
+            grad.setColorAt(1.0, t.color("signal-bot"))
+            brush = grad
+            edge = t.color("signal-edge")
+            knob = t.color("on-signal")
         else:
-            fill, edge = t.color("bg-300"), t.color("line-strong")
+            brush = t.color("glass-well")
+            edge = t.color("glass-border")
             knob = t.color("ink") if self.underMouse() else t.color("ink-muted")
         p.setPen(QtGui.QPen(edge, 1))
-        p.setBrush(fill)
-        p.drawRoundedRect(track, 8.5, 8.5)
-        x = track.left() + 3.5 + 14 * self._pos
+        p.setBrush(brush)
+        p.drawRoundedRect(track, 9.0, 9.0)
+        x = track.left() + 2.5 + 14.0 * self._pos
+        y = track.top() + 2.5
+        if enabled:
+            shadow = QtGui.QColor(0, 0, 0, 75)
+            p.setPen(Qt.PenStyle.NoPen)
+            p.setBrush(shadow)
+            p.drawEllipse(QtCore.QRectF(x, y + 1.0, 13, 13))
         p.setPen(Qt.PenStyle.NoPen)
         p.setBrush(knob)
-        p.drawEllipse(QtCore.QRectF(x, track.top() + 3.5, 10, 10))
+        p.drawEllipse(QtCore.QRectF(x, y, 13, 13))
+        if enabled:
+            hi = QtGui.QColor(255, 255, 255, 120)
+            p.setPen(QtGui.QPen(hi, 1))
+            p.setBrush(Qt.BrushStyle.NoBrush)
+            p.drawArc(QtCore.QRectF(x + 1.5, y + 1.0, 10, 10), 30 * 16, 120 * 16)
         if self.hasFocus():
             p.setPen(QtGui.QPen(t.color("focus"), 2))
             p.setBrush(Qt.BrushStyle.NoBrush)
-            p.drawRoundedRect(track.adjusted(-2, -2, 2, 2), 10, 10)
+            p.drawRoundedRect(track.adjusted(-2.5, -2.5, 2.5, 2.5), 11, 11)
         if self.text():
             p.setPen(t.color("ink") if enabled else t.color("ink-disabled"))
             p.setFont(self.font())
-            p.drawText(QtCore.QRectF(40, 0, self.width() - 40, self.height()),
+            p.drawText(QtCore.QRectF(42, 0, self.width() - 42, self.height()),
                        Qt.AlignmentFlag.AlignVCenter | Qt.AlignmentFlag.AlignLeft, self.text())
         p.end()
 
@@ -344,7 +369,7 @@ class Switch(W.QAbstractButton):
 # ── 设备 ──────────────────────────────────────────────
 
 class DeviceStatus(W.QWidget):
-    """状态圆点 + 中文状态词；连接中/授权中圆点闪烁。compact=True 只画圆点。"""
+    """带柔和光晕的 LED 状态圆点 + 加粗中文状态词；连接中/授权中圆点闪烁。compact=True 只画圆点。"""
 
     def __init__(self, state: str = "device", compact: bool = False, parent=None):
         super().__init__(parent)
@@ -353,7 +378,7 @@ class DeviceStatus(W.QWidget):
         self._timer = QtCore.QTimer(self)
         self._timer.setInterval(600)
         self._timer.timeout.connect(self._tick)
-        self.setFont(theme().ui_font(12))
+        self.setFont(theme().ui_font(12, 700))
         theme().changed.connect(self._on_theme)
         self.set_state(state)
 
@@ -381,23 +406,37 @@ class DeviceStatus(W.QWidget):
 
     def sizeHint(self):
         if self._compact:
-            return QtCore.QSize(8, 16)
-        return QtCore.QSize(14 + self.fontMetrics().horizontalAdvance(self._text), 16)
+            return QtCore.QSize(14, 18)
+        return QtCore.QSize(18 + self.fontMetrics().horizontalAdvance(self._text), 18)
 
     def paintEvent(self, _):
         c = theme().color(self._tone)
         p = QtGui.QPainter(self)
         p.setRenderHint(QtGui.QPainter.RenderHint.Antialiasing)
-        dot = QtGui.QColor(c)
-        if self._blink:
-            dot.setAlphaF(0.35)
+        cx = 7.0 if self._compact else 6.0
+        cy = self.height() / 2.0
+        alpha_mul = 0.35 if self._blink else 1.0
+        halo = QtGui.QRadialGradient(cx, cy, 7.0)
+        c0 = QtGui.QColor(c)
+        c0.setAlphaF(0.45 * alpha_mul)
+        c1 = QtGui.QColor(c)
+        c1.setAlphaF(0.0)
+        halo.setColorAt(0.0, c0)
+        halo.setColorAt(1.0, c1)
         p.setPen(Qt.PenStyle.NoPen)
+        p.setBrush(halo)
+        p.drawEllipse(QtCore.QPointF(cx, cy), 7.0, 7.0)
+        dot = QtGui.QColor(c)
+        dot.setAlphaF(alpha_mul)
         p.setBrush(dot)
-        y = (self.height() - 8) / 2
-        p.drawEllipse(QtCore.QRectF(0, y, 8, 8))
+        p.drawEllipse(QtCore.QPointF(cx, cy), 4.0, 4.0)
+        hi = QtGui.QColor(255, 255, 255, int(145 * alpha_mul))
+        p.setBrush(hi)
+        p.drawEllipse(QtCore.QPointF(cx - 1.1, cy - 1.1), 1.2, 1.2)
         if not self._compact:
             p.setPen(c)
-            p.drawText(QtCore.QRectF(14, 0, self.width() - 14, self.height()),
+            p.setFont(self.font())
+            p.drawText(QtCore.QRectF(15, 0, self.width() - 15, self.height()),
                        Qt.AlignmentFlag.AlignVCenter | Qt.AlignmentFlag.AlignLeft, self._text)
         p.end()
 
@@ -407,8 +446,7 @@ class DeviceStatus(W.QWidget):
 def badge(text: str, tone: str = "neutral", mono: bool = False) -> QtWidgets.QLabel:
     """Badge：tone = neutral / signal / ok / warn / danger / info / special。"""
     l = W.QLabel(text)
-    if mono:
-        l.setFont(theme().mono_font(11, 500))
+    l.setFont(theme().mono_font(11, 700) if mono else theme().ui_font(12, 700))
     repolish(l, badge=tone)
     l.setSizePolicy(W.QSizePolicy.Policy.Fixed, W.QSizePolicy.Policy.Fixed)
     return l
@@ -456,17 +494,19 @@ class Banner(W.QFrame):
 
 
 class ProgressRow(W.QWidget):
-    """进度：标签 + 百分比、4px 进度条、等宽明细。value=None 为不确定进度。"""
+    """进度：加粗标签 + 百分比、7px 玻璃凹槽进度条、等宽明细。value=None 为不确定进度。"""
 
     def __init__(self, label: str = "", value: int | None = 0, detail: str = "", parent=None):
         super().__init__(parent)
+        t = theme()
         lay = W.QVBoxLayout(self)
         lay.setContentsMargins(0, 0, 0, 0)
         lay.setSpacing(6)
         top = W.QHBoxLayout()
         self.label = W.QLabel(label)
+        self.label.setFont(t.ui_font(13, 700))
         self.pct = W.QLabel()
-        self.pct.setFont(theme().mono_font(12))
+        self.pct.setFont(t.mono_font(12, 700))
         repolish(self.pct, progresspct=True)
         top.addWidget(self.label, 1)
         top.addWidget(self.pct)
@@ -475,7 +515,7 @@ class ProgressRow(W.QWidget):
         self.bar.setTextVisible(False)
         lay.addWidget(self.bar)
         self.detail = W.QLabel(detail)
-        self.detail.setFont(theme().mono_font(11))
+        self.detail.setFont(t.mono_font(11, 600))
         repolish(self.detail, progressdetail=True)
         self.detail.setVisible(bool(detail))
         lay.addWidget(self.detail)
@@ -594,6 +634,8 @@ def confirm(parent, title: str, body: str, confirm_text: str, danger: bool = Fal
     lay.addWidget(foot)
     (cancel if danger else ok).setDefault(True)
     (cancel if danger else ok).setFocus()
+    from .backdrop import apply_titlebar_theme
+    apply_titlebar_theme(d, theme().name == "dark")
     return d.exec() == W.QDialog.DialogCode.Accepted
 
 
@@ -609,16 +651,49 @@ def kbd(keys: list[str]) -> QtWidgets.QWidget:
             repolish(plus, role="faint")
             lay.addWidget(plus)
         l = W.QLabel(k)
-        l.setFont(theme().mono_font(11))
+        l.setFont(theme().mono_font(11, 700))
         repolish(l, kbd=True)
         lay.addWidget(l)
     return w
 
 
-def card(title: str, content: QtWidgets.QWidget) -> QtWidgets.QFrame:
-    """带标题的卡片：bg-100 底、line 描边、6px 圆角。"""
-    f = W.QFrame()
-    repolish(f, card=True)
+class GlassCard(W.QFrame):
+    """macOS 光学玻璃卡片：圆角垂直渐变填充 + 1px 光学边框 + 顶部 1px 镜面高光线。"""
+
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        repolish(self, glasscard=True)
+        theme().changed.connect(self._on_theme)
+
+    def _on_theme(self, *_):
+        self.update()
+
+    def paintEvent(self, _):
+        t = theme()
+        p = QtGui.QPainter(self)
+        p.setRenderHint(QtGui.QPainter.RenderHint.Antialiasing)
+        r = QtCore.QRectF(self.rect()).adjusted(0.5, 0.5, -0.5, -0.5)
+        radius = 10.0
+        grad = QtGui.QLinearGradient(r.topLeft(), r.bottomLeft())
+        grad.setColorAt(0.0, t.color("glass-card-top"))
+        grad.setColorAt(1.0, t.color("glass-card-bot"))
+        p.setPen(QtGui.QPen(t.color("glass-border"), 1))
+        p.setBrush(grad)
+        p.drawRoundedRect(r, radius, radius)
+
+        # 顶部 1px 镜面高光线（macOS 玻璃受光棱边）
+        path = QtGui.QPainterPath()
+        path.addRoundedRect(r.adjusted(1.0, 1.0, -1.0, -1.0), radius - 1.0, radius - 1.0)
+        p.setClipPath(path)
+        p.setPen(QtGui.QPen(t.color("glass-hi"), 1))
+        p.drawLine(QtCore.QPointF(r.left() + radius * 0.4, r.top() + 1.0),
+                   QtCore.QPointF(r.right() - radius * 0.4, r.top() + 1.0))
+        p.end()
+
+
+def card(title: str, content: QtWidgets.QWidget) -> GlassCard:
+    """带标题的光学玻璃卡片：10px 圆角、垂直玻璃渐变与顶部镜面高光线。"""
+    f = GlassCard()
     lay = W.QVBoxLayout(f)
     lay.setContentsMargins(1, 1, 1, 1)
     lay.setSpacing(0)
@@ -647,13 +722,13 @@ class PropertyList(W.QTableWidget):
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.setTextElideMode(Qt.TextElideMode.ElideRight)
+        self.viewport().setAutoFillBackground(False)
         for r, (k, v) in enumerate(items):
             ki = W.QTableWidgetItem(k)
             ki.setForeground(t.color("ink-muted"))
-            if mono_keys:
-                ki.setFont(t.mono_font(12))
+            ki.setFont(t.mono_font(12, 600) if mono_keys else t.ui_font(12, 600))
             vi = W.QTableWidgetItem(v)
-            vi.setFont(t.mono_font(13, 500))
+            vi.setFont(t.mono_font(13, 600))
             vi.setToolTip(v)
             self.setItem(r, 0, ki)
             self.setItem(r, 1, vi)

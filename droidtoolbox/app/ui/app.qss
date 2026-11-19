@@ -2,13 +2,20 @@
 
 /* 页面内的面板标题条：40px，与 Toolbar 同高 */
 QFrame[panelhead="true"] { background: @bg-200; border: none; border-bottom: 1px solid @line; }
-QFrame[panelhead="true"] QLabel[role="subtitle"] { font-size: 13px; }
+QMainWindow[glass="true"] QFrame[panelhead="true"] { background: @glass-panel; }
+QFrame[glasscard="true"] QFrame[panelhead="true"],
+QMainWindow[glass="true"] QFrame[glasscard="true"] QFrame[panelhead="true"] {
+  background: @glass-card-head; border-bottom: 1px solid @line;
+  border-top-left-radius: 9px; border-top-right-radius: 9px;
+}
+QFrame[panelhead="true"] QLabel[role="subtitle"] { font-size: 13px; font-weight: 700; }
 
 /* 普通列表（服务列表、历史记录）*/
 QListView[plain="true"] { background: @bg-200; }
-QListView[plain="true"]::item { min-height: 28px; padding: 0 12px; border: none; color: @ink-muted; }
+QMainWindow[glass="true"] QListView[plain="true"] { background: @glass-panel; }
+QListView[plain="true"]::item { min-height: 28px; padding: 0 12px; border: none; color: @ink-muted; font-weight: 600; }
 QListView[plain="true"]::item:hover { background: @bg-400; color: @ink; }
-QListView[plain="true"]::item:selected { background: @signal-soft; color: @ink; }
+QListView[plain="true"]::item:selected { background: @signal-soft; color: @ink; font-weight: 700; }
 
 /* 窄下拉（工具栏里只显示缩写的选择框）：箭头区域缩小 */
 QComboBox[narrow="true"] { padding: 0 18px 0 8px; }
@@ -20,45 +27,56 @@ QPushButton:checked { background: @signal-soft; border-color: @signal-ink; color
 
 /* 分组树（命令库）*/
 QTreeView[plain="true"] { background: @bg-200; border: none; outline: 0; }
-QTreeView[plain="true"]::item { min-height: 26px; padding: 0 4px; border: none; color: @ink-muted; }
+QMainWindow[glass="true"] QTreeView[plain="true"] { background: @glass-panel; }
+QTreeView[plain="true"]::item { min-height: 26px; padding: 0 4px; border: none; color: @ink-muted; font-weight: 600; }
 QTreeView[plain="true"]::item:hover { background: @bg-400; color: @ink; }
-QTreeView[plain="true"]::item:selected { background: @signal-soft; color: @ink; }
+QTreeView[plain="true"]::item:selected { background: @signal-soft; color: @ink; font-weight: 700; }
 
 /* 多行输入（命令编辑）*/
-QPlainTextEdit[field="true"] { padding: 6px 8px; }
+QPlainTextEdit[field="true"] { padding: 6px 8px; font-weight: 600; }
 QPlainTextEdit[field="true"]:focus { border: 2px solid @focus; padding: 5px 7px; }
-QPlainTextEdit[field="true"][readonly="true"] { background: @bg-200; color: @ink-muted; }
+QPlainTextEdit[field="true"][readonly="true"] { background: @glass-well; color: @ink-muted; }
 
 /* 数据表：行高 28，紧凑 */
-QTableView[data="true"]::item { padding: 0 8px; border: none; border-bottom: 1px solid @line; }
+QTableView[data="true"]::item { padding: 0 8px; border: none; border-bottom: 1px solid @line; font-weight: 600; }
 QTableView[data="true"]::item:selected { background: @bg-500; color: @ink; }
-QTableView[data="true"] QHeaderView::section { padding: 0 8px; }
+QTableView[data="true"] QHeaderView::section { padding: 0 8px; font-weight: 700; }
 
 /* 只读文本查看器（dumpsys 输出、tombstone、ANR）*/
 QPlainTextEdit[viewer="true"] {
-  background: @bg-100; color: @ink; border: none; padding: 8px 12px;
-  selection-background-color: @bg-500; selection-color: @ink;
+  background: @bg-100; color: @ink; border: none; padding: 8px 12px; font-weight: 600;
+  selection-background-color: @signal-soft; selection-color: @ink;
 }
+QMainWindow[glass="true"] QPlainTextEdit[viewer="true"] { background: @glass-page; }
 
 /* 指标卡片 */
-QFrame[stat="true"] { background: @bg-100; border: 1px solid @line; border-radius: @radius-lg; }
-QLabel[statvalue="true"] { font-size: 24px; font-weight: 600; }
-QLabel[statunit="true"] { color: @ink-faint; font-size: 12px; }
+QFrame[stat="true"] {
+  background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 @glass-card-top, stop:1 @glass-card-bot);
+  border: 1px solid @glass-border; border-top-color: @glass-hi; border-radius: @radius-lg;
+}
+QLabel[statvalue="true"] { font-size: 24px; font-weight: 700; }
+QLabel[statunit="true"] { color: @ink-faint; font-size: 12px; font-weight: 600; }
 
 /* 浮动提示：在 Banner 的底色上加描边 */
-QFrame[toast="true"] { border: 1px solid @line-strong; }
+QFrame[toast="true"] { border: 1px solid @glass-border; border-top-color: @glass-hi; }
 
 /* 表单区块 */
-QLabel[formlabel="true"] { color: @ink-muted; font-size: 12px; }
-QLabel[section="true"] { color: @ink-faint; font-size: 11px; font-weight: 600; padding-top: 8px; }
+QLabel[formlabel="true"] { color: @ink-muted; font-size: 12px; font-weight: 700; }
+QLabel[section="true"] { color: @ink-faint; font-size: 11px; font-weight: 700; padding-top: 8px; }
 
 /* 截屏预览底板 */
-QLabel[preview="true"] { background: @bg-000; border: 1px solid @line; border-radius: @radius-lg; }
+QLabel[preview="true"] { background: @bg-000; border: 1px solid @glass-border; border-radius: @radius-lg; }
 
 /* 侧栏顶部的设备切换器 */
 QFrame[switcher="true"] { background: @bg-200; border: none; border-bottom: 1px solid @line; border-right: 1px solid @line; }
-QFrame[switcher="true"]:hover { background: @bg-400; }
+QMainWindow[glass="true"] QFrame[switcher="true"] { background: @glass-panel; }
+QMainWindow[glass="true"] QWidget[surface="panel"] QFrame[switcher="true"],
+QMainWindow[glass="true"] QWidget[surface="panel"] QFrame[sidefoot="true"],
+QMainWindow[glass="true"] QWidget[surface="panel"] QFrame[panelhead="true"] { background: transparent; }
+QFrame[switcher="true"]:hover,
+QMainWindow[glass="true"] QWidget[surface="panel"] QFrame[switcher="true"]:hover { background: @bg-400; }
 QFrame[sidefoot="true"] { background: @bg-200; border: none; border-top: 1px solid @line; border-right: 1px solid @line; }
+QMainWindow[glass="true"] QFrame[sidefoot="true"] { background: @glass-panel; }
 
 /* 路径栏 */
 QLineEdit[path="true"] { min-height: 22px; max-height: 22px; }

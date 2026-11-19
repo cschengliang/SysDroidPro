@@ -94,27 +94,33 @@ class Theme(QtCore.QObject):
             QtGui.QFontDatabase.addApplicationFont(str(f))
 
     @staticmethod
-    def _font(families, px, weight=400, letter_spacing=None):
+    def _font(families, px, weight=600, letter_spacing=None):
         f = QtGui.QFont()
         f.setFamilies(families)
         f.setPixelSize(px)
-        f.setWeight({400: QtGui.QFont.Weight.Normal, 500: QtGui.QFont.Weight.Medium,
-                     600: QtGui.QFont.Weight.DemiBold, 700: QtGui.QFont.Weight.Bold}[weight])
+        weights = {
+            400: QtGui.QFont.Weight.Normal,
+            500: QtGui.QFont.Weight.Medium,
+            600: QtGui.QFont.Weight.DemiBold,
+            700: QtGui.QFont.Weight.Bold,
+            800: QtGui.QFont.Weight.ExtraBold,
+        }
+        f.setWeight(weights.get(weight, QtGui.QFont.Weight.DemiBold))
         if letter_spacing:
             f.setLetterSpacing(QtGui.QFont.SpacingType.PercentageSpacing, letter_spacing)
         return f
 
-    def ui_font(self, px=13, weight=400):
+    def ui_font(self, px=13, weight=600):
         return self._font(UI_FAMILIES, px, weight)
 
-    def display_font(self, px=18, weight=600):
+    def display_font(self, px=18, weight=700):
         return self._font(DISPLAY_FAMILIES, px, weight)
 
     def label_font(self):
-        """表头、导航分组名：11px 粗体，字间距 0.04em。"""
-        return self._font(UI_FAMILIES, 11, 600, 104)
+        """表头、导航分组名：11px 粗体，字间距 0.05em。"""
+        return self._font(UI_FAMILIES, 11, 700, 105)
 
-    def mono_font(self, px=12, weight=400):
+    def mono_font(self, px=12, weight=600):
         f = self._font(MONO_FAMILIES, px, weight)
         f.setStyleHint(QtGui.QFont.StyleHint.Monospace)
         if hasattr(QtGui.QFont, "Tag") and hasattr(f, "setFeature"):  # Qt 6.7+：关闭 JetBrains Mono 的连字
@@ -136,7 +142,7 @@ class Theme(QtCore.QObject):
     def pixmap(self, name: str, color: str = "ink-muted", size: int = 16) -> QtGui.QPixmap:
         """color 可以是令牌名或 #hex。"""
         hexv = self.values.get(color, color)
-        stroke = 1.75 if size >= 20 else 1.5
+        stroke = 2.1 if size >= 20 else 1.9
         app = QtGui.QGuiApplication.instance()
         dpr = app.devicePixelRatio() if app else 1.0
         scale = max(1, math.ceil(dpr))
@@ -169,9 +175,10 @@ class Theme(QtCore.QObject):
     def icon_file(self, name: str, color: str, size: int = 16) -> str:
         """给 QSS 的 url() 用：写出着色后的 SVG 文件，返回正斜杠路径。"""
         hexv = self.values.get(color, color)
-        path = self._cache_dir / f"{name}-{hexv.strip('#')}.svg"
+        stroke = 1.9
+        path = self._cache_dir / f"{name}-{hexv.strip('#')}-w19.svg"
         if not path.exists():
-            path.write_bytes(self._svg(name, hexv, 1.5))
+            path.write_bytes(self._svg(name, hexv, stroke))
         return path.as_posix()
 
     # ── QSS 与调色板 ────────────────────────────────────
@@ -200,11 +207,14 @@ class Theme(QtCore.QObject):
         for t in TONES:
             fg = {"neutral": "@ink-muted", "signal": "@signal-ink"}.get(t, "@" + t)
             bg = {"neutral": "@bg-400", "signal": "@signal-soft"}.get(t, "@" + t + "-soft")
-            out.append(f'QLabel[badge="{t}"] {{ background: {bg}; color: {fg}; border-radius: @radius-sm; '
-                       f'padding: 0 6px; min-height: 18px; max-height: 18px; font-size: 12px; }}')
-            out.append(f'QFrame[banner="{t}"] {{ background: {bg}; border-radius: @radius-lg; }}')
+            bd = {"neutral": "@glass-border", "signal": "@signal-ink"}.get(t, fg)
+            out.append(f'QLabel[badge="{t}"] {{ background: {bg}; color: {fg}; border: 1px solid {bd}; '
+                       f'border-radius: @radius-sm; padding: 0 7px; min-height: 18px; max-height: 18px; '
+                       f'font-size: 12px; font-weight: 700; }}')
+            out.append(f'QFrame[banner="{t}"] {{ background: {bg}; border: 1px solid @glass-border; '
+                       f'border-radius: @radius-lg; }}')
             out.append(f'QFrame[banner="{t}"] QLabel {{ color: @ink; background: transparent; }}')
-            out.append(f'QLabel[tone="{t}"] {{ color: {fg}; }}')
+            out.append(f'QLabel[tone="{t}"] {{ color: {fg}; font-weight: 700; }}')
         return "\n".join(out)
 
     def palette(self) -> QtGui.QPalette:
