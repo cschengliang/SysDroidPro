@@ -6,13 +6,28 @@ Binder 服务 / init 服务 / HAL / 进程、按 Android 用户的应用与组�
 
 界面基于同级目录的 `android-toolbox-qt-style`（tbui 样式包），运行在同级目录的嵌入式 Python 3.14 上。
 
-## 运行
+## 从源码运行
 
-```bat
-run.bat                 :: 无控制台窗口启动
-run.bat --mock          :: 演示数据（不连接设备）
-run-debug.bat --mock    :: 带控制台，便于看异常
-```
+仓库不包含嵌入式 Python 和附带工具，首次运行需准备环境：
+
+1. 将 Windows x64 嵌入式 Python 解压到仓库根目录的 `python-3.14.8-embed-amd64/`。在 `python314._pth` 中加入 `Lib\site-packages`，并取消 `import site` 的注释。
+2. 在嵌入式 Python 目录安装依赖（最后一行仅用于开发与测试）：
+
+   ```bat
+   curl -O https://bootstrap.pypa.io/get-pip.py
+   python.exe get-pip.py
+   python.exe -m pip install PySide6==6.12.0
+   python.exe -m pip install pytest pytest-timeout pyflakes
+   ```
+
+3. 可选：在 `droidtoolbox/tool/` 下放入 `platform-tools/`、`scrcpy-win64-v4.1/`、`tools/winscope-android17/` 和 `perfetto-local/`。Perfetto 目录应包含 `ui/` 和 `bin/windows-amd64/trace_processor_shell.exe`。也可以在偏好设置中配置工具路径；adb 还支持从 `PATH` 或 Android SDK 中查找。
+4. 在 `droidtoolbox` 目录启动：
+
+   ```bat
+   run.bat                 :: 无控制台窗口启动
+   run.bat --mock          :: 演示数据（不连接设备）
+   run-debug.bat --mock    :: 带控制台，便于看异常
+   ```
 
 参数：`--mock` 演示数据；`--dark` / `--light` 指定主题（默认浅色，之后会记住）。快捷键：`Ctrl+T` 切换主题，`Ctrl+B` 收起侧栏，`F5` 刷新当前页，`Ctrl+1…9` 切换页面；ADB 命令页 `Ctrl+Enter` 执行、`Ctrl+S` 保存、`Ctrl+N` 新建。
 
@@ -96,6 +111,8 @@ droidtoolbox/
 ..\python-3.14.8-embed-amd64\python.exe -m pytest
 ```
 
+离线和真机测试的运行方式见[测试说明](docs/TEST_PLAN.md)。
+
 ## 对样式包的改动
 
 开发中对 `android-toolbox-qt-style/tbui` 做了少量补充（向后兼容，原 `demo.py` 仍可运行）：
@@ -106,3 +123,12 @@ droidtoolbox/
 - `Switch`：最小尺寸等于文字宽度，放进工具栏时文字不被截断。
 - `PropertyList`：键名列宽改为 35% 并限定在 110–170px（原为固定 40%）。
 - `icons/`：新增 Lucide 图标 chevron-up、arrow-up、arrow-left、house、folder-plus、save、lock、lock-open、layers、server、list、volume-1、volume-2、video、circle、image、pencil、shield、sliders、sun。
+
+## 第三方组件
+
+发布包附带或使用以下组件，版权归各自作者，按各自许可证分发：
+
+- [Qt for Python (PySide6)](https://www.qt.io/qt-for-python)：LGPLv3。
+- [Python](https://www.python.org/)：PSF License。
+- [Android SDK Platform-Tools](https://developer.android.com/tools/releases/platform-tools)、[Perfetto](https://perfetto.dev/)、Winscope、[scrcpy](https://github.com/Genymobile/scrcpy)：Apache 2.0。
+- [Lucide](https://lucide.dev/) 图标：ISC；[JetBrains Mono](https://www.jetbrains.com/lp/mono/) 字体：OFL 1.1。
