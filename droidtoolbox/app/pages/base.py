@@ -2,7 +2,7 @@
 
 生命周期：
     build()        构造时调用一次，在 self.body 里搭界面
-    load(device)   页面可见、设备满足 requires，且设备（serial 或 state）与上次不同时调用
+    load(device)   页面可见、设备满足 requires，且设备连接代次与上次不同时调用
     unload()       设备断开 / 切换 / 状态变化时调用，用来停止流、清空界面
     shown()        每次切到这一页
     hidden()       每次离开这一页
@@ -30,7 +30,8 @@ class Page(W.QWidget):
         super().__init__()
         self.ctx = ctx
         self.device: Device | None = None
-        self._loaded: tuple[str, str] | None = None
+        self._loaded: int | None = None
+        self._requests: dict[str, object] = {}
         self._visible = False
         self._stack = W.QStackedLayout(self)
         self._stack.setContentsMargins(0, 0, 0, 0)
@@ -70,6 +71,27 @@ class Page(W.QWidget):
     def serial(self) -> str:
         return self.device.serial if self.device else ""
 
+    def device_guard(self):
+        state = self.ctx.state
+        generation = state.generation
+        return lambda: not state.jobs.closed and generation == state.generation
+
+    def run_device(self, fn, *args, **kw):
+        """Keep the submitted target; do not deliver UI callbacks in a new session."""
+        return self.ctx.run(fn, *args, guard=self.device_guard(), **kw)
+
+    def expire_request(self, key: str):
+        self._requests.pop(key, None)
+
+    def request(self, key: str, fn, *args, busy=None, **kw):
+        """Only the latest result for this key and device session can update the page."""
+        token = self._requests[key] = object()
+        current = self.device_guard()
+        if busy is not None:
+            busy.push()
+        return self.ctx.run(fn, *args, guard=lambda: current() and self._requests.get(key) is token,
+                            settled=busy.pop if busy is not None else None, **kw)
+
     def accepts(self, d: Device | None) -> bool:
         if not self.requires:
             return True
@@ -87,10 +109,11 @@ class Page(W.QWidget):
             self.hidden()
 
     def _on_current(self, d: Device | None):
-        key = (d.serial, d.state) if d else None
+        key = self.ctx.state.generation
         if self._loaded is not None and key != self._loaded:
             self._loaded = None
             self.device = None
+            self._requests.clear()
             self.unload()
         if self._visible:
             self._sync()
@@ -102,7 +125,7 @@ class Page(W.QWidget):
         d = self.ctx.state.current
         if self.accepts(d):
             self._stack.setCurrentWidget(self.body)
-            key = (d.serial, d.state)
+            key = self.ctx.state.generation
             if key != self._loaded:
                 self._loaded = key
                 self.device = d

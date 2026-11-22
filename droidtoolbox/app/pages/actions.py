@@ -15,6 +15,7 @@ REBOOT_TEXT = {"system": "重启系统", "recovery": "重启到 Recovery", "boot
 def install_apks(page, serial: str, strip: TaskStrip, paths: list[str] | None = None, done=None,
                  users: list[AndroidUser] | None = None, current_user: int | None = None):
     """选择 APK → 安装选项（含目标用户）→ 在 strip 中显示进度。paths 为空时弹出文件对话框。"""
+    current = page.device_guard()
     paths = paths or open_files(page, "选择要安装的 APK", "Android 应用 (*.apk);;所有文件 (*)", multi=True)
     if not paths:
         return
@@ -31,7 +32,7 @@ def install_apks(page, serial: str, strip: TaskStrip, paths: list[str] | None = 
     sw_down = d.add(ui.Switch("允许降级（-d）", False))
     sw_grant = d.add(ui.Switch("授予全部运行时权限（-g）", False))
     sw_test = d.add(ui.Switch("允许测试包（-t）", True))
-    if not d.run():
+    if not d.run() or not current():
         return
     user = None if target is None or target.currentData() == "all" else int(target.currentData())
     opts = InstallOptions(sw_replace.isChecked(), sw_down.isChecked(), sw_grant.isChecked(), sw_test.isChecked(), user)

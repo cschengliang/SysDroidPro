@@ -1,3 +1,5 @@
+from concurrent.futures import ThreadPoolExecutor
+import sys
 import threading
 import time
 
@@ -5,8 +7,35 @@ import pytest
 
 from app.backend import api
 from app.backend._base import BackendBase
+from app.backend._proc import Runner
 from app.backend._streams import StreamMethods
 from tests.fakes import FakeProcess, FakeRunner, fake_backend
+
+
+def test_runner_close_reaps_stream_and_blocking_command(monkeypatch):
+    runner = Runner()
+    spawned = threading.Event()
+    original_spawn = runner._spawn
+    args = [sys.executable, "-c", "import time; time.sleep(30)"]
+    stream = runner.popen(args)
+
+    def spawn(*args, **kwargs):
+        proc = original_spawn(*args, **kwargs)
+        spawned.set()
+        return proc
+
+    monkeypatch.setattr(runner, "_spawn", spawn)
+    with ThreadPoolExecutor(max_workers=1) as worker, stream:
+        try:
+            blocking = worker.submit(runner.run, args, 10)
+            assert spawned.wait(2)
+            runner.close()
+            assert stream.poll() is not None
+            assert blocking.result(2)[0] != 0
+            with pytest.raises(api.Cancelled):
+                runner.popen(args)
+        finally:
+            runner.close()
 
 
 class Streams(StreamMethods, BackendBase):

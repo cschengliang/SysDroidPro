@@ -5,7 +5,6 @@ from __future__ import annotations
 import tbui as ui
 from tbui._qt import QtCore, QtGui, QtWidgets
 
-from ..core.jobs import on_ui
 from ..ui.common import tbtn
 from .base import Page
 
@@ -79,10 +78,10 @@ class ShellPage(Page):
         g = self._gen
         d = self.device
         self.term.write(f"正在连接 {d.display_name}（{d.serial}）· adb shell …", "system")
-        on_out = on_ui(lambda text, stream: g == self._gen and self._output(text, stream))
-        on_exit = on_ui(lambda err: g == self._gen and self._exited(err))
-        self.ctx.run(self.ctx.backend.open_shell, d.serial, on_out, on_exit,
-                     done=lambda s: self._opened(s, g), error=self._open_failed)
+        on_out = self.ctx.on_ui(lambda text, stream: g == self._gen and self._output(text, stream))
+        on_exit = self.ctx.on_ui(lambda err: g == self._gen and self._exited(err))
+        self.ctx.run(self.ctx.start_stream, self.ctx.backend.open_shell, d.serial, on_out, on_exit,
+                     done=lambda s: self._opened(s, g), error=lambda e: g == self._gen and self._open_failed(e))
 
     def _opened(self, session, g):
         if g != self._gen:

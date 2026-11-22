@@ -35,7 +35,7 @@ class BugreportPage(Page):
         lay.addWidget(tb)
         self.busy = BusyBar()
         lay.addWidget(self.busy)
-        self.strip = TaskStrip((12, 8, 12, 8))
+        self.strip = TaskStrip((12, 8, 12, 8), page=self)
         lay.addWidget(self.strip)
 
         split = W.QSplitter(Qt.Orientation.Horizontal)
@@ -81,14 +81,13 @@ class BugreportPage(Page):
         folder.clicked.connect(lambda: reveal(str(self.ctx.settings.export_dir())))
         gen.clicked.connect(self._bugreport)
         self._current: CrashFile | None = None
-        self._token = 0
 
     # 生命周期 --------------------------------------------------------
     def load(self, device):
         self.table.set_rows([])
         self.viewer.set_text("")
-        self.busy.push()
-        self.ctx.run(self.ctx.backend.list_crash_files, device.serial, done=self._got, error=self._failed)
+        self.request("records", self.ctx.backend.list_crash_files, device.serial, busy=self.busy,
+                     done=self._got, error=self._failed)
 
     def unload(self):
         self.table.set_rows([])
@@ -96,12 +95,10 @@ class BugreportPage(Page):
         self._current = None
 
     def _got(self, rows: list[CrashFile]):
-        self.busy.pop()
         self.table.set_rows(rows, keep=lambda c: c.path)
         self._apply_filter()
 
     def _failed(self, e):
-        self.busy.pop()
         self.ctx.report(e, "无法读取崩溃记录")
 
     def _apply_filter(self, *_):
@@ -116,17 +113,15 @@ class BugreportPage(Page):
     def _selected(self, rows):
         c = rows[0] if rows else None
         self._current = c
+        self.expire_request("preview")
         self.save.setEnabled(c is not None)
-        if c is None:
+        if c is None or self.device is None:
             return
         self.preview_head.title.setText(c.name)
         self.preview_head.set_count(fmt_size(c.size))
         self.viewer.set_text("正在读取…")
-        self._token += 1
-        tok = self._token
-        self.ctx.run(self.ctx.backend.read_text, self.serial, c.path,
-                     done=lambda text: tok == self._token and self.viewer.set_text(text),
-                     error=lambda e: tok == self._token and self.viewer.set_text(f"读取失败：{e}"))
+        self.request("preview", self.ctx.backend.read_text, self.serial, c.path,
+                     done=self.viewer.set_text, error=lambda e: self.viewer.set_text(f"读取失败：{e}"))
 
     def _save(self):
         c = self._current

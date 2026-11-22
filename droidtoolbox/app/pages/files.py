@@ -63,7 +63,7 @@ class FilesPage(Page):
         lay.addWidget(tb)
         self.busy = BusyBar()
         lay.addWidget(self.busy)
-        self.strip = TaskStrip((12, 8, 12, 8))
+        self.strip = TaskStrip((12, 8, 12, 8), page=self)
         lay.addWidget(self.strip)
         self.banner_box = W.QWidget()
         self.banner_lay = W.QVBoxLayout(self.banner_box)
@@ -101,7 +101,6 @@ class FilesPage(Page):
         self.setAcceptDrops(True)
         self.cwd = "/sdcard"
         self._history: list[str] = []
-        self._token = 0
         self._sel([])
 
     # 导航 ------------------------------------------------------------
@@ -119,15 +118,9 @@ class FilesPage(Page):
         if self.device is None:
             return
         path = posixpath.normpath("/" + path.strip("/")) if path != "/" else "/"
-        self.busy.push()
-        self._token += 1
-        tok = self._token
         prev = self.cwd
 
         def done(entries):
-            self.busy.pop()
-            if tok != self._token:
-                return
             if record and prev != path:
                 self._history.append(prev)
             self.cwd = path
@@ -140,12 +133,9 @@ class FilesPage(Page):
             self.ctx.window.update_status(self)
 
         def fail(e):
-            self.busy.pop()
-            if tok != self._token:
-                return
             self.path.setText(self.cwd)
             self._show_banner(f"无法打开 {path}", str(e))
-        self.ctx.run(self.ctx.backend.list_dir, self.serial, path, done=done, error=fail)
+        self.request("directory", self.ctx.backend.list_dir, self.serial, path, busy=self.busy, done=done, error=fail)
 
     def _back(self):
         if self._history:
@@ -176,51 +166,57 @@ class FilesPage(Page):
             items.append(("rename", "重命名（F2）", "pencil"))
         items += [None, ("delete", f"删除 {len(rows)} 项…", "trash-2", "Delete", True)]
         m = ui.menu(items, self)
+        current = self.device_guard()
         a = m.exec(self.table.viewport().mapToGlobal(pos))
-        if a is None:
+        if a is None or not current():
             return
         {"download": lambda: self._download(rows), "rename": self._rename, "delete": self._delete,
          "copy": lambda: QtWidgets.QApplication.clipboard().setText("\n".join(e.path for e in rows))}[a.data()]()
 
     def _mkdir(self):
+        current = self.device_guard()
         name = ask_text(self, "新建文件夹", "名称", placeholder="new_folder", ok_text="创建",
                         check=lambda s: None if s.strip() and "/" not in s else "名称不能为空或包含 /")
-        if name:
-            self.ctx.run(self.ctx.backend.mkdir, self.serial, posixpath.join(self.cwd, name), done=lambda _: self.refresh())
+        if name and current():
+            self.run_device(self.ctx.backend.mkdir, self.serial, posixpath.join(self.cwd, name), done=lambda _: self.refresh())
 
     def _rename(self):
         rows = self.table.selected_rows()
         if len(rows) != 1:
             return
         e = rows[0]
+        current = self.device_guard()
         name = ask_text(self, "重命名", "新名称", e.name, ok_text="重命名",
                         check=lambda s: None if s.strip() and "/" not in s else "名称不能为空或包含 /")
-        if name and name != e.name:
-            self.ctx.run(self.ctx.backend.rename, self.serial, e.path, posixpath.join(self.cwd, name), done=lambda _: self.refresh())
+        if name and name != e.name and current():
+            self.run_device(self.ctx.backend.rename, self.serial, e.path, posixpath.join(self.cwd, name), done=lambda _: self.refresh())
 
     def _delete(self):
         rows = self.table.selected_rows()
         if not rows:
             return
+        current = self.device_guard()
         names = "<br>".join(f"<code>{e.path}</code>" for e in rows[:8]) + ("<br>…" if len(rows) > 8 else "")
-        if ui.confirm(self, f"删除 {len(rows)} 项？", f"将从设备上永久删除（rm -rf）：<br>{names}", "删除", danger=True):
-            self.ctx.run(self.ctx.backend.delete, self.serial, [e.path for e in rows],
+        if ui.confirm(self, f"删除 {len(rows)} 项？", f"将从设备上永久删除（rm -rf）：<br>{names}", "删除", danger=True) and current():
+            self.run_device(self.ctx.backend.delete, self.serial, [e.path for e in rows],
                          done=lambda _: (self.ctx.notify("ok", f"已删除 {len(rows)} 项"), self.refresh()))
 
     def _download(self, rows=None):
         rows = rows if isinstance(rows, list) else self.table.selected_rows()
         if not rows or self.strip.busy:
             return
+        current = self.device_guard()
         dest = pick_dir(self, "下载到", str(self.ctx.settings.export_dir()))
-        if not dest:
+        if not dest or not current():
             return
         title = f"正在下载 {rows[0].name}" if len(rows) == 1 else f"正在下载 {len(rows)} 项"
         self.strip.run(title, self.ctx.backend.pull, self.serial, [e.path for e in rows], dest,
                        done=lambda paths: (self.ctx.notify("ok", f"已下载 {len(paths)} 项", dest), paths and reveal(paths[0])))
 
     def _upload_pick(self):
+        current = self.device_guard()
         paths, _ = W.QFileDialog.getOpenFileNames(self, f"上传到 {self.cwd}", "", "所有文件 (*)")
-        if paths:
+        if paths and current():
             self._upload(paths)
 
     def _upload(self, paths: list[str]):

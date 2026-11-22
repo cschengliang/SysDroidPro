@@ -55,7 +55,10 @@ def main(argv: list[str] | None = None) -> int:
     win = MainWindow(state)
     win.show()
     state.start()
-    return app.exec()
+    try:
+        return app.exec()
+    finally:
+        state.shutdown()
 
 
 if __name__ == "__main__":

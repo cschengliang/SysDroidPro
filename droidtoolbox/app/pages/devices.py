@@ -63,6 +63,9 @@ class DevicesPage(Page):
         self.list_empty.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.list_empty.setContentsMargins(16, 24, 16, 24)
         ll.addWidget(self.list_empty)
+        self.inventory_status = label("", "caption", wrap=True)
+        self.inventory_status.setContentsMargins(8, 4, 8, 4)
+        ll.addWidget(self.inventory_status)
         ll.addWidget(hline())
         server = tbtn("Restart adb", "adb kill-server + start-server", "ghost", icon="rotate-ccw")
         server.clicked.connect(self._restart_server)
@@ -81,7 +84,7 @@ class DevicesPage(Page):
         self.detail: DeviceDetail | None = None
         self.root: RootState | None = None
         self._detail_serial: str | None = None
-        self._token = 0
+        self._detail_generation = -1
         self._busy = False                         # Root / Remount 流程进行中
         self._pending_remount: str | None = None   # 重启后需要继续 remount 的设备
         self._log = output_log(140)
@@ -90,11 +93,13 @@ class DevicesPage(Page):
 
         st = self.ctx.state
         st.devicesChanged.connect(self._devices)
+        st.inventoryChanged.connect(self._inventory_status)
         st.currentChanged.connect(self._current)
         st.rootChanged.connect(lambda s: s == self._detail_serial and self._load_root())
         self.list.deviceSelected.connect(st.select)
         self.setAcceptDrops(True)
         self._devices(st.devices)
+        self._inventory_status(st.inventory_sources)
 
     # 设备列表 --------------------------------------------------------
     def _devices(self, devices: list[Device]):
@@ -108,6 +113,18 @@ class DevicesPage(Page):
         self.list.blockSignals(False)
         self.list.setVisible(bool(devices))
         self.list_empty.setVisible(not devices)
+
+    def _inventory_status(self, sources):
+        text = {"pending": "刷新中…", "error": "刷新失败", "unavailable": "不可用"}
+        notes = [f"{s.name}: {text[s.status]}" for s in sources if s.status in ("pending", "error")]
+        if sources and all(s.status == "unavailable" for s in sources):
+            notes.append("未找到 adb / fastboot")
+        incomplete = any(s.status in ("pending", "error") for s in sources)
+        self.list_empty.setText("暂未取得完整设备列表。" if incomplete else
+                                "未发现设备。\n\n连接数据线并打开 USB 调试，\n或点击“无线”通过网络连接。")
+        self.inventory_status.setText(" · ".join(notes))
+        self.inventory_status.setToolTip("\n".join(f"{s.name}: {s.error}" for s in sources if s.error))
+        self.inventory_status.setVisible(bool(notes))
 
     @staticmethod
     def _as_dict(d: Device) -> dict:
@@ -129,7 +146,7 @@ class DevicesPage(Page):
 
     def shown(self):
         d = self.ctx.state.current
-        if d is None or d.serial != self._detail_serial or self.detail is None:
+        if d is None or self._detail_generation != self.ctx.state.generation or self.detail is None:
             self._render(d)
 
     def refresh(self):
@@ -159,6 +176,8 @@ class DevicesPage(Page):
         self.detail = None
         self.root = None
         self._grid = None
+        self._requests.clear()
+        self._detail_generation = self.ctx.state.generation
         self._detail_serial = d.serial if d else None
         self._log.setParent(None)                  # 输出区跨设备保留，重绘前先摘下
         page = W.QWidget()
@@ -193,7 +212,7 @@ class DevicesPage(Page):
         top.addWidget(self._quick(d), 0, Qt.AlignmentFlag.AlignTop)
         v.addLayout(top)
 
-        self.strip = TaskStrip()
+        self.strip = TaskStrip(page=self)
         v.addWidget(self.strip)
 
         if d.state == "unauthorized":
@@ -217,11 +236,8 @@ class DevicesPage(Page):
         if d.is_adb:
             self._loading = ui.ProgressRow("正在读取版本信息…", None)
             self._info.addWidget(self._loading)
-            self._token += 1
-            tok = self._token
-            self.ctx.run(self.ctx.backend.device_detail, d.serial,
-                         done=lambda dd: tok == self._token and self._got_detail(dd),
-                         error=lambda e: tok == self._token and self._loading.set_value(100, str(e), failed=True))
+            self.request("details", self.ctx.backend.device_detail, d.serial,
+                         done=self._got_detail, error=lambda e: self._loading.set_value(100, str(e), failed=True))
             self._load_root()
 
         log_box = _Card("操作输出", self._log, self._clear_log_btn())
@@ -294,7 +310,10 @@ class DevicesPage(Page):
         d = self.ctx.state.current
         if d is None:
             return
+        current = self.device_guard()
         if mode == "poweroff" and not ui.confirm(self, "关闭设备？", f"{d.display_name} 将关机，需要手动开机后才能再次连接。", "关机", danger=True):
+            return
+        if not current():
             return
         cmd = {"system": "adb reboot", "poweroff": "adb shell reboot -p"}.get(mode, f"adb reboot {mode}")
         self._log.write(cmd if d.is_adb else cmd.replace("adb", "fastboot"), "input")
@@ -305,10 +324,9 @@ class DevicesPage(Page):
 
     def _load_root(self):
         serial = self._detail_serial
-        if not serial:
+        if not serial or self._detail_generation != self.ctx.state.generation:
             return
-        self.ctx.run(self.ctx.backend.root_state, serial, done=lambda rs: serial == self._detail_serial and self._show_root(rs),
-                     error=lambda e: None)
+        self.request("root", self.ctx.backend.root_state, serial, done=self._show_root, error=lambda e: None)
 
     def _show_root(self, rs: RootState):
         self.root = rs
@@ -522,8 +540,8 @@ class DevicesPage(Page):
             toggle.setText("Hide" if show else "Show")
             if show and not self.apex_table.table_model.rowCount() and self._detail_serial:
                 serial = self._detail_serial
-                self.ctx.run(self.ctx.backend.list_apex_modules, serial,
-                             done=lambda mods: serial == self._detail_serial and self._got_apex(card, mods))
+                self.request("apex", self.ctx.backend.list_apex_modules, serial,
+                             done=lambda mods: self._got_apex(card, mods))
         toggle.clicked.connect(flip)
         return card
 

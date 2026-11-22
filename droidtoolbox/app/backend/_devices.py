@@ -7,7 +7,7 @@ import time
 
 from . import api, parsers as P
 from ._base import detail, error_for, quote_args, text
-from .models import RemountResult
+from .models import DeviceInventory, InventorySource, RemountResult
 
 DETAIL_SCRIPT = "\n".join(f"echo =={key}; {cmd}" for key, cmd in [
     ("PROPS", "getprop"), ("UNAME", "uname -r"), ("KERNEL", "cat /proc/version"),
@@ -20,29 +20,39 @@ ROOT_SCRIPT = "id -u; getprop ro.build.type; getprop ro.boot.veritymode; getprop
 
 class DeviceMethods:
     def configure(self, adb_path, fastboot_path, scrcpy_path):
-        super().configure(adb_path, fastboot_path, scrcpy_path)
-        if hasattr(self, "_inventory_lock"):
-            with self._inventory_lock:
+        with self._inventory_lock:
+            old_paths = tuple(getattr(self, "_paths", {}).get(k) for k in ("adb", "fastboot"))
+            super().configure(adb_path, fastboot_path, scrcpy_path)
+            if old_paths != tuple(self._paths[k] for k in ("adb", "fastboot")):
+                self._inventory_epoch += 1
                 self._device_cache.clear()
-                self._device_states.clear()
                 self._device_sessions.clear()
+                for f in (*self._pending.values(), *self._enumerations.values()):
+                    f.cancel()
                 self._pending.clear()
                 self._enumerations.clear()
+                self._snapshots.clear()
 
     def __init__(self, runner=None):
-        super().__init__(runner)
         self._inventory_lock = threading.RLock()
         self._pool = ThreadPoolExecutor(max_workers=8, thread_name_prefix="dtb-devices")
+        self._closed = False
+        self._inventory_epoch = 0
         self._device_cache = {}
-        self._device_states = {}
         self._device_sessions = {}
         self._pending = {}
         self._enumerations = {}
+        self._snapshots = {}
+        super().__init__(runner)
 
-    def _enumerate(self, name):
-        path = self._paths.get(name)
-        if not path:
-            return [], {}
+    def close(self):
+        with self._inventory_lock:
+            self._closed = True
+            self._inventory_epoch += 1
+            self._pool.shutdown(wait=False, cancel_futures=True)
+        super().close()
+
+    def _enumerate(self, name, path, epoch):
         code, out, err = self._run([path, "devices", *(["-l"] if name == "adb" else [])], 0.6 if name == "adb" else 3)
         error = error_for(code, text(out), text(err))
         if error:
@@ -50,7 +60,8 @@ class DeviceMethods:
         output = text(out)
         # A new transport can replace the same serial between two inventory polls.
         sessions = dict(re.findall(r"(?m)^(\S+)\s+\S+[^\r\n]*\btransport_id:(\d+)", output)) if name == "adb" else {}
-        return P.devices(output, fastboot=name == "fastboot"), sessions
+        return tuple(replace(d, connection_id=f"{epoch}:{name}:{sessions.get(d.serial, '')}")
+                     for d in P.devices(output, fastboot=name == "fastboot"))
 
     def _enrich(self, device):
         if device.is_fastboot:
@@ -65,40 +76,54 @@ class DeviceMethods:
                        battery=battery.level if battery else None)
 
     def list_devices(self):
-        if not any(self._paths.get(name) for name in ("adb", "fastboot")):
-            self._tool("adb")
+        return list(self.poll_inventory().devices)
+
+    def poll_inventory(self):
+        names = ("adb", "fastboot")
         deadline = time.monotonic() + 0.85
         with self._inventory_lock:
-            for name in ("adb", "fastboot"):
-                if name not in self._enumerations or self._enumerations[name].done():
-                    self._enumerations[name] = self._pool.submit(self._enumerate, name)
+            if self._closed:
+                raise api.Cancelled("已关闭")
+            epoch = self._inventory_epoch
+            for name in names:
+                if self._paths[name] and name not in self._enumerations:
+                    self._enumerations[name] = self._pool.submit(self._enumerate, name, self._paths[name], epoch)
             futures = dict(self._enumerations)
         wait(futures.values(), timeout=0.55)
-        merged, sessions = {}, {}
-        for name in ("adb", "fastboot"):
-            future = futures[name]
-            if future.done():
-                try:
-                    devices, transports = future.result()
-                    for dev in devices:
-                        if dev.serial not in merged:
-                            merged[dev.serial] = dev
-                            sessions[dev.serial] = transports.get(dev.serial)
-                except api.BackendError:
-                    if name == "adb":
-                        raise
-        now = time.monotonic()
         with self._inventory_lock:
-            states = {s: d.state for s, d in merged.items()}
-            for serial in set(states) | set(self._device_states):
-                if (states.get(serial), sessions.get(serial)) != (self._device_states.get(serial), self._device_sessions.get(serial)):
+            if epoch != self._inventory_epoch:
+                raise api.Cancelled("设备列表配置已变更")
+            sources, merged = [], {}
+            for name in names:
+                future = futures.get(name)
+                if future is None:
+                    sources.append(InventorySource(name, "unavailable"))
+                elif self._enumerations.get(name) is future and future.done():
+                    self._enumerations.pop(name)
+                    try:
+                        self._snapshots[name] = future.result()
+                    except api.BackendError as e:
+                        sources.append(InventorySource(name, "error", str(e)))
+                    else:
+                        sources.append(InventorySource(name, "ready"))
+                else:
+                    sources.append(InventorySource(name, "pending"))
+
+            # Prefer a fresh report over another source's retained snapshot.
+            for source in sorted(sources, key=lambda s: s.status != "ready"):
+                for d in self._snapshots.get(source.name, ()):
+                    merged.setdefault(d.serial, d)
+
+            sessions = {s: (d.state, d.connection_id) for s, d in merged.items()}
+            for serial in set(sessions) | set(self._device_sessions):
+                if sessions.get(serial) != self._device_sessions.get(serial):
                     self._invalidate_permission_cache(serial)
-            for serial in set(self._device_cache) | set(self._pending):
-                if states.get(serial) != self._device_states.get(serial):
                     self._device_cache.pop(serial, None)
-                    self._pending.pop(serial, None)
-            self._device_states = states
+                    old = self._pending.pop(serial, None)
+                    if old is not None:
+                        old.cancel()
             self._device_sessions = sessions
+            now = time.monotonic()
             for serial, dev in merged.items():
                 if not (dev.is_adb or dev.is_fastboot):
                     continue
@@ -110,16 +135,25 @@ class DeviceMethods:
         if pending:
             wait(pending.values(), timeout=max(0, deadline - time.monotonic()))
         with self._inventory_lock:
+            if epoch != self._inventory_epoch:
+                raise api.Cancelled("设备列表配置已变更")
             for serial, future in pending.items():
                 if future.done() and self._pending.get(serial) is future:
                     self._pending.pop(serial)
                     try:
                         enriched = future.result()
-                        if self._device_states.get(serial) == enriched.state:
+                        if self._device_sessions.get(serial) == (enriched.state, enriched.connection_id):
                             self._device_cache[serial] = (time.monotonic(), enriched)
                     except api.BackendError:
                         pass
-            return [self._device_cache[s][1] if s in self._device_cache else d for s, d in merged.items()]
+            devices = []
+            for serial, dev in merged.items():
+                if serial in self._device_cache:
+                    cached = self._device_cache[serial][1]
+                    dev = replace(dev, manufacturer=cached.manufacturer, android=cached.android, api=cached.api,
+                                  battery=cached.battery, product=dev.product if dev.product is not None else cached.product)
+                devices.append(dev)
+            return DeviceInventory(tuple(devices), tuple(sources))
 
     def device_detail(self, serial):
         return P.device_detail(serial, self._shell(serial, DETAIL_SCRIPT))

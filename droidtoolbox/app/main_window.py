@@ -5,7 +5,6 @@ import tbui as ui
 from tbui._qt import QtCore, QtGui, QtWidgets, Qt
 
 from .backend.models import Device, ToolInfo
-from .core import jobs
 from .core.state import AppState, Context
 from .pages import GROUPS
 from .pages.actions import connect_dialog
@@ -165,7 +164,6 @@ class MainWindow(W.QMainWindow):
         state.notified.connect(self.toasts.show_toast)
         state.devicesChanged.connect(self._devices_changed)
         state.currentChanged.connect(lambda d: self._status_device(d))
-        jobs.set_default_error_handler(state.report)
         ui.theme().changed.connect(lambda name: state.settings.set("theme", name))
 
         self.set_sidebar_collapsed(state.settings.get("sidebar_collapsed"))
@@ -265,9 +263,8 @@ class MainWindow(W.QMainWindow):
             if hasattr(p, "can_close") and not p.can_close():   # 命令库：有未保存的修改且选择了取消
                 e.ignore()
                 return
-        for p in self.pages.values():
-            if hasattr(p, "shutdown"):   # 功能启动页：停止本机服务进程
-                p.shutdown()
+        self.state.shutdown()
+        # Resource ownership is application-wide; unloading also stops page timers.
         for p in self.pages.values():
             if p.device is not None:
                 p.unload()

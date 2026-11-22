@@ -496,8 +496,9 @@ class TaskStrip(W.QWidget):
 
     finished = Signal(bool)
 
-    def __init__(self, margins=(0, 0, 0, 0), parent=None):
+    def __init__(self, margins=(0, 0, 0, 0), parent=None, *, page):
         super().__init__(parent)
+        self._page = page
         outer = W.QVBoxLayout(self)
         outer.setContentsMargins(*margins)
         card = W.QFrame()
@@ -522,7 +523,8 @@ class TaskStrip(W.QWidget):
         return self._job is not None and not self._job.finished
 
     def run(self, title: str, fn, *args, done=None, error=None, cancellable: bool = True, ok_text: str | None = None, **kw):
-        from ..core import jobs
+        from ..core.jobs import object_alive
+        current = self._page.device_guard()
         self._hide_timer.stop()
         self.row.label.setText(title)
         self.row.set_value(None, "", failed=False)
@@ -536,7 +538,7 @@ class TaskStrip(W.QWidget):
             self.action.setVisible(False)
             self._hide_timer.start(4000)
             self.finished.emit(True)
-            if done:
+            if done and current():
                 done(result)
 
         def fail(e):
@@ -550,10 +552,11 @@ class TaskStrip(W.QWidget):
                 self.action.setText("Close")
                 self.action.setVisible(True)
             self.finished.emit(False)
-            if error:
+            if error and current():
                 error(e)
 
-        self._job = jobs.run(fn, *args, done=ok, error=fail, progress=self._progress, cancellable=cancellable, **kw)
+        self._job = self._page.ctx.run(fn, *args, done=ok, error=fail, progress=self._progress,
+                                       guard=lambda: object_alive(self), cancellable=cancellable, **kw)
         return self._job
 
     def _progress(self, p):

@@ -98,6 +98,7 @@ class LauncherPage(Page):
         self._adb_dir: str | None = None
         self.services: list[HostService] = [WinscopeService(self.ctx.settings, self._adb_dir_for_proxy),
                                             PerfettoService(self.ctx.settings)]
+        self.ctx.state.jobs.add_cleanup(self.shutdown)
         self.table.verticalHeader().setDefaultSectionSize(ROW_H)
         self.table.set_rows(self.services)
         self.actions: dict[str, RowActions] = {}

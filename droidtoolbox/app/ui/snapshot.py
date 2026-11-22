@@ -38,9 +38,10 @@ def diff(old: dict[str, str], new: dict[str, str]) -> list[tuple[str, str, str |
 class SnapshotBar(W.QWidget):
     """工具栏里的一组控件：记录快照 / 选择快照 / 对比 / 删除。"""
 
-    def __init__(self, ctx, kind: str, fetch: Callable[[str], dict[str, str]], noun: str = "键"):
+    def __init__(self, ctx, kind: str, fetch: Callable[..., dict[str, str]], noun: str = "键", *, fetch_args=tuple):
         super().__init__()
         self.ctx, self.kind, self.fetch, self.noun = ctx, kind, fetch, noun
+        self._fetch_args = fetch_args
         self.serial = ""
         lay = W.QHBoxLayout(self)
         lay.setContentsMargins(0, 0, 0, 0)
@@ -87,11 +88,11 @@ class SnapshotBar(W.QWidget):
     def _record(self):
         if not self.serial:
             return
+        serial, args, valid = self._target()
         name = ask_text(self, "记录快照", "快照名称", time.strftime("%H:%M 快照"), hint="记录后在设备上操作，再点“对比”查看变化。",
                         ok_text="记录", mono=False)
-        if not name:
+        if not name or not valid():
             return
-        serial = self.serial
 
         def done(data: dict[str, str]):
             d = self._dir()
@@ -101,18 +102,24 @@ class SnapshotBar(W.QWidget):
                                         "time": time.strftime("%Y-%m-%d %H:%M:%S"), "data": data}, ensure_ascii=False, indent=1), "utf-8")
             self._reload(select=str(path))
             self.ctx.notify("ok", f"已记录快照“{name}”", f"{len(data)} 个{self.noun}。现在去设备上操作，然后点“对比”。")
-        self.ctx.run(self.fetch, serial, done=done)
+        self.ctx.run(self.fetch, serial, *args, done=done, guard=valid)
 
     def _compare(self):
         path = self.pick.currentData()
         if not path or not self.serial:
             return
+        serial, args, valid = self._target()
         snap = json.loads(Path(path).read_text("utf-8"))
 
         def done(now: dict[str, str]):
             rows = diff(snap.get("data", {}), now)
             show_diff(self, f"对比：{snap.get('name')}（{snap.get('time', '')[5:16]}）→ 当前", rows, self.noun)
-        self.ctx.run(self.fetch, self.serial, done=done)
+        self.ctx.run(self.fetch, serial, *args, done=done, guard=valid)
+
+    def _target(self):
+        state = self.ctx.state
+        generation, serial, args = state.generation, self.serial, self._fetch_args()
+        return serial, args, lambda: generation == state.generation and args == self._fetch_args()
 
     def _remove(self):
         path = self.pick.currentData()

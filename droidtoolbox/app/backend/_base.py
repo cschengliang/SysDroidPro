@@ -52,6 +52,11 @@ class BackendBase:
         self._permission_cache = {}
         self.configure(None, None, None)
 
+    def close(self):
+        close = getattr(self._runner, "close", None)
+        if close is not None:
+            close()
+
     def configure(self, adb_path, fastboot_path, scrcpy_path):
         with self._config_lock:
             adb = find_tool("adb", adb_path)

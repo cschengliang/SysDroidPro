@@ -12,20 +12,63 @@ from .api import BackendError, Cancelled, CommandFailed, StreamHandle
 
 
 class Runner:
+    def __init__(self):
+        self._lock = threading.Lock()
+        self._closed = False
+        self._processes = set()
+
     def run(self, args, timeout, input=None):
-        result = subprocess.run(args, input=input, capture_output=True, timeout=timeout,
-                                creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0))
-        return result.returncode, result.stdout, result.stderr
+        with self._spawn(args, stdin=subprocess.PIPE if input is not None else None) as proc:
+            try:
+                out, err = proc.communicate(input, timeout=timeout)
+                return proc.returncode, out, err
+            except subprocess.TimeoutExpired as e:
+                proc.kill()
+                e.output, e.stderr = proc.communicate()
+                raise
+            finally:
+                with self._lock:
+                    if proc.poll() is not None:
+                        self._processes.discard(proc)
 
     def popen(self, args, *, env=None):
-        return subprocess.Popen(args, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
-                                env=env, creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0))
+        return self._spawn(args, stdin=subprocess.PIPE, env=env)
+
+    def _spawn(self, args, *, stdin, env=None):
+        with self._lock:
+            if self._closed:
+                raise Cancelled("已关闭")
+            self._processes = {p for p in self._processes if p.poll() is None}
+            proc = subprocess.Popen(args, stdin=stdin, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                                    env=env, creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0))
+            self._processes.add(proc)
+            return proc
+
+    def close(self):
+        with self._lock:
+            self._closed = True
+            processes, self._processes = self._processes, set()
+        for proc in processes:
+            if proc.poll() is None:
+                try:
+                    proc.kill()
+                except ProcessLookupError:
+                    pass
+        deadline = time.monotonic() + 1
+        for proc in processes:
+            try:
+                proc.wait(timeout=max(0, deadline - time.monotonic()))
+            except subprocess.TimeoutExpired:
+                pass
 
 
 def terminate(process):
     """等待本地进程退出并在必要时强杀；由读线程排空管道。"""
     if process.poll() is None:
-        process.terminate()
+        try:
+            process.terminate()
+        except ProcessLookupError:
+            return
         try:
             process.wait(timeout=0.7)
         except subprocess.TimeoutExpired:

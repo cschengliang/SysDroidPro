@@ -44,6 +44,7 @@ class Device:
     android: str | None = None        # ro.build.version.release，如 "15"
     api: int | None = None            # ro.build.version.sdk
     battery: int | None = None        # 电量百分比 0–100
+    connection_id: str | None = None  # identifies a transport within a backend configuration
 
     @property
     def display_name(self) -> str:
@@ -58,6 +59,19 @@ class Device:
     @property
     def is_fastboot(self) -> bool:
         return self.state in ("fastboot", "bootloader")
+
+
+@dataclass(frozen=True)
+class InventorySource:
+    name: str
+    status: Literal["ready", "pending", "error", "unavailable"]
+    error: str = ""
+
+
+@dataclass(frozen=True)
+class DeviceInventory:
+    devices: tuple[Device, ...]
+    sources: tuple[InventorySource, ...] = ()
 
 
 @dataclass(frozen=True)

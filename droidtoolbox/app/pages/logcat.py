@@ -10,7 +10,6 @@ from pathlib import Path
 import tbui as ui
 from tbui._qt import QtCore, QtWidgets
 
-from ..core.jobs import on_ui
 from ..ui.common import narrow_select, set_icon, tbtn
 from .base import Page
 
@@ -117,10 +116,10 @@ class LogcatPage(Page):
         bufs = BUFFER_SETS.get(key, [key])
         self._gen += 1
         g = self._gen
-        on_lines = on_ui(lambda ls: g == self._gen and self._lines(ls))
-        on_exit = on_ui(lambda err: g == self._gen and self._exited(err))
+        on_lines = self.ctx.on_ui(lambda ls: g == self._gen and self._lines(ls))
+        on_exit = self.ctx.on_ui(lambda err: g == self._gen and self._exited(err))
         try:
-            self._stream = self.ctx.backend.start_logcat(self.serial, bufs, on_lines, on_exit, tail=tail)
+            self._stream = self.ctx.start_stream(self.ctx.backend.start_logcat, self.serial, bufs, on_lines, on_exit, tail=tail)
         except Exception as e:  # noqa: BLE001
             self._show_banner(str(e))
 
@@ -181,7 +180,7 @@ class LogcatPage(Page):
             if key == "dmesg":
                 self.ctx.notify("info", "dmesg 不支持清空", "只清空了视图。")
                 return
-            self.ctx.run(self.ctx.backend.clear_logcat, self.serial, BUFFER_SETS.get(key, [key]),
+            self.run_device(self.ctx.backend.clear_logcat, self.serial, BUFFER_SETS.get(key, [key]),
                          done=lambda _: self.ctx.notify("ok", "已清空设备日志缓冲区"))
 
     def _apply_filter(self, *_):

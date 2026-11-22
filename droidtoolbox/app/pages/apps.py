@@ -43,7 +43,7 @@ class AppsPage(Page):
         lay.addWidget(tb)
         self.busy = BusyBar()
         lay.addWidget(self.busy)
-        self.strip = TaskStrip((12, 8, 12, 8))
+        self.strip = TaskStrip((12, 8, 12, 8), page=self)
         lay.addWidget(self.strip)
 
         split = W.QSplitter(Qt.Orientation.Horizontal)
@@ -61,7 +61,7 @@ class AppsPage(Page):
         lay.addWidget(split, 1)
 
         refresh.clicked.connect(self.refresh)
-        self.user.currentIndexChanged.connect(lambda *_: self._load_packages())
+        self.user.currentIndexChanged.connect(self._user_changed)
         self.filter.textChanged.connect(self._apply)
         self.kind.changed.connect(self._apply)
         self.table.selectionChangedRows.connect(lambda rows: self._select(rows[0] if rows else None))
@@ -73,7 +73,6 @@ class AppsPage(Page):
         self._pkg: PackageInfo | None = None
         self._detail: PackageDetail | None = None
         self._loaded_tabs: set[str] = set()      # 当前包已加载的详情标签
-        self._token = 0
         self._show_detail(None)
 
     @property
@@ -175,13 +174,22 @@ class AppsPage(Page):
 
     # 加载 ------------------------------------------------------------
     def load(self, device):
-        self.ctx.run(self.ctx.backend.list_users, device.serial, done=self._got_users, error=lambda e: self._load_packages())
+        self.request("users", self.ctx.backend.list_users, device.serial,
+                     done=self._got_users, error=lambda e: self._load_packages())
 
     def unload(self):
         self.table.set_rows([])
+        self._pkg = None
+        self._users = []
+        self.user.clear()
         self._show_detail(None)
 
     def refresh(self):
+        self._load_packages()
+
+    def _user_changed(self, *_):
+        self.table.set_rows([])
+        self._select(None)
         self._load_packages()
 
     def _got_users(self, users: list[AndroidUser]):
@@ -201,11 +209,9 @@ class AppsPage(Page):
     def _load_packages(self):
         if self.device is None:
             return
-        self.busy.push()
         uid = self._uid
 
         def done(pkgs):
-            self.busy.pop()
             if uid != self._uid:
                 return
             self.table.set_rows(pkgs, keep=lambda p: p.name)
@@ -214,9 +220,8 @@ class AppsPage(Page):
                 self._show_detail(None)
 
         def fail(e):
-            self.busy.pop()
             self.ctx.report(e, "无法读取应用列表")
-        self.ctx.run(self.ctx.backend.list_packages, self.serial, uid, done=done, error=fail)
+        self.request("packages", self.ctx.backend.list_packages, self.serial, uid, busy=self.busy, done=done, error=fail)
 
     def _apply(self, *_):
         k = self.kind.value()
@@ -270,14 +275,13 @@ class AppsPage(Page):
 
     def _select(self, p: PackageInfo | None):
         self._pkg = p
-        if p is None:
-            self._show_detail(None)
+        for key in ("detail", "components", "dump"):
+            self.expire_request(key)
+        self._show_detail(None)
+        if p is None or self.device is None:
             return
-        self._token += 1
-        tok = self._token
-        self.ctx.run(self.ctx.backend.package_detail, self.serial, p.name, self._uid,
-                     done=lambda d: tok == self._token and self._show_detail(d),
-                     error=lambda e: tok == self._token and self.ctx.report(e, f"无法读取 {p.name}"))
+        self.request("detail", self.ctx.backend.package_detail, self.serial, p.name, self._uid,
+                     done=self._show_detail, error=lambda e: self.ctx.report(e, f"无法读取 {p.name}"))
 
     def _render_overview(self, d: PackageDetail):
         p = d.info
@@ -331,16 +335,14 @@ class AppsPage(Page):
         if self._detail is None or key in self._loaded_tabs:
             return
         self._loaded_tabs.add(key)
-        name, tok = self._detail.info.name, self._token
+        name = self._detail.info.name
         if key == "components":
-            self.ctx.run(self.ctx.backend.package_components, self.serial, name, self._uid,
-                         done=lambda rows: tok == self._token and self._got_components(rows),
-                         error=lambda e: self.ctx.report(e))
+            self.request("components", self.ctx.backend.package_components, self.serial, name, self._uid,
+                         done=self._got_components)
         elif key == "dump":
             self.dump.set_text("正在读取 dumpsys package …")
-            self.ctx.run(self.ctx.backend.dump_package, self.serial, name,
-                         done=lambda t: tok == self._token and self.dump.set_text(t),
-                         error=lambda e: tok == self._token and self.dump.set_text(f"读取失败：{e}"))
+            self.request("dump", self.ctx.backend.dump_package, self.serial, name,
+                         done=self.dump.set_text, error=lambda e: self.dump.set_text(f"读取失败：{e}"))
 
     def _got_components(self, rows: list[Component]):
         self.c_table.set_rows(rows, keep=lambda c: c.name)
@@ -356,16 +358,20 @@ class AppsPage(Page):
     def _simple(self, method: str, ok: str):
         p = self._detail.info if self._detail else None
         if p:
-            self.ctx.run(getattr(self.ctx.backend, method), self.serial, p.name, self._uid,
-                         done=lambda _: self.ctx.notify("ok", ok, f"{p.name}（用户 {self._uid}）"))
+            uid = self._uid
+            self.run_device(getattr(self.ctx.backend, method), self.serial, p.name, uid,
+                            done=lambda _: self.ctx.notify("ok", ok, f"{p.name}（用户 {uid}）"))
 
     def _perm(self, perm: str, on: bool, sw):
+        from ..core.jobs import object_alive
+
         def fail(e):
-            sw.blockSignals(True)
-            sw.setChecked(not on)
-            sw.blockSignals(False)
+            if object_alive(sw):
+                sw.blockSignals(True)
+                sw.setChecked(not on)
+                sw.blockSignals(False)
             self.ctx.report(e, f"无法{'授予' if on else '撤销'} {perm.rsplit('.', 1)[-1]}")
-        self.ctx.run(self.ctx.backend.set_permission, self.serial, self._detail.info.name, perm, on, self._uid, error=fail)
+        self.run_device(self.ctx.backend.set_permission, self.serial, self._detail.info.name, perm, on, self._uid, error=fail)
 
     def _set_components(self, enabled: bool):
         rows = self.c_table.selected_rows()
@@ -373,10 +379,13 @@ class AppsPage(Page):
             self.ctx.notify("info", "先在组件列表中选中要操作的组件")
             return
         pkg = self._detail.info.name
+        current = self.device_guard()
         verb = "启用" if enabled else "停用"
         if not enabled and not ui.confirm(self, f"停用 {len(rows)} 个组件？", "将执行 <code>pm disable --user "
                                           f"{self._uid} {pkg}/&lt;类名&gt;</code>：<br><code>" + "<br>".join(c.name for c in rows[:8]) +
                                           "</code><br>停用系统组件可能导致相关功能异常，可随时重新启用。", "停用", danger=True):
+            return
+        if not current():
             return
         b, serial, uid = self.ctx.backend, self.serial, self._uid
 
@@ -388,17 +397,20 @@ class AppsPage(Page):
             self.ctx.notify("ok", f"已{verb} {len(rows)} 个组件")
             self._loaded_tabs.discard("components")
             self._tab_changed("components")
-        self.ctx.run(work, done=done)
+        self.run_device(work, done=done)
 
     def _toggle(self):
         p = self._detail.info if self._detail else None
         if p is None:
             return
+        current = self.device_guard()
         if p.enabled and p.system and not ui.confirm(
                 self, f"停用 {p.name}？", f"将对用户 {self._uid} 执行 <code>pm disable-user</code>。停用系统应用可能导致相关功能不可用。可以随时重新启用。",
                 "停用", danger=True):
             return
-        self.ctx.run(self.ctx.backend.set_enabled, self.serial, p.name, not p.enabled, self._uid,
+        if not current():
+            return
+        self.run_device(self.ctx.backend.set_enabled, self.serial, p.name, not p.enabled, self._uid,
                      done=lambda _: (self.ctx.notify("ok", ("已启用 " if not p.enabled else "已停用 ") + p.name), self.refresh()))
 
     def _extract(self):
@@ -415,20 +427,21 @@ class AppsPage(Page):
         if p is None:
             return
         b, s, uid = self.ctx.backend, self.serial, self._uid
+        current = self.device_guard()
         if action == "clear":
             if ui.confirm(self, "清除应用数据？", f"将删除 <code>{p.name}</code> 在用户 {uid} 下的全部数据、缓存与登录状态"
-                          f"（<code>pm clear --user {uid}</code>）。此操作无法撤销。", "清除数据", danger=True):
-                self.ctx.run(b.clear_data, s, p.name, uid, done=lambda _: self.ctx.notify("ok", "已清除数据", p.name))
+                          f"（<code>pm clear --user {uid}</code>）。此操作无法撤销。", "清除数据", danger=True) and current():
+                self.run_device(b.clear_data, s, p.name, uid, done=lambda _: self.ctx.notify("ok", "已清除数据", p.name))
         elif action == "uninstall_user":
             extra = "系统应用只是对该用户隐藏，可用 <code>pm install-existing</code> 恢复。" if p.system else "其它用户下的安装不受影响。"
-            if ui.confirm(self, f"为用户 {uid} 卸载 {p.name}？", f"执行 <code>pm uninstall --user {uid}</code>。{extra}", "卸载", danger=True):
-                self.ctx.run(b.uninstall, s, p.name, False, uid, done=lambda _: (self.ctx.notify("ok", f"已为用户 {uid} 卸载", p.name), self.refresh()))
+            if ui.confirm(self, f"为用户 {uid} 卸载 {p.name}？", f"执行 <code>pm uninstall --user {uid}</code>。{extra}", "卸载", danger=True) and current():
+                self.run_device(b.uninstall, s, p.name, False, uid, done=lambda _: (self.ctx.notify("ok", f"已为用户 {uid} 卸载", p.name), self.refresh()))
         elif action == "uninstall":
             if p.system:
                 self.ctx.notify("warn", "系统应用无法完全卸载", "可以“为当前用户卸载”或停用。")
                 return
-            if ui.confirm(self, f"卸载 {p.name}？", "将从所有用户中卸载，数据一并删除。", "卸载", danger=True):
-                self.ctx.run(b.uninstall, s, p.name, False, None, done=lambda _: (self.ctx.notify("ok", "已卸载", p.name), self.refresh()))
+            if ui.confirm(self, f"卸载 {p.name}？", "将从所有用户中卸载，数据一并删除。", "卸载", danger=True) and current():
+                self.run_device(b.uninstall, s, p.name, False, None, done=lambda _: (self.ctx.notify("ok", "已卸载", p.name), self.refresh()))
 
     def _save_dump(self):
         if not self.dump.plain().strip() or self._detail is None:
@@ -443,13 +456,14 @@ class AppsPage(Page):
     def _batch_dump(self):
         if self.device is None or self.strip.busy:
             return
+        current = self.device_guard()
         rows = self.table.table_model.rows
         visible = [self.table._row(self.table.filter.index(i, 0)) for i in range(self.table.filter.rowCount())]
         d = Dialog(self, "批量 dump 包信息", "开始")
         d.add_text(f"把用户 {self._uid} 下的包逐个执行 <code>dumpsys package</code>，每个包保存为一个 txt。")
         scope = d.add(ui.SegmentedControl([("third", f"第三方（{sum(1 for p in rows if not p.system)}）"),
                                            ("all", f"全部（{len(rows)}）"), ("visible", f"当前列表（{len(visible)}）")], "third", label="范围"))
-        if not d.run():
+        if not d.run() or not current():
             return
         pkgs = {"third": [p.name for p in rows if not p.system], "all": [p.name for p in rows],
                 "visible": [p.name for p in visible if p]}[scope.value()]

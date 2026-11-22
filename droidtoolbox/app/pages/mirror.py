@@ -10,7 +10,6 @@ from tbui._qt import QtGui, QtWidgets
 
 from ..backend.api import ToolNotFound
 from ..backend.models import ScrcpyOptions
-from ..core.jobs import on_ui
 from ..ui.common import label, narrow_select, output_log, set_icon, tbtn
 from .base import Page
 
@@ -152,12 +151,12 @@ class MirrorPage(Page):
                              self._int("mirror_window_width"), self._int("mirror_window_height"))
         self._gen += 1
         g = self._gen
-        out = on_ui(lambda text, stream: g == self._gen and self._out(text, stream))
-        ex = on_ui(lambda err: g == self._gen and self._exited(err))
+        out = self.ctx.on_ui(lambda text, stream: g == self._gen and self._out(text, stream))
+        ex = self.ctx.on_ui(lambda err: g == self._gen and self._exited(err))
         self.log.out.clear()
         self.log.write(f"scrcpy -s {d.serial} --window-title \"{opts.window_title}\"", "input")
         try:
-            self._proc = self.ctx.backend.start_scrcpy(d.serial, opts, out, ex)
+            self._proc = self.ctx.start_stream(self.ctx.backend.start_scrcpy, d.serial, opts, out, ex)
         except ToolNotFound as e:
             self.ctx.report(e)
             self._check_tool()

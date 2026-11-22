@@ -14,7 +14,7 @@ import abc
 import threading
 from typing import Callable, Literal
 
-from .models import (AndroidUser, ApexModule, BinderService, Component, CrashFile, Device, DeviceDetail, FileEntry,
+from .models import (AndroidUser, ApexModule, BinderService, Component, CrashFile, Device, DeviceDetail, DeviceInventory, FileEntry,
                      HalInfo, InitService, InstallOptions, LogBuffer, PackageDetail, PackageInfo, ProcessDetail,
                      ProcessInfo, Progress, RebootMode, RemountResult, RootState, ScrcpyOptions, SettingsNamespace,
                      ShellResult, ToolInfo)
@@ -106,6 +106,9 @@ class Backend(abc.ABC):
     #: 界面在状态栏显示的后端名称，如 "adb" 或 "演示数据"
     name: str = "backend"
 
+    def close(self) -> None:
+        """Release resources owned by this backend instance."""
+
     # 环境 ----------------------------------------------------------
     @abc.abstractmethod
     def configure(self, adb_path: str | None, fastboot_path: str | None, scrcpy_path: str | None) -> None:
@@ -123,6 +126,9 @@ class Backend(abc.ABC):
     @abc.abstractmethod
     def list_devices(self) -> list[Device]:
         """adb 与 fastboot 设备合并后的列表，界面每 2 秒轮询一次，应在 1 秒内返回。"""
+
+    def poll_inventory(self) -> DeviceInventory:
+        return DeviceInventory(tuple(self.list_devices()))
 
     @abc.abstractmethod
     def device_detail(self, serial: str) -> DeviceDetail:

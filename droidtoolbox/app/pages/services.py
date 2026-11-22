@@ -62,7 +62,6 @@ class ServicesPage(Page):
         self._dirty = {"binder", "init", "hal", "proc"}
         self.tabs.changed.connect(self._tab_changed)
         self.tab_refresh.clicked.connect(self.refresh)
-        self._tok = {"binder": 0, "hal": 0, "proc": 0}
         self._tab_changed(self.tabs.value())
 
     # 生命周期 --------------------------------------------------------
@@ -72,6 +71,8 @@ class ServicesPage(Page):
 
     def unload(self):
         self.init_timer.stop()
+        self._b_service = None
+        self._pending_pid = None
         for t in (self.b_table, self.i_table, self.h_table, self.p_table):
             t.set_rows([])
         for v in (self.b_view, self.h_view, self.p_view):
@@ -102,18 +103,14 @@ class ServicesPage(Page):
         serial, b = self.serial, self.ctx.backend
         fn = {"binder": b.list_binder_services, "init": b.list_init_services, "hal": b.list_hals, "proc": b.list_processes}[key]
         done = {"binder": self._got_binder, "init": self._got_init, "hal": self._got_hal, "proc": self._got_proc}[key]
-        self.busy.push()
-
         def ok(rows):
-            self.busy.pop()
-            if serial == self.serial:
-                done(rows)
-                self.ctx.window.update_status(self)
+            done(rows)
+            self.ctx.window.update_status(self)
 
         def fail(e):
-            self.busy.pop()
+            self._dirty.add(key)
             self.ctx.report(e)
-        self.ctx.run(fn, serial, done=ok, error=fail)
+        self.request(f"list:{key}", fn, serial, busy=self.busy, done=ok, error=fail)
 
     def status_text(self) -> str:
         t = {"binder": self.b_table, "init": self.i_table, "hal": self.h_table, "proc": self.p_table}[self.tabs.value()]
@@ -161,11 +158,8 @@ class ServicesPage(Page):
         args = args if args is not None else self.b_args.text().split()
         self.b_cmd.setText("dumpsys " + service + (" " + " ".join(args) if args else ""))
         self.b_view.set_text("正在执行…")
-        self._tok["binder"] += 1
-        tok = self._tok["binder"]
-        self.ctx.run(self.ctx.backend.dumpsys, self.serial, service, args,
-                     done=lambda text: tok == self._tok["binder"] and self.b_view.set_text(text),
-                     error=lambda e: tok == self._tok["binder"] and self.b_view.set_text(f"执行失败：{e}\n{getattr(e, 'detail', '')}"))
+        self.request("binder", self.ctx.backend.dumpsys, self.serial, service, args,
+                     done=self.b_view.set_text, error=lambda e: self.b_view.set_text(f"执行失败：{e}\n{getattr(e, 'detail', '')}"))
 
     # init ----------------------------------------------------------
     def _build_init(self) -> W.QWidget:
@@ -218,15 +212,16 @@ class ServicesPage(Page):
         body = f"将执行 <code>{'stop + start' if action == 'restart' else action}</code>：<br><code>" + "<br>".join(names) + "</code>"
         if critical:
             body += f"<br><b>{'、'.join(critical)} 是核心服务，{verb}会导致界面重启或 adb 断开。</b>"
-        if not ui.confirm(self, f"{verb} {len(names)} 个服务？", body, verb, danger=bool(critical) or action == "stop"):
+        current = self.device_guard()
+        if not ui.confirm(self, f"{verb} {len(names)} 个服务？", body, verb, danger=bool(critical) or action == "stop") or not current():
             return
         b, serial = self.ctx.backend, self.serial
 
         def work():
             for n in names:
                 b.control_init_service(serial, n, action)
-        self.ctx.run(work, done=lambda _: (self.ctx.notify("ok", f"已{verb}", "、".join(names)), self._load("init"),
-                                           QtCore.QTimer.singleShot(2000, lambda: self._load("init"))))
+        self.run_device(work, done=lambda _: (self.ctx.notify("ok", f"已{verb}", "、".join(names)), self._load("init"),
+                                              QtCore.QTimer.singleShot(2000, lambda: current() and self._load("init"))))
 
     # HAL -----------------------------------------------------------
     def _build_hal(self) -> W.QWidget:
@@ -270,11 +265,8 @@ class ServicesPage(Page):
         if h is None:
             return
         self.h_view.set_text("正在执行…")
-        self._tok["hal"] += 1
-        tok = self._tok["hal"]
-        self.ctx.run(self.ctx.backend.hal_debug, self.serial, h.name, h.kind,
-                     done=lambda t: tok == self._tok["hal"] and self.h_view.set_text(t),
-                     error=lambda e: tok == self._tok["hal"] and self.h_view.set_text(f"执行失败：{e}"))
+        self.request("hal", self.ctx.backend.hal_debug, self.serial, h.name, h.kind,
+                     done=self.h_view.set_text, error=lambda e: self.h_view.set_text(f"执行失败：{e}"))
 
     def _hal_process(self):
         h: HalInfo | None = self.h_table.current_row()
@@ -327,40 +319,34 @@ class ServicesPage(Page):
 
     def _proc_detail(self, p: ProcessInfo):
         self.p_view.set_text(f"正在读取 {p.name}（{p.pid}）…")
-        self._tok["proc"] += 1
-        tok = self._tok["proc"]
-
         def done(d: ProcessDetail):
-            if tok != self._tok["proc"]:
-                return
             libs = "\n".join("  " + l for l in d.libraries) or "  （无法读取，可能需要 root）"
             threads = "\n".join(f"  {tid:>6}  {name}" for tid, name in d.threads) or "  （无法读取）"
             self.p_view.set_text(
                 f"== 进程 {d.pid} · {d.name}\ncmdline: {d.cmdline}\n打开的文件: {d.fd_count if d.fd_count is not None else '—'}\n\n"
                 f"== /proc/{d.pid}/status\n{d.status.rstrip()}\n\n== 线程（{len(d.threads)}）\n{threads}\n\n"
                 f"== 已加载的 .so（{len(d.libraries)}）\n{libs}\n")
-        self.ctx.run(self.ctx.backend.process_detail, self.serial, p.pid, done=done,
-                     error=lambda e: tok == self._tok["proc"] and self.p_view.set_text(f"读取失败：{e}"))
+        self.request("process", self.ctx.backend.process_detail, self.serial, p.pid, done=done,
+                     error=lambda e: self.p_view.set_text(f"读取失败：{e}"))
 
     def _backtrace(self):
         p: ProcessInfo | None = self.p_table.current_row()
         if p is None:
             return
         self.p_view.set_text(f"$ debuggerd -b {p.pid}\n正在抓取调用栈…")
-        self._tok["proc"] += 1
-        tok = self._tok["proc"]
-        self.ctx.run(self.ctx.backend.dump_backtrace, self.serial, p.pid,
-                     done=lambda t: tok == self._tok["proc"] and self.p_view.set_text(f"$ debuggerd -b {p.pid}\n\n{t}"),
-                     error=lambda e: tok == self._tok["proc"] and self.p_view.set_text(f"$ debuggerd -b {p.pid}\n\n失败：{e}"))
+        self.request("process", self.ctx.backend.dump_backtrace, self.serial, p.pid,
+                     done=lambda t: self.p_view.set_text(f"$ debuggerd -b {p.pid}\n\n{t}"),
+                     error=lambda e: self.p_view.set_text(f"$ debuggerd -b {p.pid}\n\n失败：{e}"))
 
     def _kill(self):
         p: ProcessInfo | None = self.p_table.current_row()
         if p is None:
             return
+        current = self.device_guard()
         if not ui.confirm(self, f"结束进程 {p.pid}？", f"将向 <code>{p.name}</code>（PID {p.pid}，用户 {p.user}）发送 SIGKILL。"
-                          "结束系统进程可能导致系统重启或服务被 init 拉起。", "结束进程", danger=True):
+                          "结束系统进程可能导致系统重启或服务被 init 拉起。", "结束进程", danger=True) or not current():
             return
-        self.ctx.run(self.ctx.backend.kill_process, self.serial, p.pid,
+        self.run_device(self.ctx.backend.kill_process, self.serial, p.pid,
                      done=lambda _: (self.ctx.notify("ok", f"已结束 {p.name}", f"PID {p.pid}"), self.refresh()))
 
     # 公共 ----------------------------------------------------------

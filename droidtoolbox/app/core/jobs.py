@@ -1,13 +1,14 @@
 """把阻塞的后端调用放进线程池，结果、进度、流回调都转回 Qt 主线程。
 
-    job = run(backend.device_detail, serial, done=self.show, error=self.fail)
-    job = run(backend.install, serial, paths, opts, progress=bar.update, cancellable=True)  # fn 收到 progress= / cancel=
+    job = manager.run(backend.device_detail, serial, done=self.show, error=self.fail)
+    job = manager.run(backend.install, serial, paths, opts, progress=bar.update, cancellable=True)
     job.cancel()
 
     on_lines = on_ui(self.append)            # 后端线程里调用 on_lines(...)，self.append 在主线程执行
 """
 from __future__ import annotations
 
+import logging
 import threading
 from concurrent.futures import ThreadPoolExecutor
 from typing import Any, Callable
@@ -16,15 +17,7 @@ from tbui._qt import QtCore, Signal
 
 from ..backend.api import Cancelled
 
-_pool = ThreadPoolExecutor(max_workers=16, thread_name_prefix="job")
-_live: set["Job"] = set()          # 运行中的任务，防止被垃圾回收
-_default_error: Callable[[BaseException], None] | None = None
-
-
-def set_default_error_handler(fn: Callable[[BaseException], None]):
-    """没有传 error= 的任务失败时调用（主窗口用它弹出提示）。"""
-    global _default_error
-    _default_error = fn
+log = logging.getLogger(__name__)
 
 
 def _alive(fn) -> bool:
@@ -32,6 +25,10 @@ def _alive(fn) -> bool:
     owner = getattr(fn, "__self__", None)
     if owner is None or not isinstance(owner, QtCore.QObject):
         return True
+    return object_alive(owner)
+
+
+def object_alive(owner):
     try:
         import shiboken6
         return shiboken6.isValid(owner)
@@ -48,10 +45,13 @@ class Job(QtCore.QObject):
 
     _event = Signal(str, object)
 
-    def __init__(self, fn, args, kwargs, done, error, progress, cancellable):
+    def __init__(self, manager, fn, args, kwargs, done, error, progress, cancellable, guard, settled):
         super().__init__()
+        self._manager = manager
         self._fn, self._args, self._kwargs = fn, args, kwargs
         self._done, self._error, self._progress = done, error, progress
+        self._guard, self._settled = guard, settled
+        self._future = None
         self._cancel = threading.Event() if cancellable else None
         self.finished = False
         self._event.connect(self._dispatch)
@@ -60,21 +60,22 @@ class Job(QtCore.QObject):
         if cancellable:
             self._kwargs["cancel"] = self._cancel
 
-    def start(self) -> "Job":
-        _live.add(self)
-        _pool.submit(self._work)
-        return self
-
     def cancel(self):
         if self._cancel is not None:
             self._cancel.set()
+            if self._future is not None and self._future.cancel():
+                self._dispatch("error", Cancelled("已取消"))
 
     @property
     def cancelled(self) -> bool:
         return self._cancel is not None and self._cancel.is_set()
 
     def _work(self):
+        if self._manager.closed:
+            return
         try:
+            if self.cancelled:
+                raise Cancelled("已取消")
             result = self._fn(*self._args, **self._kwargs)
         except BaseException as e:  # noqa: BLE001 — 任何异常都要送回界面
             self._event.emit("error", e)
@@ -82,12 +83,21 @@ class Job(QtCore.QObject):
             self._event.emit("done", result)
 
     def _dispatch(self, kind: str, payload: Any):
+        if self.finished:
+            return
+        if kind != "progress":
+            self.finished = True
+            self._manager._live.discard(self)
+        if self._manager.closed:
+            return
         if kind == "progress":
-            if self._progress and _alive(self._progress) and not self.finished:
+            if self._progress and not self.cancelled and self._valid() and _alive(self._progress):
                 self._progress(payload)
             return
-        self.finished = True
-        _live.discard(self)
+        if self._settled is not None and _alive(self._settled):
+            self._settled()
+        if not self._valid():
+            return
         if kind == "done":
             if self._done and _alive(self._done):
                 self._done(payload)
@@ -97,33 +107,95 @@ class Job(QtCore.QObject):
         elif self._error is not None:
             if _alive(self._error):
                 self._error(payload)
-        elif _default_error is not None:
-            _default_error(payload)
+        elif self._manager.report is not None:
+            self._manager.report(payload)
+
+    def _valid(self):
+        return self._guard is None or self._guard()
 
 
-def run(fn: Callable, *args, done: Callable[[Any], None] | None = None,
-        error: Callable[[BaseException], None] | None = None,
-        progress: Callable[[Any], None] | None = None, cancellable: bool = False, **kwargs) -> Job:
-    """在线程池里执行 fn(*args, **kwargs)。必须在主线程调用。"""
-    return Job(fn, args, dict(kwargs), done, error, progress, cancellable).start()
+class JobManager:
+    """One application owns its worker pool, streams and shutdown callbacks."""
+
+    def __init__(self, report=None, *, max_workers=16):
+        self.report = report
+        self.closed = False
+        self._pool = ThreadPoolExecutor(max_workers=max_workers, thread_name_prefix="job")
+        self._live: set[Job] = set()
+        self._lock = threading.Lock()
+        self._streams = {}
+        self._cleanups = []
+
+    def run(self, fn, *args, done=None, error=None, progress=None, cancellable=False,
+            guard=None, settled=None, **kwargs) -> Job:
+        """Submit on the UI thread; guard limits delivery, not execution."""
+        job = Job(self, fn, args, kwargs, done, error, progress, cancellable, guard, settled)
+        if self.closed:
+            job.finished = True
+        else:
+            self._live.add(job)
+            job._future = self._pool.submit(job._work)
+        return job
+
+    def own_stream(self, stream):
+        """May run on a worker (e.g. open_shell); close a late result immediately."""
+        with self._lock:
+            if not self.closed:
+                self._streams = {k: s for k, s in self._streams.items() if s.running}
+                self._streams[id(stream)] = stream
+                return stream
+        self._cleanup(stream.stop)
+        return stream
+
+    def add_cleanup(self, fn):
+        self._cleanups.append(fn)
+
+    def close(self):
+        with self._lock:
+            if self.closed:
+                return
+            self.closed = True
+            streams, self._streams = self._streams, {}
+        for job in tuple(self._live):
+            job.cancel()
+        self._pool.shutdown(wait=False, cancel_futures=True)
+        for job in self._live:
+            job.finished = True
+        self._live.clear()
+        for stream in streams.values():
+            self._cleanup(stream.stop)
+        for fn in reversed(self._cleanups):
+            self._cleanup(fn)
+        self._cleanups.clear()
+
+    @staticmethod
+    def _cleanup(fn):
+        try:
+            fn()
+        except Exception:
+            log.exception("Resource cleanup failed")
+
+    def on_ui(self, fn):
+        return on_ui(fn, valid=lambda: not self.closed)
 
 
 class _Bridge(QtCore.QObject):
     _call = Signal(object)
 
-    def __init__(self, fn):
+    def __init__(self, fn, valid):
         super().__init__()
         self._fn = fn
+        self._valid = valid
         self._call.connect(self._run)
 
     def _run(self, args):
-        if _alive(self._fn):
+        if (self._valid is None or self._valid()) and _alive(self._fn):
             self._fn(*args)
 
 
-def on_ui(fn: Callable) -> Callable:
+def on_ui(fn: Callable, valid=None) -> Callable:
     """包装回调：在任意线程调用返回的函数，fn 都在主线程执行。必须在主线程调用 on_ui。"""
-    bridge = _Bridge(fn)
+    bridge = _Bridge(fn, valid)
 
     def call(*args):
         try:

@@ -83,9 +83,11 @@ class PropsPage(Page):
 
     # 加载 ------------------------------------------------------------
     def load(self, device):
+        self.expire_request("watch")
+        self._polling = False
         self.snap.set_serial(device.serial)
-        self.busy.push()
-        self.ctx.run(self.ctx.backend.get_props, device.serial, done=self._got, error=self._failed)
+        self.request("props", self.ctx.backend.get_props, device.serial, busy=self.busy,
+                     done=self._got, error=self._failed)
         if self.ctx_btn.isChecked():
             self._load_contexts()
 
@@ -100,13 +102,11 @@ class PropsPage(Page):
         self.watch_btn.setChecked(False)
 
     def _got(self, props: dict[str, str]):
-        self.busy.pop()
         self._props = props
         self.table.set_rows(sorted(props.items()), keep=lambda r: r[0])
         self._apply()
 
     def _failed(self, e):
-        self.busy.pop()
         self.ctx.report(e, "无法读取系统属性")
 
     def _toggle_context(self, on: bool):
@@ -115,13 +115,10 @@ class PropsPage(Page):
             self._load_contexts()
 
     def _load_contexts(self):
-        self.busy.push()
-
         def done(ctx):
-            self.busy.pop()
             self._contexts = ctx
             self.table.viewport().update()
-        self.ctx.run(self.ctx.backend.get_prop_contexts, self.serial, done=done, error=self._failed)
+        self.request("contexts", self.ctx.backend.get_prop_contexts, self.serial, busy=self.busy, done=done, error=self._failed)
 
     def _apply(self, *_):
         p = self.prefix.currentData()
@@ -147,6 +144,8 @@ class PropsPage(Page):
             self._timer.start()
         else:
             self._timer.stop()
+            self.expire_request("watch")
+            self._polling = False
             self._watched = set()
             self.watch_btn.setToolTip(WATCH_TIP)
         self.table.viewport().update()
@@ -176,7 +175,7 @@ class PropsPage(Page):
             self._polling = False
             self.watch_btn.setChecked(False)
             self.ctx.report(e)
-        self.ctx.run(self.ctx.backend.get_props, self.serial, done=done, error=fail)
+        self.request("watch", self.ctx.backend.get_props, self.serial, done=done, error=fail)
 
     # 操作 ------------------------------------------------------------
     def _copy(self):
@@ -212,8 +211,9 @@ class PropsPage(Page):
             k.set_error(err)
             return err
         d.validate = validate
-        if not d.run():
+        current = self.device_guard()
+        if not d.run() or not current():
             return
         key, value = k.edit.text().strip(), v.edit.text()
-        self.ctx.run(self.ctx.backend.set_prop, self.serial, key, value,
+        self.run_device(self.ctx.backend.set_prop, self.serial, key, value,
                      done=lambda _: (self.ctx.notify("ok", "属性已设置", f"{key} = {value}"), self.refresh()))

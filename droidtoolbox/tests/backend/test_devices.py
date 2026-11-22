@@ -1,4 +1,5 @@
 import subprocess
+import threading
 import time
 
 import pytest
@@ -22,6 +23,50 @@ def test_inventory_and_cache():
     assert sum("getprop ro.product.manufacturer;" in args[-1] for args in backend._runner.calls) == count
     backend._runner.add(("devices", "-l"), (0, "emulator-5554 offline\n", ""))
     assert backend.list_devices()[0].api is None
+
+
+def test_pending_enum_is_retained_and_consumed_next_poll():
+    runner = FakeRunner.from_fixtures().add(("devices",), (0, "s fastboot\n", ""))
+    backend = fake_backend(Devices, runner)
+    release = threading.Event()
+    calls = []
+
+    def slow(_):
+        calls.append(True)
+        assert release.wait(5)
+        return 0, "", ""
+
+    try:
+        assert any(d.serial == "s" for d in backend.list_devices())
+        runner.add(("devices",), slow)
+        pending = backend.poll_inventory()
+        assert any(d.serial == "s" for d in pending.devices)
+        assert pending.sources[1].status == "pending"
+        release.set()
+        backend._enumerations["fastboot"].result(2)
+        fresh = backend.poll_inventory()
+        assert fresh.sources[1].status == "ready"
+        assert not any(d.serial == "s" for d in fresh.devices)
+        assert len(calls) == 1
+    finally:
+        release.set()
+        backend.close()
+
+
+def test_enum_error_preserves_snapshot_but_reconnect_invalidates_cache():
+    runner = FakeRunner.from_fixtures().add(("devices", "-l"), (0, "s device transport_id:1\n", ""))
+    backend = fake_backend(Devices, runner)
+    try:
+        before = backend.list_devices()[0]
+        runner.add(("devices", "-l"), subprocess.TimeoutExpired("adb", 1))
+        failed = backend.poll_inventory()
+        assert failed.sources[0].status == "error" and failed.devices == (before,)
+        runner.add(("devices", "-l"), (0, "s device transport_id:2\n", ""))
+        runner.add(lambda a: "getprop ro.product.manufacturer;" in a[-1], (0, "New\n17\n37\n==BATTERY\n", ""))
+        after = backend.list_devices()[0]
+        assert after.connection_id != before.connection_id and after.manufacturer == "New"
+    finally:
+        backend.close()
 
 
 def test_slow_device_does_not_block_others():

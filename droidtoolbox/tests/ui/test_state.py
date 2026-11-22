@@ -4,7 +4,8 @@ from __future__ import annotations
 import pytest
 
 from app.backend.mock import MockBackend
-from app.backend.models import Device
+from app.backend.models import Device, DeviceInventory, InventorySource
+from tests.conftest import wait_until
 
 pytestmark = pytest.mark.ui
 
@@ -20,7 +21,9 @@ def state(qapp, tmp_path):
     from app.core.state import AppState
     s = Settings(tmp_path / "s.ini")
     s.set("auto_root", False)
-    return AppState(MockBackend(), s, CommandStore(tmp_path / "c.json"))
+    state = AppState(MockBackend(), s, CommandStore(tmp_path / "c.json"))
+    yield state
+    state.shutdown()
 
 
 def test_first_device_selected(state):
@@ -52,3 +55,18 @@ def test_new_device_while_selected_missing(state):
     state._set_devices([B])
     state._set_devices([B, C])
     assert state.serial == "C"
+
+
+def test_pending_inventory_does_not_reset_selection(state, qapp, monkeypatch):
+    state._set_devices([A])
+    generation = state.generation
+    results = iter([DeviceInventory((A,), (InventorySource("adb", "pending"),)),
+                    DeviceInventory((), (InventorySource("adb", "ready"),))])
+    monkeypatch.setattr(state.backend, "poll_inventory", lambda: next(results))
+    state.refresh_devices()
+    assert wait_until(qapp, lambda: not state._polling)
+    assert state.current is A and state.generation == generation
+    assert state.inventory_sources[0].status == "pending"
+    state.refresh_devices()
+    assert wait_until(qapp, lambda: not state._polling)
+    assert state.current is None and state.generation == generation + 1

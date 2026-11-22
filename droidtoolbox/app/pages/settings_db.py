@@ -82,7 +82,8 @@ class SettingsDbPage(Page):
         self.ns.setToolTip("settings 命名空间；presets 为常用键（带备注）")
         self.user = tb.add(narrow_select([("0", "u0", "用户 0")], "0", 64, "Android 用户：system / secure 按用户区分，global 对所有用户生效"))
         self.filter = tb.add(grow(ui.FilterField("Filter: key / value / note", width=240), 160))
-        self.snap = tb.add(SnapshotBar(self.ctx, "settings", self._fetch_all, noun="设置项"))
+        self.snap = tb.add(SnapshotBar(self.ctx, "settings", self._fetch_all, noun="设置项",
+                                       fetch_args=lambda: (self._preset_user(),)))
         self.copy = tb.add(ui.icon_button("copy", "复制所选（key=value）"))
         self.export = tb.add(ui.icon_button("download", "导出当前命名空间"))
         self.add = tb.add(tbtn("Add", "新增设置项（settings put）", icon="plus"))
@@ -113,7 +114,7 @@ class SettingsDbPage(Page):
         self.export.clicked.connect(self._export)
         self.add.clicked.connect(lambda: self._edit())
         self._data: dict[str, str] = {}
-        self._token = 0
+        self._table_scope = None
 
     # 常用 ------------------------------------------------------------
     def _build_presets(self) -> W.QWidget:
@@ -134,25 +135,22 @@ class SettingsDbPage(Page):
         if self.device is None:
             return
         serial, user, b = self.serial, self._preset_user(), self.ctx.backend
-        self.busy.push()
 
         def work():
             return {"global": b.list_settings(serial, "global", None), "system": b.list_settings(serial, "system", user),
                     "secure": b.list_settings(serial, "secure", user)}
 
         def done(data):
-            self.busy.pop()
             self.ptable.set_rows([(p, data.get(p.ns, {}).get(p.key)) for p in PRESETS], keep=lambda r: r[0].key)
             self._apply()
 
         def fail(e):
-            self.busy.pop()
             self.ctx.report(e, "无法读取常用设置")
-        self.ctx.run(work, done=done, error=fail)
+        self.request("presets", work, busy=self.busy, done=done, error=fail)
 
     def _put_preset(self, p: Preset, value: str):
         user = None if p.ns == "global" else self._preset_user()
-        self.ctx.run(self.ctx.backend.put_setting, self.serial, p.ns, p.key, value, user,
+        self.run_device(self.ctx.backend.put_setting, self.serial, p.ns, p.key, value, user,
                      done=lambda _: (self.ctx.notify("ok", "已修改", f"{p.ns} {p.key} = {value}"), self._load_presets()),
                      error=lambda e: self.ctx.report(e, f"无法修改 {p.key}"))
 
@@ -174,11 +172,12 @@ class SettingsDbPage(Page):
         d.add(box)
         d.add_text("从下拉选择候选值，或直接输入其它值。")
         box.setFocus()
-        if not d.run():
+        valid = self.device_guard()
+        if not d.run() or not valid():
             return
         text = box.currentText().strip()
         value = text.split()[0] if text else ""
-        if value != (current or "") and self._confirm_sensitive(p.key, value):
+        if value != (current or "") and self._confirm_sensitive(p.key, value) and valid():
             self._put_preset(p, value)
 
     def _preset_menu(self, pos):
@@ -188,14 +187,15 @@ class SettingsDbPage(Page):
         p = r[0]
         items = [("edit", "修改…", "pencil")] + [(f"set:{v}", f"设为 {v}（{t}）", None) for v, t in p.options] + \
                 [None, ("copy", "复制 key=value", "copy")]
+        valid = self.device_guard()
         a = ui.menu(items, self).exec(self.ptable.viewport().mapToGlobal(pos))
-        if a is None:
+        if a is None or not valid():
             return
         if a.data() == "edit":
             self._edit_preset(p, r[1])
         elif a.data() == "copy":
             QtWidgets.QApplication.clipboard().setText(f"{p.key}={r[1] or ''}")
-        elif self._confirm_sensitive(p.key, a.data()[4:]):
+        elif self._confirm_sensitive(p.key, a.data()[4:]) and valid():
             self._put_preset(p, a.data()[4:])
 
     def _preset_user(self) -> int:
@@ -217,12 +217,17 @@ class SettingsDbPage(Page):
 
     def load(self, device):
         self.snap.set_serial(device.serial)
-        self.ctx.run(self.ctx.backend.list_users, device.serial, done=self._got_users, error=lambda e: None)
+        self.request("users", self.ctx.backend.list_users, device.serial, done=self._got_users, error=lambda e: None)
         self._tab_changed()
 
     def unload(self):
         self.table.set_rows([])
         self._data = {}
+        self._table_scope = None
+        self.ptable.set_rows([])
+        self.user.blockSignals(True)
+        self.user.clear()
+        self.user.blockSignals(False)
         self.snap.set_serial("")
 
     def refresh(self):
@@ -246,22 +251,20 @@ class SettingsDbPage(Page):
         if self.device is None:
             return
         ns, user, serial = self.ns.value(), self._user, self.serial
-        self._token += 1
-        tok = self._token
-        self.busy.push()
+        scope = ns, user
+        if scope != self._table_scope:
+            self._table_scope = scope
+            self._data = {}
+            self.table.set_rows([])
 
         def done(data):
-            self.busy.pop()
-            if tok != self._token:
-                return
             self._data = data
             self.table.set_rows(sorted(data.items()), keep=lambda r: r[0])
             self._apply()
 
         def fail(e):
-            self.busy.pop()
             self.ctx.report(e, f"无法读取 settings {ns}")
-        self.ctx.run(self.ctx.backend.list_settings, serial, ns, user, done=done, error=fail)
+        self.request("settings", self.ctx.backend.list_settings, serial, ns, user, busy=self.busy, done=done, error=fail)
 
     def _cur_table(self) -> DataTable:
         return self.ptable if self.ns.value() == "presets" else self.table
@@ -278,9 +281,8 @@ class SettingsDbPage(Page):
         u = "" if self._user is None else f" · u{self._user}"
         return f"{self.ns.value()}{u} · {self.table.filter.rowCount()}/{len(self._data)}"
 
-    def _fetch_all(self, serial: str) -> dict[str, str]:
+    def _fetch_all(self, serial: str, user: int) -> dict[str, str]:
         """快照用：三个命名空间合并成 “命名空间/键”（在工作线程调用）。"""
-        user = int(self.user.currentData() or 0)
         out = {}
         for ns, _ in NAMESPACES:
             for k, v in self.ctx.backend.list_settings(serial, ns, None if ns == "global" else user).items():
@@ -290,7 +292,7 @@ class SettingsDbPage(Page):
     # 修改 ------------------------------------------------------------
     def _put(self, ns, key, value):
         user = None if ns == "global" else int(self.user.currentData() or 0)
-        self.ctx.run(self.ctx.backend.put_setting, self.serial, ns, key, value, user,
+        self.run_device(self.ctx.backend.put_setting, self.serial, ns, key, value, user,
                      done=lambda _: (self.ctx.notify("ok", "已修改", f"{ns} {key} = {value}"), self._load_table()),
                      error=lambda e: self.ctx.report(e, f"无法修改 {key}"))
 
@@ -322,26 +324,29 @@ class SettingsDbPage(Page):
             k.set_error(err)
             return err
         d.validate = validate
-        if not d.run():
+        valid = self.device_guard()
+        if not d.run() or not valid():
             return
         key, value = k.edit.text().strip(), v.edit.text()
         if key in SENSITIVE and not ui.confirm(self, f"修改 {key}？", SENSITIVE[key] + f"<br>新值：<code>{value}</code>", "仍然修改", danger=True):
             return
-        self._put(ns, key, value)
+        if valid():
+            self._put(ns, key, value)
 
     def _delete(self, rows):
         if not rows:
             return
         ns, user = self.ns.value(), self._user
+        valid = self.device_guard()
         names = "<br>".join(f"<code>{r[0]}</code>" for r in rows[:10]) + ("<br>…" if len(rows) > 10 else "")
-        if not ui.confirm(self, f"删除 {len(rows)} 个设置项？", f"将从 {ns} 中删除（settings delete）：<br>{names}", "删除", danger=True):
+        if not ui.confirm(self, f"删除 {len(rows)} 个设置项？", f"将从 {ns} 中删除（settings delete）：<br>{names}", "删除", danger=True) or not valid():
             return
         b, serial = self.ctx.backend, self.serial
 
         def work():
             for r in rows:
                 b.delete_setting(serial, ns, r[0], user)
-        self.ctx.run(work, done=lambda _: (self.ctx.notify("ok", f"已删除 {len(rows)} 项"), self._load_table()))
+        self.run_device(work, done=lambda _: (self.ctx.notify("ok", f"已删除 {len(rows)} 项"), self._load_table()))
 
     def _menu(self, pos):
         rows = self.table.selected_rows()
@@ -349,8 +354,9 @@ class SettingsDbPage(Page):
             return
         items = [("edit", "修改…", "pencil"), ("copy", "复制 key=value", "copy"), None,
                  ("delete", f"删除 {len(rows)} 项…", "trash-2", None, True)]
+        valid = self.device_guard()
         a = ui.menu(items if len(rows) == 1 else items[1:], self).exec(self.table.viewport().mapToGlobal(pos))
-        if a is None:
+        if a is None or not valid():
             return
         {"edit": lambda: self._edit(*rows[0]), "copy": self._copy, "delete": lambda: self._delete(rows)}[a.data()]()
 

@@ -7,10 +7,20 @@ import urllib.request
 import pytest
 
 from app.backend.mock import MockBackend
-from app.core.host_services import PerfettoService, port_open
+from app.core.host_services import PerfettoService, WinscopeService, port_open
 from tests.conftest import pump, wait_until
 
 pytestmark = pytest.mark.ui
+
+
+@pytest.fixture(autouse=True)
+def isolated_proxy_home(monkeypatch, tmp_path):
+    # The real proxy writes a token to its home directory, including in mock mode.
+    home = tmp_path / "home"
+    home.mkdir()
+    monkeypatch.setenv("USERPROFILE", str(home))
+    monkeypatch.setenv("HOME", str(home))
+    monkeypatch.setattr(WinscopeService, "TOKEN_FILE", home / ".config" / "winscope" / ".token")
 
 
 def _free_port() -> int:

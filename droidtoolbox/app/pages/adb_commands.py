@@ -15,7 +15,6 @@ import tbui as ui
 from tbui._qt import QtGui, QtWidgets, Qt
 
 from ..core.commands import Command, HistoryItem
-from ..core.jobs import on_ui
 from ..ui.command_params import TYPE_TEXT, ask_param_values
 from ..ui.common import PanelHead, TextViewer, ask_choice, ask_text, hbox, label, narrow_select, set_icon, tbtn
 from .base import Page
@@ -678,6 +677,7 @@ class AdbCommandsPage(Page):
         if d is None or not d.is_adb:
             self.ctx.notify("warn", "没有可用的设备", "连接设备并在设备总览中选中后再执行。")
             return
+        current = self.device_guard()
         c = self._editing()
         if not c.script.strip():
             return
@@ -686,13 +686,15 @@ class AdbCommandsPage(Page):
             self.ctx.notify("warn", "命令有问题", probs[0])
             return
         vals = ask_param_values(self, self.ctx, c, d.serial)
-        if vals is None:
+        if vals is None or not current():
             return
         lines = c.lines(vals)
         if not lines:
             return
         if c.confirm and not ui.confirm(self, f"执行“{c.name}”？", f"将在 <b>{d.display_name}</b> 上执行：<br><code>"
                                         + html_lines(lines) + "</code>", "执行", danger=True):
+            return
+        if not current():
             return
         if c.root:
             self._check_root(d, lambda: self._start(c, lines, d, vals))
@@ -702,10 +704,13 @@ class AdbCommandsPage(Page):
     def _check_root(self, d, proceed):
         """需要 root 的命令：先查 adbd 是否 root；没有时询问 adb root 后执行 / 直接执行。"""
         b = self.ctx.backend
+        current = self.device_guard()
         self.status.setText("checking root…")
 
         def got(rs):
             self.status.setText("")
+            if not current():
+                return
             if rs.adbd_root:
                 proceed()
                 return
@@ -715,14 +720,16 @@ class AdbCommandsPage(Page):
             else:
                 ans = ask_choice(self, "需要 root", f"<b>{d.display_name}</b> 当前没有 adb root，这条命令需要 root 权限。",
                                  [("root", "adb root 后执行", "primary"), ("run", "直接执行", "secondary")])
+            if not current():
+                return
             if ans == "run":
                 proceed()
             elif ans == "root":
                 self.status.setText("adb root…")
                 self.ctx.run(b.root, d.serial, True, done=lambda _: (self.status.setText(""), self.ctx.state.rootChanged.emit(d.serial),
-                                                                      proceed()),
+                                                                      self.ctx.state.serial == d.serial and proceed()),
                              error=lambda e: (self.status.setText(""), self.ctx.report(e, "adb root 失败")))
-        self.ctx.run(b.root_state, d.serial, done=got, error=lambda e: (self.status.setText(""), proceed()))
+        self.ctx.run(b.root_state, d.serial, done=got, error=lambda e: (self.status.setText(""), current() and proceed()))
 
     def _start(self, c: Command, lines: list[str], d, vals: dict[str, str]):
         self.result.set_text("")
@@ -821,7 +828,8 @@ class AdbCommandsPage(Page):
             item.results.append((line, code, "".join(chunks)[-200_000:], "".join(errs), time.time() - t0))
             self._finish(item)
         try:
-            self._stream = self.ctx.backend.start_command(serial, self._args(c.kind, line), on_ui(out), on_ui(ex))
+            self._stream = self.ctx.start_stream(self.ctx.backend.start_command, serial, self._args(c.kind, line),
+                                                 self.ctx.on_ui(out), self.ctx.on_ui(ex))
         except Exception as e:  # noqa: BLE001
             self._set_running(False)
             self.ctx.report(e, "无法执行命令")
@@ -881,12 +889,15 @@ class AdbCommandsPage(Page):
         if d is None or not d.is_adb:
             self.ctx.notify("warn", "没有可用的设备", "连接设备并在设备总览中选中后再执行。")
             return
+        current = self.device_guard()
         h = self.ctx.commands.history[self._hist_index]
         src = self.ctx.commands.get(h.command_id) if h.command_id else None
         base = src or Command(id="", name=h.command, script="\n".join(h.lines), kind=h.kind)
         c = replace(base, script="\n".join(h.lines), kind=h.kind)   # 历史里是展开后的命令行，不含参数
         if c.confirm and not ui.confirm(self, f"重新执行“{c.name}”？", f"将在 <b>{d.display_name}</b> 上执行：<br><code>"
                                         + html_lines(h.lines) + "</code>", "执行", danger=True):
+            return
+        if not current():
             return
         go = lambda: self._start(c, list(h.lines), d, dict(h.values))  # noqa: E731
         self._check_root(d, go) if c.root else go()
