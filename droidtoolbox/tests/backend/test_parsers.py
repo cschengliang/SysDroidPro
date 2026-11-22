@@ -56,6 +56,77 @@ def test_root_unknown_override_and_numbers():
     assert P.sections("ignored\n==MEM\nfoo\n==WM\nbar") == {"MEM": "foo", "WM": "bar"}
 
 
+def test_device_overview_metadata_fallbacks_and_storage_targets():
+    dd = P.device_detail("serial", """==PROPS
+[ro.soc.model]: [unknown]
+[ro.board.platform]: [example-soc]
+[ro.product.cpu.abilist]: [arm64-v8a,armeabi-v7a]
+[ro.product.vendor.device]: [example]
+[ro.build.version.release_or_codename]: [16]
+[ro.build.date.utc]: [1786801073]
+[ro.vendor.build.version.security_patch]: [2025-11-05]
+[ro.boot.slot]: [b]
+[ro.boot.verifiedbootstate]: [orange]
+[gsm.version.baseband]: []
+[ro.boot.baseband]: [example-radio]
+[ro.bootloader]: [unknown]
+[ro.boot.bootloader]: [example-loader]
+==WM
+Override size: 540x1200
+Physical size: 1080x2400
+Override density: 210
+Physical density: 420
+==UPTIME
+   59.9   121.0
+==MEM
+MemTotal:  100000 kB
+Buffers:   4500 kB
+Cached:    1210 kB
+MemAvailable: 50000 kB
+==SELINUX
+Enforcing
+==DF_DATA
+Filesystem 1024-blocks Used Available Capacity Mounted on
+/dev/block/dm-54 10000 2500 7500 25% /data/user/0
+==DF_SYSTEM
+/dev/block/dm-0 1000 900 100 90% /
+""")
+    assert (dd.soc, dd.abi, dd.device, dd.android) == ("example-soc", "arm64-v8a", "example", "16")
+    assert (dd.resolution, dd.density) == ("540 × 1200（覆盖）", 210)
+    assert (dd.uptime_s, dd.mem_total, dd.mem_available, dd.selinux) == (59, 102400000, 51200000, "Enforcing")
+    assert (dd.slot, dd.verified_boot) == ("b", "orange")
+    assert dd.build_date == "2026-08-15 13:37:53+00:00" and dd.vendor_security_patch == "2025-11-05"
+    assert (dd.bootloader, dd.baseband) == ("example-loader", "example-radio")
+    assert [(row.mount, row.total, row.used) for row in dd.storage] == [
+        ("/data", 10240000, 2560000),
+        ("/system", 1024000, 921600),
+    ]
+
+
+def test_device_overview_missing_measurements_and_battery_scaling():
+    dd = P.device_detail("serial", """==PROPS
+[ro.bootloader]: [unknown]
+[ro.build.date.utc]: [999999999999]
+==MEM
+MemTotal: 2048 kB
+==UPTIME
+nan 0
+==SELINUX
+getenforce: command not found
+==BATTERY
+present: false
+level: 0
+==DF_DATA
+==DF_SYSTEM
+unavailable
+""")
+    assert dd.mem_total == 2 * 1024**2 and dd.mem_available is None
+    assert dd.uptime_s is None and dd.selinux is None and dd.battery is None and dd.storage == []
+    assert dd.bootloader is None and dd.build_date is None
+    assert P.battery("level: 125\nscale: 250").level == 50
+    assert P.battery("level: 0\nscale: 0").level is None
+
+
 def test_apex():
     modules = P.apex(fixture("apex_list.emu36"))
     assert modules and modules[0].version_code is not None

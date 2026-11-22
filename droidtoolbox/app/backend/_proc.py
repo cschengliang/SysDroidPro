@@ -31,15 +31,15 @@ class Runner:
                     if proc.poll() is not None:
                         self._processes.discard(proc)
 
-    def popen(self, args, *, env=None):
-        return self._spawn(args, stdin=subprocess.PIPE, env=env)
+    def popen(self, args, *, env=None, stdout=subprocess.PIPE, stderr=subprocess.PIPE):
+        return self._spawn(args, stdin=subprocess.PIPE, env=env, stdout=stdout, stderr=stderr)
 
-    def _spawn(self, args, *, stdin, env=None):
+    def _spawn(self, args, *, stdin, env=None, stdout=subprocess.PIPE, stderr=subprocess.PIPE):
         with self._lock:
             if self._closed:
                 raise Cancelled("已关闭")
             self._processes = {p for p in self._processes if p.poll() is None}
-            proc = subprocess.Popen(args, stdin=stdin, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+            proc = subprocess.Popen(args, stdin=stdin, stdout=stdout, stderr=stderr,
                                     env=env, creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0))
             self._processes.add(proc)
             return proc

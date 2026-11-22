@@ -1,6 +1,6 @@
 """Logcat：实时日志、文字 / 正则过滤、最低级别、dmesg、跟随、暂停、导出。
 
-同一台设备重启后重新连接时保留旧日志并插入分隔行（重启前的日志往往最有用）；切换设备时清空。
+打开页面后手动启动日志流。同一台设备重连时保留旧日志并插入分隔行，切换设备时清空。
 """
 from __future__ import annotations
 
@@ -39,7 +39,8 @@ class LogcatPage(Page):
         lay.setContentsMargins(0, 0, 0, 0)
         lay.setSpacing(0)
         tb = ui.Toolbar()
-        self.pause = tb.add(ui.icon_button("pause", "暂停显示（继续在后台接收）", checkable=True))
+        self.pause = tb.add(ui.icon_button("play", "启动实时日志", checkable=True))
+        self.pause.setChecked(True)
         clear_menu = ui.menu([("view", "清空视图", "eraser"), ("device", "清空设备日志缓冲区（logcat -c）", "trash-2", None, True)], self)
         clear_menu.triggered.connect(lambda a: self._clear(a.data()))
         clear = tb.add(ui.icon_button("eraser", "清空"))
@@ -60,6 +61,7 @@ class LogcatPage(Page):
         self.follow = tb.add(ui.icon_button("arrow-down-to-line", "跟随最新", checkable=True))
         self.buffers = tb.add(narrow_select(BUFFERS, "default", 100, "日志缓冲区"))
         self.restart_btn = tb.add(ui.icon_button("refresh-cw", "重新连接"))
+        self.restart_btn.setEnabled(False)
         export = tb.add(ui.icon_button("download", "导出日志（已应用过滤时只导出显示的行）"))
         self.follow.setChecked(True)
         lay.addWidget(tb)
@@ -91,8 +93,9 @@ class LogcatPage(Page):
         export.clicked.connect(self._export)
 
         self._stream = None
+        self._stream_callbacks = None
         self._gen = 0                         # 每次启动 / 停止 +1，丢弃旧流排队中的回调
-        self._held: list = []                 # 暂停期间收到的行
+        self._started_buffer: str | None = None
         self._last_serial: str | None = None
 
     # 生命周期 --------------------------------------------------------
@@ -102,10 +105,14 @@ class LogcatPage(Page):
         else:
             self.view.log_model.clear()
         self._last_serial = device.serial
-        self._start(tail=self.ctx.settings.get("logcat_tail"))
+        self._started_buffer = None
+        self._hide_banner()
 
     def unload(self):
-        self._stop()
+        self.pause.setChecked(True)
+
+    def hidden(self):
+        self.pause.setChecked(True)
 
     def refresh(self):
         self._restart()
@@ -118,19 +125,24 @@ class LogcatPage(Page):
         g = self._gen
         on_lines = self.ctx.on_ui(lambda ls: g == self._gen and self._lines(ls))
         on_exit = self.ctx.on_ui(lambda err: g == self._gen and self._exited(err))
+        # 进程退出后，保留信号接收对象直到主线程处理回调。
+        self._stream_callbacks = (on_lines, on_exit)
         try:
             self._stream = self.ctx.start_stream(self.ctx.backend.start_logcat, self.serial, bufs, on_lines, on_exit, tail=tail)
         except Exception as e:  # noqa: BLE001
-            self._show_banner(str(e))
+            self._exited(e)
+        else:
+            self._started_buffer = key
 
     def _stop(self):
         self._gen += 1
+        self._stream_callbacks = None
         if self._stream is not None:
             s, self._stream = self._stream, None
             s.stop()
 
     def _restart(self):
-        if self.device is None:
+        if self.pause.isChecked() or self.device is None:
             return
         self._stop()
         self._marker(f"——— {time.strftime('%H:%M:%S')} 缓冲区：{self.buffers.currentText().replace('缓冲区：', '')} ———")
@@ -139,6 +151,7 @@ class LogcatPage(Page):
 
     def _exited(self, err):
         self._stream = None
+        self.pause.setChecked(True)
         if err is not None:
             self._show_banner(str(err))
 
@@ -154,27 +167,29 @@ class LogcatPage(Page):
                     continue
                 r = ui.LogRow("", 0, 0, "V", "", line)   # 无法解析的行原样显示
             rows.append(r)
-        if self.pause.isChecked():
-            self._held.extend(rows)
-            if len(self._held) > self.view.log_model.max_rows:
-                del self._held[:len(self._held) - self.view.log_model.max_rows]
-            self.pause.setToolTip(f"继续显示（已暂存 {len(self._held):,} 行）")
-            return
         self.view.log_model.append_rows(rows)
 
     def _marker(self, text: str):
         self.view.log_model.append_rows([ui.LogRow(time.strftime("%m-%d %H:%M:%S.000"), 0, 0, "I", "toolbox", text)])
 
-    def _on_pause(self, on: bool):
-        set_icon(self.pause, "play" if on else "pause")
-        if not on:
-            self.view.log_model.append_rows(self._held)
-            self._held = []
-            self.pause.setToolTip("暂停显示（继续在后台接收）")
+    def _on_pause(self, paused: bool):
+        set_icon(self.pause, "play" if paused else "pause")
+        action = "启动实时日志" if paused else "暂停实时日志"
+        self.pause.setToolTip(action)
+        self.pause.setAccessibleName(action)
+        self.restart_btn.setEnabled(not paused)
+        if paused:
+            self._stop()
+        elif self.device is None:
+            self.pause.setChecked(True)
+        else:
+            same_buffer = self.buffers.currentData() == self._started_buffer
+            tail = 0 if same_buffer else self.ctx.settings.get("logcat_tail")
+            self._start(tail=tail)
+        self.ctx.window.update_status(self)
 
     def _clear(self, what: str):
         self.view.log_model.clear()
-        self._held = []
         if what == "device" and self.device:
             key = self.buffers.currentData()
             if key == "dmesg":
@@ -195,7 +210,8 @@ class LogcatPage(Page):
         self.ctx.window.update_status(self)
 
     def status_text(self) -> str:
-        return f"{self.view.proxy.rowCount():,} / {self.view.log_model.rowCount():,} rows"
+        prefix = "已暂停 · " if self.pause.isChecked() else ""
+        return f"{prefix}{self.view.proxy.rowCount():,} / {self.view.log_model.rowCount():,} rows"
 
     def _export(self):
         rows_all = self.view.log_model.rows
@@ -218,7 +234,7 @@ class LogcatPage(Page):
     def _show_banner(self, text: str):
         self._hide_banner()
         retry = ui.button("重新连接", size="sm", icon="refresh-cw")
-        retry.clicked.connect(self._restart)
+        retry.clicked.connect(lambda: self.pause.setChecked(False))
         self.banner_lay.addWidget(ui.Banner("danger", "日志流已中断", text, action=retry))
         self.banner_box.show()
 

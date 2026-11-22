@@ -1,6 +1,7 @@
 import subprocess
 import threading
 import time
+from types import SimpleNamespace
 
 import pytest
 
@@ -15,14 +16,68 @@ class Devices(DeviceMethods, BackendBase):
     pass
 
 
-def test_inventory_and_cache():
+def test_inventory_and_cache(monkeypatch):
+    from app.backend import _devices
+
+    offset = 0
+    monotonic = time.monotonic
+    monkeypatch.setattr(_devices, "time", SimpleNamespace(monotonic=lambda: monotonic() + offset))
     backend = fake_backend(Devices)
-    assert backend.list_devices()[0].api == 36
-    count = sum("getprop ro.product.manufacturer;" in args[-1] for args in backend._runner.calls)
-    assert backend.list_devices()[0].api == 36
-    assert sum("getprop ro.product.manufacturer;" in args[-1] for args in backend._runner.calls) == count
-    backend._runner.add(("devices", "-l"), (0, "emulator-5554 offline\n", ""))
-    assert backend.list_devices()[0].api is None
+    runner = backend._runner
+    metadata_probe = "getprop ro.product.manufacturer;"
+    try:
+        original = backend.list_devices()[0]
+        assert original.api == 36
+        assert original.battery == 100
+
+        offset = 60
+        runner.add(lambda args: metadata_probe in args[-1], (0, "Google\n16\n36\n==BATTERY\nlevel: 42\n", ""))
+        assert backend.list_devices()[0] == original
+        assert sum(metadata_probe in args[-1] for args in runner.calls) == 1
+
+        runner.add(("devices", "-l"), (0, "emulator-5554 offline\n", ""))
+        assert backend.list_devices()[0].api is None
+        runner.add(("devices", "-l"), (0, "emulator-5554 device transport_id:2\n", ""))
+        assert backend.list_devices()[0].battery == 42
+        assert sum(metadata_probe in args[-1] for args in runner.calls) == 2
+    finally:
+        backend.close()
+
+
+def test_manual_scan_retries_failed_metadata_on_same_connection():
+    runner = FakeRunner.from_fixtures()
+    probe = lambda args: "getprop ro.product.manufacturer;" in args[-1]
+    runner.add(probe, subprocess.TimeoutExpired("adb", 2))
+    backend = fake_backend(Devices, runner)
+    try:
+        first = backend.scan_inventory().devices[0]
+        assert first.api is None
+        runner.add(probe, (0, "Google\n16\n36\n==BATTERY\nlevel: 42\n", ""))
+        second = backend.scan_inventory().devices[0]
+        assert second.connection_id == first.connection_id
+        assert (second.android, second.api, second.battery) == ("16", 36, 42)
+        assert backend.scan_inventory().devices[0] == second
+        assert sum(probe(args) for args in runner.calls) == 2
+    finally:
+        backend.close()
+
+
+def test_one_shot_scan_collects_slow_fastboot_result():
+    runner = FakeRunner.from_fixtures()
+
+    def slow_fastboot(_):
+        time.sleep(0.65)
+        return 0, "s fastboot\n", ""
+
+    runner.add(("devices",), slow_fastboot)
+    backend = fake_backend(Devices, runner)
+    try:
+        inventory = backend.scan_inventory()
+        assert all(source.status == "ready" for source in inventory.sources)
+        assert any(device.serial == "s" and device.is_fastboot for device in inventory.devices)
+        assert runner.calls.count(["fastboot", "devices"]) == 1
+    finally:
+        backend.close()
 
 
 def test_pending_enum_is_retained_and_consumed_next_poll():
@@ -150,7 +205,7 @@ def test_reboot_modes_only_with_fake_runner():
                 with pytest.raises(api.CommandFailed):
                     backend.reboot("s", mode)
                 continue
-            backend.reboot("s", mode)
+            assert backend.reboot("s", mode) == Device("s", state, "usb")
             assert runner.calls[-1][:3] == ["fastboot" if state == "fastboot" else "adb", "-s", "s"]
             assert "wait-for-device" not in runner.calls[-1]
 

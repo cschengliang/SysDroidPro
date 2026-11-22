@@ -2,6 +2,7 @@
 from .api import Backend
 from ._apps import AppMethods
 from ._base import BackendBase
+from ._capture import CaptureMethods
 from ._crashes import CrashMethods
 from ._devices import DeviceMethods
 from ._files import FileMethods
@@ -11,7 +12,7 @@ from ._streams import StreamMethods
 from ._system import SystemMethods
 
 
-class AdbBackend(DeviceMethods, StreamMethods, SystemMethods, AppMethods, FileMethods,
+class AdbBackend(DeviceMethods, StreamMethods, CaptureMethods, SystemMethods, AppMethods, FileMethods,
                  CrashMethods, MirrorMethods, JobMethods, BackendBase, Backend):
     name = "adb"
 

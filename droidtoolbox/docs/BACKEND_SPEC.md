@@ -147,7 +147,9 @@ scrcpy 3.3.3 <https://github.com/Genymobile/scrcpy>
 
 ### 2.1 设备
 
-#### `list_devices()` —— 每 2 秒轮询，必须 < 1 秒
+#### `list_devices()` —— 快速查询，必须 < 1 秒
+
+启动和手动刷新通过 `scan_inventory()` 完成本次扫描。
 
 ```
 $ adb devices -l
@@ -249,7 +251,7 @@ Current Battery Service state:
 | sideload | `adb reboot sideload` | 不支持 → `CommandFailed` |
 | poweroff | `adb shell reboot -p` | 不支持 → `CommandFailed` |
 
-重启后设备会短暂消失 / 变成 offline，这是正常的，界面靠轮询感知。不要在 `reboot` 里等待设备回来。
+重启后设备会短暂消失或变成 offline。手动刷新设备列表即可更新状态。`reboot` 在发出重启命令后返回。
 
 #### `root(serial, enable)` / `remount(serial)`
 

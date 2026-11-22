@@ -87,7 +87,7 @@ class BatteryInfo:
 
 @dataclass(frozen=True)
 class StorageInfo:
-    mount: str                        # "/data"
+    mount: str                        # 查询路径，例如 "/data"
     total: int                        # 字节
     used: int
 
@@ -105,7 +105,7 @@ class DeviceDetail:
     build_id: str | None              # ro.build.id
     fingerprint: str | None           # ro.build.fingerprint
     build_type: str | None            # user / userdebug / eng
-    build_date: str | None            # ro.build.date 原样
+    build_date: str | None            # ro.build.date，或由 ro.build.date.utc 转换
     security_patch: str | None        # ro.build.version.security_patch
     vendor_security_patch: str | None  # ro.vendor.build.security_patch
     baseband: str | None              # gsm.version.baseband
@@ -116,7 +116,7 @@ class DeviceDetail:
     soc: str | None                   # ro.soc.model 或 ro.board.platform
     resolution: str | None            # "1344 × 2992"
     density: int | None               # 489
-    slot: str | None                  # "_a" / "_b" / None（非 A/B）
+    slot: str | None                  # ro.boot.slot_suffix 或 ro.boot.slot
     verified_boot: str | None         # ro.boot.verifiedbootstate：green / yellow / orange / red
     selinux: str | None               # "Enforcing" / "Permissive"
     uptime_s: int | None
@@ -310,3 +310,45 @@ class Progress:
     """长任务进度。percent 为 None 时界面显示不确定进度条。"""
     percent: int | None
     message: str = ""
+
+
+# ── 日志抓取与录屏 ──────────────────────────────────────
+
+@dataclass(frozen=True)
+class LogcatBufferInfo:
+    """logcat -g 查询到的单个缓冲区容量与已用字节数。"""
+    name: str
+    size_bytes: int | None
+    consumed_bytes: int | None = None
+
+
+@dataclass(frozen=True)
+class LogcatCaptureResult:
+    """logcat 抓取 / dump 完成结果。"""
+    path: str
+    buffers: tuple[str, ...]
+    size_bytes: int
+    interrupted: bool = False
+
+
+@dataclass(frozen=True)
+class DisplayInfo:
+    """设备上可录制的显示屏幕信息。"""
+    id: str
+    name: str = ""
+
+
+@dataclass(frozen=True)
+class ScreenrecordOptions:
+    """adb shell screenrecord 录制参数。"""
+    bugreport: bool = True
+    bit_rate: int = 8_000_000
+    display_id: str | None = None
+
+
+@dataclass(frozen=True)
+class ScreenrecordResult:
+    """screenrecord 录制并拉取到本地的完成结果。"""
+    path: str
+    size_bytes: int
+    display_id: str | None = None

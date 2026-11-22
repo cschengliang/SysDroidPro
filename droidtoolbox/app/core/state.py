@@ -1,4 +1,4 @@
-"""全局状态：设备列表轮询、当前设备、提示消息。页面通过 Context 访问后端与状态。"""
+"""全局状态：设备列表扫描、当前设备、提示消息。页面通过 Context 访问后端与状态。"""
 from __future__ import annotations
 
 from tbui._qt import QtCore, Signal
@@ -12,6 +12,7 @@ from .settings import Settings
 
 class AppState(QtCore.QObject):
     devicesChanged = Signal(list)          # list[Device]，任何字段变化都会发出
+    devicesScanned = Signal(list)          # 每次扫描返回结果后发出，包括设备列表未变的情况
     currentChanged = Signal(object)        # Device | None：选择或连接代次变化
     inventoryChanged = Signal(object)      # tuple[InventorySource, ...]
     notified = Signal(str, str, str)       # tone, title, body
@@ -26,6 +27,7 @@ class AppState(QtCore.QObject):
         self.settings = settings
         self.commands = commands or CommandStore()
         self._auto_root_seen = set()    # 每个在线 transport 至多尝试一次
+        self._auto_root_pending: set[str] = set()
         self.devices: list[Device] = []
         self.current: Device | None = None
         self.generation = 0
@@ -34,20 +36,18 @@ class AppState(QtCore.QObject):
         self._polling = False
         self._poll_again = False
         self._poll_epoch = 0
-        self._poll_error_shown = False   # 同一个轮询错误只提示一次
-        self._timer = QtCore.QTimer(self)
-        self._timer.timeout.connect(self.refresh_devices)
+        self._poll_error_shown = False   # 同一个扫描错误只提示一次
         settings.changed.connect(self._on_setting)
+        from .log_capture import LogCaptureController
+        self.log_capture = LogCaptureController(self)
 
     def start(self):
         if self.jobs.closed:
             return
         self.apply_tool_paths()
         self.refresh_devices()
-        self._timer.start(self.settings.get("poll_interval_ms"))
 
     def shutdown(self):
-        self._timer.stop()
         self.jobs.close()
 
     def apply_tool_paths(self):
@@ -57,25 +57,22 @@ class AppState(QtCore.QObject):
     def _on_setting(self, key):
         if self.jobs.closed:
             return
-        if key == "poll_interval_ms":
-            self._timer.setInterval(self.settings.get(key))
-        elif key in ("adb_path", "fastboot_path", "scrcpy_path"):
+        if key in ("adb_path", "fastboot_path", "scrcpy_path"):
             self.apply_tool_paths()
             if key != "scrcpy_path":
                 self._poll_epoch += 1
-                if self._polling:
-                    self._poll_again = True
-                elif self._timer.isActive():
-                    self.refresh_devices()
 
     # 设备 ----------------------------------------------------------
     def refresh_devices(self):
-        if self._polling or self.jobs.closed:
+        if self.jobs.closed:
+            return
+        if self._polling:
+            self._poll_again = True
             return
         self._polling = True
         epoch = self._poll_epoch
         self.busyChanged.emit(True)
-        self.jobs.run(self.backend.poll_inventory,
+        self.jobs.run(self.backend.scan_inventory,
                       done=lambda result: self._poll_finished(epoch, result=result),
                       error=lambda e: self._poll_finished(epoch, error=e))
 
@@ -88,7 +85,9 @@ class AppState(QtCore.QObject):
                 if result.sources != self.inventory_sources:
                     self.inventory_sources = result.sources
                     self.inventoryChanged.emit(result.sources)
-                self._set_devices(list(result.devices))
+                devices = list(result.devices)
+                self._set_devices(devices)
+                self.devicesScanned.emit(devices)
             elif not isinstance(error, Cancelled) and not self._poll_error_shown:
                 self._poll_error_shown = True
                 self.notify("danger", "无法获取设备列表", str(error))
@@ -109,11 +108,12 @@ class AppState(QtCore.QObject):
                 cur = next((d for d in pool if d.is_adb), pool[0])
                 self._serial = cur.serial
         current_changed = self._update_current(cur)
+        to_root = self._plan_auto_root(devices)
         if changed:
             self.devicesChanged.emit(devices)
         if current_changed:
             self.currentChanged.emit(self.current)
-        self._auto_root(devices)
+        self._start_auto_root(to_root)
 
     def select(self, serial: str | None):
         if serial == self._serial:
@@ -137,16 +137,24 @@ class AppState(QtCore.QObject):
         return self.current.serial if self.current else None
 
     # 自动 root ------------------------------------------------------
-    def _auto_root(self, devices: list[Device]):
+    def _plan_auto_root(self, devices: list[Device]) -> list[str]:
         stale = {s.name for s in self.inventory_sources if s.status in ("pending", "error")}
         online = {(d.serial, d.connection_id) for d in devices if d.state == "device"}
         self._auto_root_seen &= online
+        self._auto_root_pending &= {s for s, _ in online}
         if "adb" in stale or not self.settings.get("auto_root"):
-            return
+            return []
+        planned: list[str] = []
         for serial, connection in sorted(online - self._auto_root_seen):
             self._auto_root_seen.add((serial, connection))
+            self._auto_root_pending.add(serial)
+            planned.append(serial)
+        return planned
+
+    def _start_auto_root(self, serials: list[str]):
+        for serial in serials:
             self.jobs.run(self._try_root, serial, done=lambda r, s=serial: self._auto_rooted(s, r),
-                          error=lambda e, s=serial: self.notify("warn", "自动 root 失败", f"{s}：{e}"))
+                          error=lambda e, s=serial: self._auto_root_failed(s, e))
 
     def _try_root(self, serial: str) -> str:
         """在工作线程执行：user 固件跳过，已 root 不动。"""
@@ -159,10 +167,16 @@ class AppState(QtCore.QObject):
         return "rooted"
 
     def _auto_rooted(self, serial: str, result: str):
+        self._auto_root_pending.discard(serial)
         if result == "rooted":
             name = next((d.display_name for d in self.devices if d.serial == serial), serial)
             self.notify("ok", "已自动 adb root", f"{name}（可在偏好设置中关闭）")
         self.rootChanged.emit(serial)
+
+    def _auto_root_failed(self, serial: str, err: BaseException):
+        self._auto_root_pending.discard(serial)
+        self.notify("warn", "自动 root 失败", f"{serial}：{err}")
+        self.log_capture.check_auto_capture()
 
     # 提示 ----------------------------------------------------------
     def notify(self, tone: str, title: str, body: str = ""):
@@ -188,6 +202,7 @@ class Context:
         self.backend = state.backend
         self.settings = state.settings
         self.commands = state.commands
+        self.log_capture = state.log_capture
         self.window = window
 
     def run(self, fn, *args, **kw) -> jobs.Job:

@@ -80,10 +80,10 @@ class PrefsPage(Page):
         glass = ui.Switch("On", s.get("glass_backdrop"))
         glass.toggled.connect(lambda on: s.set("glass_backdrop", on))
         self._row(form, "毛玻璃窗口", glass, "Win11 原生 Acrylic 透底与深色标题栏，实时生效")
-        auto_root = ui.Switch("On", s.get("auto_root"))
+        auto_root = ui.Switch("", s.get("auto_root"))
+        auto_root.setAccessibleName("连接后自动 adb root")
         auto_root.toggled.connect(lambda on: s.set("auto_root", on))
-        self._row(form, "连接后自动 adb root", auto_root, "userdebug / eng 固件有效，user 固件自动跳过")
-        self._row(form, "设备轮询间隔", self._select("poll_interval_ms", [(1000, "1s"), (2000, "2s"), (5000, "5s")]))
+        self._row(form, "连接后自动 adb root", auto_root, "默认关闭。开启后，对支持的调试固件生效")
         self._row(form, "Logcat 行数上限", self._select("logcat_max_rows", [(50_000, "50k"), (200_000, "200k"), (500_000, "500k")]),
                   "超过上限丢弃最早的行；重新打开 Logcat 生效")
         self._row(form, "Logcat 启动时回溯", self._select("logcat_tail", [(0, "0"), (500, "500"), (2000, "2000"),

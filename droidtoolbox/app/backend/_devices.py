@@ -11,11 +11,17 @@ from .models import DeviceInventory, InventorySource, RemountResult
 
 DETAIL_SCRIPT = "\n".join(f"echo =={key}; {cmd}" for key, cmd in [
     ("PROPS", "getprop"), ("UNAME", "uname -r"), ("KERNEL", "cat /proc/version"),
-    ("SELINUX", "getenforce"), ("MEM", "head -n 3 /proc/meminfo"), ("WM", "wm size; wm density"),
+    ("SELINUX", "getenforce"), ("MEM", "cat /proc/meminfo"), ("WM", "wm size; wm density"),
     ("UPTIME", "cat /proc/uptime"), ("BATTERY", "dumpsys battery"),
     ("CURRENT", "cat /sys/class/power_supply/battery/current_now 2>/dev/null || true"),
-    ("DF", "df -k /data /system 2>/dev/null || true")])
-ROOT_SCRIPT = "id -u; getprop ro.build.type; getprop ro.boot.veritymode; getprop partition.system.verified; mount | grep -E ' / | /system '"
+    # Query the paths separately. df may resolve /data to a user mount, or /system to /.
+    ("DF_DATA", "df -kP /data 2>/dev/null || df -k /data 2>/dev/null || true"),
+    ("DF_SYSTEM", "df -kP /system 2>/dev/null || df -k /system 2>/dev/null || true"),
+])
+ROOT_SCRIPT = (
+    "id -u || exit $?; getprop ro.build.type; getprop ro.boot.veritymode; "
+    "getprop partition.system.verified; mount | grep -E ' on /system | on / ' || true"
+)
 
 
 class DeviceMethods:
@@ -67,7 +73,9 @@ class DeviceMethods:
         if device.is_fastboot:
             code, out, err = self._run([self._tool("fastboot"), "-s", device.serial, "getvar", "product"], 2)
             match = re.search(r"product:\s*(\S+)", text(out) + text(err))
-            return replace(device, product=match[1] if code == 0 and match else None)
+            if code or match is None:
+                raise api.CommandFailed("无法读取 Fastboot 产品名称", detail(text(out) + text(err)), code)
+            return replace(device, product=match[1])
         result = self._shell(device.serial, "getprop ro.product.manufacturer; getprop ro.build.version.release; getprop ro.build.version.sdk; echo ==BATTERY; dumpsys battery", timeout=2)
         metadata, _, bat = result.partition("==BATTERY")
         fields = metadata.splitlines() + ["", "", ""]
@@ -79,8 +87,15 @@ class DeviceMethods:
         return list(self.poll_inventory().devices)
 
     def poll_inventory(self):
+        return self._scan_inventory(enumeration_timeout=0.55, total_timeout=0.85)
+
+    def scan_inventory(self):
+        # The UI should collect results from this scan without relying on another refresh.
+        return self._scan_inventory(enumeration_timeout=3.5, total_timeout=6)
+
+    def _scan_inventory(self, *, enumeration_timeout, total_timeout):
         names = ("adb", "fastboot")
-        deadline = time.monotonic() + 0.85
+        deadline = time.monotonic() + total_timeout
         with self._inventory_lock:
             if self._closed:
                 raise api.Cancelled("已关闭")
@@ -89,7 +104,7 @@ class DeviceMethods:
                 if self._paths[name] and name not in self._enumerations:
                     self._enumerations[name] = self._pool.submit(self._enumerate, name, self._paths[name], epoch)
             futures = dict(self._enumerations)
-        wait(futures.values(), timeout=0.55)
+        wait(futures.values(), timeout=enumeration_timeout)
         with self._inventory_lock:
             if epoch != self._inventory_epoch:
                 raise api.Cancelled("设备列表配置已变更")
@@ -123,14 +138,12 @@ class DeviceMethods:
                     if old is not None:
                         old.cancel()
             self._device_sessions = sessions
-            now = time.monotonic()
             for serial, dev in merged.items():
                 if not (dev.is_adb or dev.is_fastboot):
                     continue
-                cached = self._device_cache.get(serial)
-                if not cached or now - cached[0] >= 30:
-                    if serial not in self._pending:
-                        self._pending[serial] = self._pool.submit(self._enrich, dev)
+                # Cache successful metadata reads for this connection.
+                if serial not in self._device_cache and serial not in self._pending:
+                    self._pending[serial] = self._pool.submit(self._enrich, dev)
             pending = {s: f for s, f in self._pending.items() if s in merged}
         if pending:
             wait(pending.values(), timeout=max(0, deadline - time.monotonic()))
@@ -140,16 +153,17 @@ class DeviceMethods:
             for serial, future in pending.items():
                 if future.done() and self._pending.get(serial) is future:
                     self._pending.pop(serial)
-                    try:
-                        enriched = future.result()
-                        if self._device_sessions.get(serial) == (enriched.state, enriched.connection_id):
-                            self._device_cache[serial] = (time.monotonic(), enriched)
-                    except api.BackendError:
-                        pass
+                    device = merged[serial]
+                    if self._device_sessions.get(serial) == (device.state, device.connection_id):
+                        try:
+                            self._device_cache[serial] = future.result()
+                        except api.BackendError:
+                            # Return enumeration fields and retry on the next scan.
+                            pass
             devices = []
             for serial, dev in merged.items():
                 if serial in self._device_cache:
-                    cached = self._device_cache[serial][1]
+                    cached = self._device_cache[serial]
                     dev = replace(dev, manufacturer=cached.manufacturer, android=cached.android, api=cached.api,
                                   battery=cached.battery, product=dev.product if dev.product is not None else cached.product)
                 devices.append(dev)
@@ -227,6 +241,7 @@ class DeviceMethods:
             self._shell(serial, "reboot -p")
         else:
             self._adb(serial, "reboot", *([] if mode == "system" else [mode]))
+        return device
 
     def send_key(self, serial, keycode):
         self._shell(serial, quote_args("input", "keyevent", keycode))

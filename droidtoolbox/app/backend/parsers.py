@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import re
+from math import isfinite
 from datetime import datetime, timedelta, timezone
 import posixpath
 
@@ -68,50 +69,106 @@ def battery(output, current=""):
         if ":" in line:
             key, value = line.strip().split(":", 1)
             values[key] = value.strip()
+    if values.get("present") == "false":
+        return None
     level = integer(values.get("level"))
+    scale = integer(values.get("scale", "100"))
+    level_pct = round(100 * level / scale) if level is not None and scale and 0 <= level <= scale else None
     status = integer(values.get("status"))
     temp, voltage, amps = number(values.get("temperature")), number(values.get("voltage")), integer(current.strip())
     if not any(key in values for key in ("level", "status", "temperature", "voltage")):
         return None
     if amps is not None:
         amps = int(abs(amps) / 1000) * (1 if status == 2 else -1 if status == 3 else (1 if amps >= 0 else -1))
-    return M.BatteryInfo(level if level is not None and 0 <= level <= 100 else None,
+    return M.BatteryInfo(level_pct,
         {1: "未知", 2: "充电中", 3: "放电中", 4: "未充电", 5: "已充满"}.get(status),
         next((label for key, label in (("AC powered", "AC"), ("USB powered", "USB"), ("Wireless powered", "无线")) if values.get(key) == "true"), None),
         temp / 10 if temp is not None else None, voltage / 1000 if voltage is not None else None, amps,
         {2: "良好", 3: "过热", 4: "损坏", 5: "过压", 7: "过冷"}.get(integer(values.get("health"))))
 
 
+def _storage_rows(output):
+    # Both toybox and older toolbox use a filesystem name, 1 KiB counts, a percent and the mount.
+    for line in output.splitlines():
+        columns = line.split(maxsplit=5)
+        if len(columns) != 6:
+            continue
+        total, used = integer(columns[1]), integer(columns[2])
+        if total is not None and used is not None and total > 0 and 0 <= used <= total and columns[4].endswith("%"):
+            yield M.StorageInfo(columns[5], total * 1024, used * 1024)
+
+
 def device_detail(serial, output):
     data = sections(output)
-    p = props(data.get("PROPS", ""))
-    get = lambda key: p.get(key) or None
+    properties = props(data.get("PROPS", ""))
+
+    def get(*keys):
+        for key in keys:
+            value = properties.get(key, "").strip()
+            if value and value.lower() != "unknown":
+                return value
+        return None
+
     wm = data.get("WM", "")
-    sizes = re.findall(r"(Physical|Override) size: (\d+)x(\d+)", wm)
+    sizes = {kind: (width, height) for kind, width, height in
+             re.findall(r"(?m)^\s*(Physical|Override) size:\s*(\d+)x(\d+)[ \t]*$", wm)}
+    densities = dict(re.findall(r"(?m)^\s*(Physical|Override) density:\s*(\d+)[ \t]*$", wm))
     resolution = None
-    if sizes:
-        _, width, height = sizes[-1]
-        resolution = f"{width} × {height}" + ("（覆盖）" if sizes[-1][0] == "Override" else "")
-    densities = re.findall(r"(?:Physical|Override) density: (\d+)", wm)
-    memory = dict(re.findall(r"(MemTotal|MemAvailable):\s+(\d+)", data.get("MEM", "")))
-    uptime = number(data.get("UPTIME", "").split(" ")[0])
+    size = sizes.get("Override") or sizes.get("Physical")
+    if size:
+        resolution = f"{size[0]} × {size[1]}"
+        if "Override" in sizes:
+            resolution += "（覆盖）"
+
+    memory = dict(re.findall(r"(?m)^(MemTotal|MemAvailable):[ \t]+(\d+)[ \t]+kB\b", data.get("MEM", "")))
+    mem_total = int(memory.get("MemTotal", "0")) * 1024 or None
+    mem_available = integer(memory.get("MemAvailable"))
+    if mem_available is not None:
+        mem_available *= 1024
+        if mem_total is not None:
+            mem_available = min(mem_available, mem_total)
+
+    uptime_fields = data.get("UPTIME", "").split()
+    uptime = number(uptime_fields[0]) if uptime_fields else None
     storage = []
-    for line in data.get("DF", "").splitlines():
-        cells = line.split()
-        if len(cells) >= 6 and cells[1].isdigit() and cells[2].isdigit():
-            storage.append(M.StorageInfo(cells[-1], int(cells[1]) * 1024, int(cells[2]) * 1024))
+    if "DF_DATA" in data or "DF_SYSTEM" in data:
+        for key, target in (("DF_DATA", "/data"), ("DF_SYSTEM", "/system")):
+            row = next(_storage_rows(data.get(key, "")), None)
+            if row:
+                storage.append(M.StorageInfo(target, row.total, row.used))
+    else:
+        storage = list(_storage_rows(data.get("DF", "")))
+
+    build_date = get("ro.build.date")
+    if build_date is None:
+        epoch = integer(get("ro.build.date.utc"))
+        if epoch is not None and 0 < epoch <= 253402300799:
+            build_date = (datetime(1970, 1, 1, tzinfo=timezone.utc) + timedelta(seconds=epoch)).isoformat(sep=" ")
+
+    abi = get("ro.product.cpu.abi")
+    if abi is None:
+        abi_list = get("ro.product.cpu.abilist")
+        if abi_list:
+            abi = abi_list.split(",", 1)[0].strip() or None
+    selinux = data.get("SELINUX", "").strip().lower()
+
     return M.DeviceDetail(serial=serial, model=get("ro.product.model"), manufacturer=get("ro.product.manufacturer"),
-        brand=get("ro.product.brand"), device=get("ro.product.device"), android=get("ro.build.version.release"),
+        brand=get("ro.product.brand"), device=get("ro.product.device", "ro.product.vendor.device"),
+        android=get("ro.build.version.release", "ro.build.version.release_or_codename"),
         api=integer(get("ro.build.version.sdk")), build_id=get("ro.build.id"), fingerprint=get("ro.build.fingerprint"),
-        build_type=get("ro.build.type"), build_date=get("ro.build.date"), security_patch=get("ro.build.version.security_patch"),
-        vendor_security_patch=get("ro.vendor.build.security_patch"), baseband=get("gsm.version.baseband"), bootloader=get("ro.bootloader"),
-        kernel=data.get("UNAME") or None, kernel_full=data.get("KERNEL") or None, abi=get("ro.product.cpu.abi"),
-        soc=get("ro.soc.model") or get("ro.board.platform"), resolution=resolution, density=integer(densities[-1]) if densities else None,
-        slot=get("ro.boot.slot_suffix"), verified_boot=get("ro.boot.verifiedbootstate"), selinux=data.get("SELINUX") or None,
-        uptime_s=int(uptime) if uptime is not None else None, mem_total=int(memory["MemTotal"]) * 1024 if "MemTotal" in memory else None,
-        mem_available=int(memory["MemAvailable"]) * 1024 if "MemAvailable" in memory else None,
+        build_type=get("ro.build.type"), build_date=build_date, security_patch=get("ro.build.version.security_patch"),
+        vendor_security_patch=get("ro.vendor.build.security_patch", "ro.vendor.build.version.security_patch"),
+        baseband=get("gsm.version.baseband", "ro.boot.baseband"), bootloader=get("ro.bootloader", "ro.boot.bootloader"),
+        kernel=data.get("UNAME", "").strip() or None, kernel_full=data.get("KERNEL", "").strip() or None,
+        abi=abi, soc=get("ro.soc.model", "ro.board.platform"), resolution=resolution,
+        density=integer(densities.get("Override") or densities.get("Physical")),
+        slot=get("ro.boot.slot_suffix", "ro.boot.slot"), verified_boot=get("ro.boot.verifiedbootstate"),
+        selinux={"enforcing": "Enforcing", "permissive": "Permissive", "disabled": "Disabled"}.get(selinux),
+        uptime_s=int(uptime) if uptime is not None and isfinite(uptime) and uptime >= 0 else None,
+        mem_total=mem_total, mem_available=mem_available,
         battery=battery(data.get("BATTERY", ""), data.get("CURRENT", "")), storage=storage,
-        partition_fingerprints={part: p[f"ro.{part}.build.fingerprint"] for part in ("system", "system_ext", "product", "vendor", "odm") if p.get(f"ro.{part}.build.fingerprint")})
+        partition_fingerprints={part: p for part in ("system", "system_ext", "product", "vendor", "odm")
+                                if (p := get(f"ro.{part}.build.fingerprint"))})
 
 
 def root_state(output):
@@ -507,3 +564,40 @@ def dropbox_content(output, tag, millis, offset, index_output=""):
     if len(candidates) == 1:
         return candidates[0]["body"].split("\nUsage: dumpsys dropbox")[0].strip().rstrip("=").strip()
     return None
+
+
+_LOG_SIZE = r"(\d+(?:\.\d+)?)\s*([KMGT](?:i?B)?|B)"
+_LOG_BUFFER = re.compile(
+    r"^\s*(\w+):\s+ring buffer is\s+" + _LOG_SIZE + r"\b", re.IGNORECASE,
+)
+_LOG_CONSUMED = re.compile(_LOG_SIZE + r"\s+consumed\b", re.IGNORECASE)
+
+
+def _log_bytes(value, unit):
+    # logd uses powers of 1024, including the older KB and Kb spellings.
+    exponent = {"B": 0, "K": 1, "M": 2, "G": 3, "T": 4}[unit[0].upper()]
+    whole, _, fraction = value.partition(".")
+    return int(whole + fraction) * 1024**exponent // 10**len(fraction)
+
+
+def logcat_buffer_sizes(output):
+    result = {}
+    for line in output.splitlines():
+        match = _LOG_BUFFER.match(line)
+        if match:
+            name = match[1].lower()
+            consumed = _LOG_CONSUMED.search(line, match.end())
+            result[name] = M.LogcatBufferInfo(name, _log_bytes(match[2], match[3]),
+                                               _log_bytes(*consumed.groups()) if consumed else None)
+    return list(result.values())
+
+
+def physical_displays(output):
+    result = {}
+    for line in output.splitlines():
+        match = re.match(r"^\s*Display\s+([0-9]{1,20})\b(?:\s+\(([^)]*)\))?\s*:", line)
+        if not match or int(match[1]) >= 2**64:
+            continue
+        name = re.search(r'\bdisplayName="([^"]*)"', line)
+        result.setdefault(match[1], M.DisplayInfo(match[1], (name[1] if name else "") or match[2] or ""))
+    return list(result.values())

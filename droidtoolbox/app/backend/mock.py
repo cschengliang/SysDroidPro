@@ -10,15 +10,19 @@ from __future__ import annotations
 import random
 import threading
 import time
+from pathlib import Path
 
 from . import api
 from . import mock_data as D
 from .api import Backend, BackendError, Cancelled, CommandFailed, DeviceNotFound, PermissionDenied, StreamHandle
 from .models import (AndroidUser, ApexModule, BatteryInfo, BinderService, Component, Device, DeviceDetail,
-                     FileEntry, HalInfo, InitService, PackageDetail, PackageInfo, Permission, ProcessDetail,
-                     ProcessInfo, Progress, RemountResult, RootState, ShellResult, StorageInfo, ToolInfo)
+                     DisplayInfo, FileEntry, HalInfo, InitService, LogcatBufferInfo, LogcatCaptureResult,
+                     PackageDetail, PackageInfo, Permission, ProcessDetail, ProcessInfo, Progress,
+                     RemountResult, RootState, ScreenrecordResult, ShellResult,
+                     StorageInfo, ToolInfo)
 
 GB, MB = D.GB, D.MB
+_LOGCAT_BUFFERS = ("main", "system", "crash", "events", "radio", "kernel")
 
 
 def _sleep(a=0.08, b=0.25):
@@ -131,6 +135,8 @@ class MockBackend(Backend):
         self._settings = {(ns, u): dict(v) for ns, v in D.SETTINGS.items() for u in ((None,) if ns == "global" else (0, 10, 999))}
         self._comp_off: set[tuple[int, str]] = set()
         self._state: dict[str, dict] = {}
+        self._log_sizes: dict[str, dict[str, int]] = {}
+        self._log_consumed: dict[str, dict[str, int]] = {}
         self._scrcpy: str | None = None
         self._lock = threading.Lock()
 
@@ -258,6 +264,7 @@ class MockBackend(Backend):
         new_state = {"system": "device", "recovery": "recovery", "bootloader": "fastboot", "fastboot": "fastboot",
                      "sideload": "sideload"}.get(mode)
         self._bounce(serial, new_state, 3.0)
+        return d
 
     def root_state(self, serial):
         self._need(serial)
@@ -487,6 +494,139 @@ class MockBackend(Backend):
     def clear_logcat(self, serial, buffers):
         self._need(serial)
         _sleep()
+        with self._lock:
+            consumed = self._log_consumed.setdefault(serial, self._default_consumed())
+            targets = _LOGCAT_BUFFERS if "all" in buffers else buffers
+            for b in targets:
+                if b in consumed:
+                    consumed[b] = 0
+
+    @staticmethod
+    def _default_consumed() -> dict[str, int]:
+        return {
+            "main": int(2.4 * MB),
+            "system": int(1.8 * MB),
+            "crash": 64 * 1024,
+            "events": 900 * 1024,
+            "radio": 750 * 1024,
+            "kernel": int(1.2 * MB),
+        }
+
+    def _buffer_maps(self, serial: str) -> tuple[dict[str, int], dict[str, int]]:
+        sizes = self._log_sizes.setdefault(serial, {b: 16 * MB for b in _LOGCAT_BUFFERS})
+        consumed = self._log_consumed.setdefault(serial, self._default_consumed())
+        return sizes, consumed
+
+    def get_logcat_buffer_sizes(self, serial, buffers=None):
+        self._need(serial)
+        _sleep(0.03, 0.08)
+        targets = [b for b in (buffers or _LOGCAT_BUFFERS) if b in _LOGCAT_BUFFERS]
+        with self._lock:
+            sizes, consumed = self._buffer_maps(serial)
+            return [LogcatBufferInfo(b, sizes[b], min(sizes[b], consumed[b])) for b in targets]
+
+    def set_logcat_buffer_size(self, serial, size_mb, buffers=None):
+        self._need(serial)
+        if not isinstance(size_mb, int) or size_mb <= 0:
+            raise CommandFailed("缓冲区大小必须是正整数")
+        _sleep(0.05, 0.12)
+        targets = [b for b in (buffers or _LOGCAT_BUFFERS) if b in _LOGCAT_BUFFERS]
+        if not targets:
+            raise CommandFailed("请至少选择一个日志缓冲区")
+        with self._lock:
+            sizes, consumed = self._buffer_maps(serial)
+            for b in targets:
+                effective_mb = min(size_mb, 64) if b == "kernel" and size_mb > 64 else size_mb
+                sizes[b] = effective_mb * MB
+                consumed[b] = min(consumed[b], sizes[b])
+            return [LogcatBufferInfo(b, sizes[b], consumed[b]) for b in targets]
+
+    def dump_logcat(self, serial, buffers, dest_path):
+        self._need(serial)
+        if not buffers:
+            raise CommandFailed("请至少选择一个日志缓冲区")
+        _sleep(0.08, 0.2)
+        path = Path(dest_path)
+        path.parent.mkdir(parents=True, exist_ok=True)
+        now = time.time()
+        lines = [f"--------- beginning of {b}" for b in buffers]
+        lines.extend(self._log_line(now - (59 - i) * 0.05) for i in range(60))
+        data = ("\n".join(lines) + "\n").encode("utf-8")
+        path.write_bytes(data)
+        return LogcatCaptureResult(str(path), tuple(buffers), len(data))
+
+    def start_logcat_capture(self, serial, buffers, dest_path, on_progress, on_exit, *, clear_first=False):
+        self._need(serial)
+        if not buffers:
+            raise CommandFailed("请至少选择一个日志缓冲区")
+        if clear_first:
+            with self._lock:
+                _, consumed = self._buffer_maps(serial)
+                for b in buffers:
+                    if b in consumed:
+                        consumed[b] = 0
+        path = Path(dest_path)
+        path.parent.mkdir(parents=True, exist_ok=True)
+
+        def run(h: _Thread):
+            result: LogcatCaptureResult | None = None
+            err: BackendError | None = None
+            written = 0
+            try:
+                with path.open("wb") as f:
+                    header = [f"--------- beginning of {b}" for b in buffers]
+                    initial = ("\n".join(header + [self._log_line(time.time()) for _ in range(12)]) + "\n").encode("utf-8")
+                    f.write(initial)
+                    f.flush()
+                    written += len(initial)
+                    h.emit(on_progress, written)
+                    while not h.wait(0.12):
+                        chunk = ("\n".join(self._log_line(time.time()) for _ in range(random.randint(3, 7))) + "\n").encode("utf-8")
+                        f.write(chunk)
+                        f.flush()
+                        written += len(chunk)
+                        h.emit(on_progress, written)
+                result = LogcatCaptureResult(str(path), tuple(buffers), written)
+            except BackendError as e:
+                err = e
+            except OSError as e:
+                err = CommandFailed("写入日志文件失败", str(e))
+            finally:
+                on_exit(result, err)
+
+        return _Thread(run)
+
+    def list_displays(self, serial):
+        self._need(serial)
+        _sleep(0.03, 0.08)
+        return [DisplayInfo("4619827677550801152", "主屏"), DisplayInfo("4619827677550801153", "副屏")]
+
+    def start_screenrecord(self, serial, dest_path, options, on_exit):
+        self._need(serial)
+        path = Path(dest_path)
+
+        def run(h: _Thread):
+            result: ScreenrecordResult | None = None
+            err: BackendError | None = None
+            try:
+                started = time.monotonic()
+                while not h.wait(0.1):
+                    pass
+                elapsed = max(0.3, time.monotonic() - started)
+                path.parent.mkdir(parents=True, exist_ok=True)
+                # Minimal ftyp header + simulated MP4 payload
+                payload_len = min(256 * 1024, max(4096, int(elapsed * (options.bit_rate // 80))))
+                data = b"\x00\x00\x00\x18ftypisom\x00\x00\x02\x00isomiso2avc1mp41" + (b"\x00" * payload_len)
+                path.write_bytes(data)
+                result = ScreenrecordResult(str(path), path.stat().st_size, options.display_id)
+            except BackendError as e:
+                err = e
+            except OSError as e:
+                err = CommandFailed("保存录屏文件失败", str(e))
+            finally:
+                on_exit(result, err)
+
+        return _Thread(run)
 
     # 属性与 settings ------------------------------------------------
     def get_props(self, serial):

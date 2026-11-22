@@ -77,7 +77,7 @@ droidtoolbox/
 │  │  └─ adb.py             真实后端（adb / fastboot / scrcpy）
 │  ├─ core/
 │  │  ├─ jobs.py            线程池调用、进度、取消；回调转回主线程（run / on_ui）
-│  │  ├─ state.py           AppState：设备轮询、当前设备、自动 root、提示；Context：页面依赖
+│  │  ├─ state.py           AppState：设备扫描、当前设备、自动 root、提示；Context：页面依赖
 │  │  ├─ commands.py        ADB 命令库（data/commands.json）、参数语法、执行历史（data/command_history.json）
 │  │  ├─ command_presets.py 内置命令数据（按系统模块分组）
 │  │  └─ settings.py        便携设置 data/settings.ini
@@ -93,9 +93,9 @@ droidtoolbox/
 
 ## 架构要点
 
-- **界面只依赖 `Backend` 契约。** `Context.run()` 把同步后端调用交给应用自己的 `JobManager`；`Context.start_stream()` 登记 Shell、Logcat、持续命令和 scrcpy。关闭应用时停止轮询、取消队列及可取消任务，并清理应用启动的流和子进程；已经执行的设备操作不保证回滚。
+- **界面只依赖 `Backend` 契约。** `Context.run()` 把同步后端调用交给应用自己的 `JobManager`；`Context.start_stream()` 登记 Shell、Logcat、持续命令和 scrcpy。关闭应用时取消队列及可取消任务，并清理应用启动的流和子进程；已经执行的设备操作不保证回滚。
 - **页面生命周期**（`pages/base.py`）：`requires` 声明需要的设备状态。当前设备切换、断开或 transport 变化会推进连接代次。设备查询用 `Page.request(key, ...)`，只有本代次同一请求键的最新回调可以更新页面；写入用 `Page.run_device()` 约束回调，提交时传入明确的目标。
-- **设备枚举**：ADB 和 Fastboot 分别保留最近一次成功快照；查询未完成或失败时保持已有结果，只有成功返回的新快照才能确认该来源中的设备是否离线。
+- **设备枚举**：启动时扫描一次，之后可手动刷新。自动 adb root 默认关闭。ADB 和 Fastboot 分别保留最近一次成功快照；查询未完成或失败时保持已有结果，只有成功返回的新快照才能确认该来源中的设备是否离线。
 - **当前设备是全局的**：侧栏顶部的设备切换器、设备总览列表都会切换它，所有页面跟随。
 - **危险操作**（停用组件、启停核心 init 服务、修改敏感 settings、清除数据、卸载、删除文件、结束进程、关机）全部二次确认，确认框写明对象。
 - **主题监听用绑定方法**：连接 `theme().changed` 时用控件的方法而不是 lambda，控件销毁后 Qt 会自动断开。

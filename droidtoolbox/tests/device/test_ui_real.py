@@ -30,7 +30,7 @@ def test_all_pages_real_backend(qapp, device_backend, serial, tmp_path, monkeypa
         state.start()
         assert wait_until(qapp, lambda: state.current is not None, 5)
         state.select(serial)
-        assert len(window.pages) == 13 and state.backend.name == "adb"
+        assert len(window.pages) == 14 and state.backend.name == "adb"
         assert not any(label.text() == "MOCK" for label in window.findChildren(QtWidgets.QLabel))
         for pid in window.pages:
             window.open_page(pid)
@@ -49,5 +49,4 @@ def test_all_pages_real_backend(qapp, device_backend, serial, tmp_path, monkeypa
         assert not [item for item in notices if item[0] == "danger"], notices
     finally:
         window.close()
-        state._timer.stop()
         pump(qapp, .3)

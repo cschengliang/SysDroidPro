@@ -14,10 +14,11 @@ import abc
 import threading
 from typing import Callable, Literal
 
-from .models import (AndroidUser, ApexModule, BinderService, Component, CrashFile, Device, DeviceDetail, DeviceInventory, FileEntry,
-                     HalInfo, InitService, InstallOptions, LogBuffer, PackageDetail, PackageInfo, ProcessDetail,
-                     ProcessInfo, Progress, RebootMode, RemountResult, RootState, ScrcpyOptions, SettingsNamespace,
-                     ShellResult, ToolInfo)
+from .models import (AndroidUser, ApexModule, BinderService, Component, CrashFile, Device, DeviceDetail, DeviceInventory,
+                     DisplayInfo, FileEntry, HalInfo, InitService, InstallOptions, LogBuffer, LogcatBufferInfo,
+                     LogcatCaptureResult, PackageDetail, PackageInfo, ProcessDetail, ProcessInfo, Progress, RebootMode,
+                     RemountResult, RootState, ScreenrecordOptions, ScreenrecordResult, ScrcpyOptions,
+                     SettingsNamespace, ShellResult, ToolInfo)
 
 ProgressFn = Callable[[Progress], None]
 
@@ -96,6 +97,9 @@ LinesFn = Callable[[list[str]], None]                 # 一批原始文本行（
 OutputFn = Callable[[str, str], None]                 # (文本, "stdout" | "stderr")
 ExitFn = Callable[[BackendError | None], None]        # 流结束：正常结束 None，异常结束为错误
 CommandExitFn = Callable[[int | None, BackendError | None], None]   # (退出码, 错误)；被 stop() 终止时退出码为 None
+CaptureProgressFn = Callable[[int], None]             # 累计已写入本地文件的字节数
+CaptureExitFn = Callable[[LogcatCaptureResult | None, BackendError | None], None]
+ScreenrecordExitFn = Callable[[ScreenrecordResult | None, BackendError | None], None]
 
 
 # ── 接口 ──────────────────────────────────────────────
@@ -125,10 +129,14 @@ class Backend(abc.ABC):
     # 设备 ----------------------------------------------------------
     @abc.abstractmethod
     def list_devices(self) -> list[Device]:
-        """adb 与 fastboot 设备合并后的列表，界面每 2 秒轮询一次，应在 1 秒内返回。"""
+        """adb 与 fastboot 设备合并后的快速列表，应在 1 秒内返回。"""
 
     def poll_inventory(self) -> DeviceInventory:
         return DeviceInventory(tuple(self.list_devices()))
+
+    def scan_inventory(self) -> DeviceInventory:
+        """执行一次设备扫描，供应用启动和手动刷新使用。"""
+        return self.poll_inventory()
 
     @abc.abstractmethod
     def device_detail(self, serial: str) -> DeviceDetail:
@@ -151,8 +159,8 @@ class Backend(abc.ABC):
         ...
 
     @abc.abstractmethod
-    def reboot(self, serial: str, mode: RebootMode = "system") -> None:
-        """adb 与 fastboot 状态下都要能用；fastboot 状态下 sideload / poweroff 不可用时抛 CommandFailed。"""
+    def reboot(self, serial: str, mode: RebootMode = "system") -> Device:
+        """返回重启前的设备。Fastboot 不支持 sideload 和 poweroff。"""
 
     @abc.abstractmethod
     def root_state(self, serial: str) -> RootState:
@@ -379,3 +387,38 @@ class Backend(abc.ABC):
     @abc.abstractmethod
     def start_scrcpy(self, serial: str, options: ScrcpyOptions, on_output: OutputFn, on_exit: ExitFn) -> StreamHandle:
         """启动 scrcpy 独立窗口；用户关闭窗口时触发 on_exit(None)。"""
+
+    # 日志抓取与录屏 -------------------------------------------------
+    @abc.abstractmethod
+    def get_logcat_buffer_sizes(self, serial: str, buffers: list[LogBuffer] | None = None) -> list[LogcatBufferInfo]:
+        """查询缓冲区容量与已用字节数（adb logcat [-b ...] -g）。"""
+        ...
+
+    @abc.abstractmethod
+    def set_logcat_buffer_size(self, serial: str, size_mb: int, buffers: list[LogBuffer] | None = None) -> list[LogcatBufferInfo]:
+        """设置缓冲区大小（adb logcat [-b ...] -G <N>M），再查询返回实际生效的容量。"""
+        ...
+
+    @abc.abstractmethod
+    def dump_logcat(self, serial: str, buffers: list[LogBuffer], dest_path: str) -> LogcatCaptureResult:
+        """一次性导出设备当前环形缓冲区日志（adb logcat -d）到本地文件。"""
+        ...
+
+    @abc.abstractmethod
+    def start_logcat_capture(self, serial: str, buffers: list[LogBuffer], dest_path: str,
+                             on_progress: CaptureProgressFn, on_exit: CaptureExitFn,
+                             *, clear_first: bool = False) -> StreamHandle:
+        """启动持续 logcat 落盘抓取：定期回调已写字节数，stop() 请求后台结束，保存后触发 on_exit。"""
+        ...
+
+    @abc.abstractmethod
+    def list_displays(self, serial: str) -> list[DisplayInfo]:
+        """获取可用于 screenrecord --display-id 的屏幕列表（dumpsys SurfaceFlinger --display-id）。"""
+        ...
+
+    @abc.abstractmethod
+    def start_screenrecord(self, serial: str, dest_path: str, options: ScreenrecordOptions,
+                           on_exit: ScreenrecordExitFn) -> StreamHandle:
+        """启动 adb shell screenrecord [--bugreport] --bit-rate <bps> [--display-id <ID>]；
+        stop() 时优雅终止远端录制并 pull 到 dest_path，完成后触发 on_exit(result, error)。"""
+        ...

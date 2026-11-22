@@ -15,10 +15,9 @@ DEFAULTS = {
     "fastboot_path": "",
     "scrcpy_path": "",
     "export_dir": str(Path.home() / "Documents" / "SysDroidPro"),
-    "poll_interval_ms": 2000,
     "logcat_max_rows": 200_000,
     "logcat_tail": 2000,
-    "auto_root": True,              # 设备连接后自动 adb root（user 固件自动跳过）
+    "auto_root": False,             # 用户可在偏好设置中开启
     "sidebar_collapsed": False,
     "last_page": "devices",
     # 投屏窗口位置与大小，空串表示由 scrcpy 决定
@@ -34,6 +33,14 @@ DEFAULTS = {
     "perfetto_dir": "",
     "perfetto_web_port": 10000,
     "perfetto_rpc_port": 9001,
+    # 日志抓取与扩展录屏
+    "log_capture_buffers": "main,system,crash",
+    "log_capture_auto": False,
+    "log_capture_clear_before": False,
+    "log_capture_sync_video": False,
+    "log_capture_bugreport": True,
+    "log_capture_bitrate": 8_000_000,
+    "log_capture_display_id": "",
 }
 
 

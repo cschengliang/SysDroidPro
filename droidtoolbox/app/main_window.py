@@ -100,6 +100,7 @@ class MainWindow(W.QMainWindow):
         super().__init__()
         self.state = state
         self.ctx = Context(state, self)
+        self._closing_after_recording = False
         self.setWindowTitle("SysDroidPro")
         self.resize(1360, 860)
         self.setMinimumSize(1100, 680)
@@ -164,6 +165,8 @@ class MainWindow(W.QMainWindow):
         state.notified.connect(self.toasts.show_toast)
         state.devicesChanged.connect(self._devices_changed)
         state.currentChanged.connect(lambda d: self._status_device(d))
+        state.log_capture.stateChanged.connect(self._capture_changed)
+        state.log_capture.videoFinished.connect(self._finish_close_after_recording)
         ui.theme().changed.connect(lambda name: state.settings.set("theme", name))
 
         self.set_sidebar_collapsed(state.settings.get("sidebar_collapsed"))
@@ -219,6 +222,12 @@ class MainWindow(W.QMainWindow):
         self.side.set_badge("devices", online or None)
         self.side.viewport().update()
 
+    def _capture_changed(self):
+        self.side.set_badge("log_capture", "REC" if self.state.log_capture.any_recording else None)
+        self.side.viewport().update()
+        if "log_capture" in self.pages:
+            self.update_status(self.pages["log_capture"])
+
     def update_status(self, page: Page):
         if page is self._current:
             self.page_label.setText(page.status_text() if page.device is not None or not page.requires else "")
@@ -250,7 +259,7 @@ class MainWindow(W.QMainWindow):
 
     def _shortcuts(self):
         def sc(key, fn):
-            s = QtGui.QShortcut(QtGui.QKeySequence(key), self)
+            s = QtGui.QShortcut(QtGui.QKeySequence(key), self.centralWidget())
             s.activated.connect(fn)
         sc("Ctrl+T", ui.theme().toggle)
         sc("Ctrl+B", lambda: self.set_sidebar_collapsed(not self.side.collapsed))
@@ -258,10 +267,33 @@ class MainWindow(W.QMainWindow):
         for i, pid in enumerate(self._order[:9]):
             sc(f"Ctrl+{i + 1}", lambda pid=pid: self.open_page(pid))
 
+    def _finish_close_after_recording(self, saved: bool):
+        if not self._closing_after_recording:
+            return
+        if saved:
+            self.close()
+        else:
+            self._closing_after_recording = False
+            self.centralWidget().setEnabled(True)
+            self.statusBar().showMessage("录屏保存失败", 5000)
+
     def closeEvent(self, e):
-        for p in self.pages.values():
-            if hasattr(p, "can_close") and not p.can_close():   # 命令库：有未保存的修改且选择了取消
+        capture = self.state.log_capture
+        if self._closing_after_recording:
+            if capture.video_recording:
                 e.ignore()
+                return
+        else:
+            for p in self.pages.values():
+                if hasattr(p, "can_close") and not p.can_close():
+                    e.ignore()
+                    return
+            if capture.video_recording:
+                e.ignore()
+                self._closing_after_recording = True
+                self.centralWidget().setEnabled(False)
+                self.statusBar().showMessage("正在保存录屏")
+                capture.stop_screenrecord()
                 return
         self.state.shutdown()
         # Resource ownership is application-wide; unloading also stops page timers.

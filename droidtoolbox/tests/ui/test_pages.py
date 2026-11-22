@@ -68,7 +68,7 @@ def test_default_theme_is_light(win):
 
 
 def test_every_page_opens(win, qapp):
-    assert list(win.pages) == ["devices", "commands", "shell", "logcat", "bugreport", "props", "settings_db", "services",
+    assert list(win.pages) == ["devices", "commands", "shell", "logcat", "log_capture", "bugreport", "props", "settings_db", "services",
                                "apps", "files", "mirror", "launcher", "prefs"]
     for pid in win.pages:
         win.open_page(pid)
@@ -77,10 +77,11 @@ def test_every_page_opens(win, qapp):
         shot(win, f"page-{pid}")
 
 
-def test_auto_root_on_connect(win, qapp):
+def test_connection_does_not_root_by_default(win):
     b = win.state.backend
-    assert wait_until(qapp, lambda: b._st(SERIAL)["root"], 5), "userdebug 设备连接后应自动 root"
-    assert not b._st("192.168.1.23:5555")["root"], "user 固件不应 root"
+    assert win.state.settings.get("auto_root") is False
+    assert not b._st(SERIAL)["root"]
+    assert not b._st("192.168.1.23:5555")["root"]
 
 
 def test_remount_flow_with_reboot(win, qapp):
@@ -90,23 +91,37 @@ def test_remount_flow_with_reboot(win, qapp):
     win.open_page("devices")
     pump(qapp, 0.6)
     dp._remount_flow(SERIAL)
-    assert wait_until(qapp, lambda: dp._pending_remount == SERIAL, 5), "需要重启时应等待设备重新连接"
-    assert wait_until(qapp, lambda: b._st(SERIAL)["rw"], 15), "设备回来后应自动完成 remount"
+    assert wait_until(qapp, lambda: "设备启动后请手动刷新列表" in dp._log.out.toPlainText(), 5)
+    original = win.state.current
+    assert dp._pending_remount == (SERIAL, original.connection_id)
+    win.state.select("192.168.1.23:5555")
+    win.state.select(SERIAL)
+    assert dp._pending_remount == (SERIAL, original.connection_id)
+    assert "继续 root + remount" not in dp._log.out.toPlainText()
+    dp.refresh()
+    assert wait_until(qapp, lambda: win.state.current is not None and win.state.current.state == "connecting", 3)
+    assert wait_until(qapp, lambda: any(d.serial == SERIAL and d.state == "device" for d in b.list_devices()), 6)
+    assert not b._st(SERIAL)["rw"]
+    dp.refresh()
+    assert wait_until(qapp, lambda: b._st(SERIAL)["rw"], 10), "手动刷新发现重连后应继续 remount"
     assert wait_until(qapp, lambda: dp.root is not None and dp.root.system_writable, 5)
     text = dp._log.out.toPlainText()
     assert "adb remount" in text and "adb reboot" in text and "remount succeeded" in text
     shot(win, "devices-remounted")
 
 
-def test_version_copy_and_apex(win, qapp):
+def test_devices_cards_and_copy(win, qapp):
     dp = win.pages["devices"]
     assert wait_until(qapp, lambda: dp.detail is not None, 5)
-    dp._copy_versions()
+    assert not hasattr(dp, "apex_table") and not hasattr(dp, "reboot_btn")
+    dp.copy_flash_btn.click()
     clip = qapp.clipboard().text()
-    assert "构建指纹" in clip and "与 system 不一致" in clip    # 演示数据里 vendor 指纹与 system 不同
-    dp.apex_toggle.click()
-    assert wait_until(qapp, lambda: dp.apex_table.table_model.rowCount() > 0)
-    assert dp.apex_table.isVisibleTo(dp)
+    assert "编译时间:" in clip and "编译指纹:" in clip
+    dp.copy_summary_btn.click()
+    summary = qapp.clipboard().text()
+    assert "硬件规格:" in summary and "刷机版本:" in summary
+    dp.serial_btn.click()
+    assert qapp.clipboard().text() == SERIAL
 
 
 def test_adb_commands_run_persistent_and_save(win, qapp, monkeypatch):
@@ -257,18 +272,34 @@ def test_apps_users_components_dump(win, qapp):
     ap.user.setCurrentIndex(0)
 
 
-def test_logcat_filters(win, qapp):
+def test_logcat_filters(win, qapp, monkeypatch):
     lp = win.pages["logcat"]
+    start_logcat = win.state.backend.start_logcat
+    starts = []
+
+    def track_start(serial, buffers, *callbacks, **options):
+        starts.append((serial, buffers))
+        return start_logcat(serial, buffers, *callbacks, **options)
+
+    monkeypatch.setattr(win.state.backend, "start_logcat", track_start)
     win.open_page("logcat")
+    assert lp.pause.isChecked() and "已暂停" in lp.status_text()
+    lp.buffers.setCurrentIndex(lp.buffers.findData("main"))
+    lp.refresh()
+    lp.buffers.setCurrentIndex(lp.buffers.findData("default"))
+    assert not starts and lp.view.log_model.rowCount() == 0
+
+    lp.pause.click()
+    assert starts == [(SERIAL, ["main", "system", "crash"])]
     assert wait_until(qapp, lambda: lp.view.log_model.rowCount() > 0)
-    lp.pause.setChecked(True)
+    lp.pause.click()
+    assert lp._stream is None
     pump(qapp, 0.2)
     n0 = lp.view.log_model.rowCount()
-    pump(qapp, 1.0)
-    assert lp.view.log_model.rowCount() == n0 and lp._held
-    lp.pause.setChecked(False)
     pump(qapp, 0.3)
-    assert not lp._held
+    assert lp.view.log_model.rowCount() == n0
+    lp.pause.click()
+    assert len(starts) == 2
     assert not hasattr(lp, "pid") and not hasattr(lp, "avc")
     # 级别下拉 + 正则按钮（与过滤框内的正则开关同步）
     lp.level.setCurrentIndex(lp.level.findData("W"))
@@ -289,6 +320,19 @@ def test_logcat_filters(win, qapp):
     lp.buffers.setCurrentIndex(lp.buffers.findData("dmesg"))
     assert wait_until(qapp, lambda: any("init: " in r.message or "healthd" in r.message for r in lp.view.log_model.rows[-80:]), 5)
     lp.buffers.setCurrentIndex(0)
+
+    win.open_page("devices")
+    assert lp.pause.isChecked() and lp._stream is None
+    start_count = len(starts)
+    win.open_page("logcat")
+    assert lp.pause.isChecked() and len(starts) == start_count
+
+    lp.pause.click()
+    assert len(starts) == start_count + 1
+    win.state.select("192.168.1.23:5555")
+    assert lp.pause.isChecked() and lp._stream is None
+    assert len(starts) == start_count + 1 and lp.view.log_model.rowCount() == 0
+    win.state.select(SERIAL)
 
 
 def test_shell_menu_from_command_library(win, qapp):

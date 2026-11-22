@@ -5,7 +5,7 @@ import pytest
 
 from app.backend.mock import MockBackend
 from app.backend.models import Device, DeviceInventory, InventorySource
-from tests.conftest import wait_until
+from tests.conftest import pump, wait_until
 
 pytestmark = pytest.mark.ui
 
@@ -20,10 +20,31 @@ def state(qapp, tmp_path):
     from app.core.settings import Settings
     from app.core.state import AppState
     s = Settings(tmp_path / "s.ini")
-    s.set("auto_root", False)
     state = AppState(MockBackend(), s, CommandStore(tmp_path / "c.json"))
     yield state
     state.shutdown()
+
+
+def test_startup_scans_once_and_manual_refresh_scans_again(state, qapp, monkeypatch):
+    scans = []
+
+    def scan():
+        scans.append(True)
+        return DeviceInventory((A,))
+
+    def unexpected_root(*args):
+        pytest.fail("default startup must not request adb root")
+
+    monkeypatch.setattr(state.backend, "scan_inventory", scan)
+    monkeypatch.setattr(state.backend, "root", unexpected_root)
+    state.start()
+    assert wait_until(qapp, lambda: state.current is A)
+    pump(qapp, 2.2)
+    assert len(scans) == 1
+    assert not state._auto_root_seen
+    state.refresh_devices()
+    assert wait_until(qapp, lambda: len(scans) == 2 and not state._polling)
+    assert not state._auto_root_seen
 
 
 def test_first_device_selected(state):

@@ -81,3 +81,12 @@ QMainWindow[glass="true"] QFrame[sidefoot="true"] { background: @glass-panel; }
 /* 路径栏 */
 QLineEdit[path="true"] { min-height: 22px; max-height: 22px; }
 QLineEdit[path="true"]:focus { min-height: 20px; max-height: 20px; }
+
+/* 设备总览：可点击信息行、指纹区块、按需输出底栏 */
+QFrame[inforow="true"] { background: transparent; border-radius: @radius-md; }
+QFrame[inforow="true"]:hover { background: @bg-400; }
+QFrame[fpbox="true"] { background: @glass-well; border: 1px solid @glass-border; border-radius: @radius-md; }
+QFrame[outputbar="true"] {
+  background: @glass-well; border-top: 1px solid @line;
+  border-bottom-left-radius: 9px; border-bottom-right-radius: 9px;
+}

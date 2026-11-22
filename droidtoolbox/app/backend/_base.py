@@ -89,9 +89,11 @@ class BackendBase:
         except OSError as exc:
             raise api.CommandFailed("无法执行本机命令工具", str(exc)) from exc
 
-    def _popen(self, args, *, env=None):
+    def _popen(self, args, *, env=None, **stdio):
+        if env is not None:
+            stdio["env"] = env
         try:
-            return self._runner.popen(args, env=env) if env is not None else self._runner.popen(args)
+            return self._runner.popen(args, **stdio)
         except FileNotFoundError as exc:
             raise api.ToolNotFound("找不到命令工具：请检查偏好设置中的路径", str(exc)) from exc
         except OSError as exc:
