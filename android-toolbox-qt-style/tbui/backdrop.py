@@ -23,6 +23,9 @@ _DWMSBT_TRANSIENTWINDOW = 3  # Acrylic（真·毛玻璃透底）
 _WM_NCCALCSIZE = 0x0083
 _WM_NCHITTEST = 0x0084
 
+_GWL_STYLE = -16
+_WS_SYSMENU = 0x00080000
+
 _SWP_NOSIZE = 0x0001
 _SWP_NOMOVE = 0x0002
 _SWP_NOZORDER = 0x0004
@@ -159,7 +162,7 @@ def apply_backdrop(window, theme_name: str, *, glass: bool = True) -> bool:
 
 
 def enable_frameless_frame(window) -> bool:
-    """触发 Win32 WM_NCCALCSIZE 生效并保留 Win11 圆角/阴影/缩放/分屏能力。"""
+    """隐藏原生标题栏按钮，保留 Win11 圆角、阴影和可缩放边框。"""
     if sys.platform != "win32":
         return False
     app = QtGui.QGuiApplication.instance()
@@ -169,10 +172,17 @@ def enable_frameless_frame(window) -> bool:
     if not hwnd:
         return False
     try:
+        u32 = ctypes.windll.user32
+        win_handle = ctypes.c_void_p(hwnd)
+        style = u32.GetWindowLongW(win_handle, _GWL_STYLE)
+        # WM_NCCALCSIZE 只扩大客户区，DWM 扩展玻璃框架时仍可能绘制原生按钮。
+        # 关闭系统菜单及其标题栏按钮，保留 WS_CAPTION 以维持最大化工作区。
+        if style & _WS_SYSMENU:
+            u32.SetWindowLongW(win_handle, _GWL_STYLE, style & ~_WS_SYSMENU)
         if supports_glass():
             _dwm_set_int(hwnd, _DWMWA_WINDOW_CORNER_PREFERENCE, _DWMWCP_ROUND)
         flags = _SWP_FRAMECHANGED | _SWP_NOMOVE | _SWP_NOSIZE | _SWP_NOZORDER | _SWP_NOACTIVATE
-        return bool(ctypes.windll.user32.SetWindowPos(hwnd, 0, 0, 0, 0, 0, flags))
+        return bool(u32.SetWindowPos(win_handle, None, 0, 0, 0, 0, flags))
     except Exception:
         return False
 
